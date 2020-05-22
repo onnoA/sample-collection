@@ -1,0 +1,74 @@
+server:
+  port: 9090
+
+  spring:
+    datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/mall?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+      username: root
+      password: root
+      type: com.alibaba.druid.pool.DruidDataSource
+      druid:
+        initial-size: 5
+        min-idle: 5
+        max-active: 10
+        test-on-borrow: true
+        time-between-eviction-runs-millis: 60000
+        min-evictable-idle-time-millis: 300000
+
+# Mybatis-plus
+mybatis-plus:
+  # 放在resource目录 classpath:/mapper/*Mapper.xml
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  # 实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.onnoa.shop.demo.elk.domain
+  global-config:
+    # 主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    id-type: 0
+    # 字段策略 0:"忽略判断",1:"非 NULL 判断",2:"非空判断"
+    field-strategy: 1
+    # 驼峰下划线转换
+    db-column-underline: true
+    # 刷新mapper 调试神器
+    refresh-mapper: true
+    # 数据库大写下划线转换
+    #capital-mode: true
+    # 逻辑删除配置（下面3个配置）
+    logic-delete-value: 0
+    logic-not-delete-value: 1
+    # SQL 解析缓存，开启后多租户 @SqlParser 注解生效
+    sql-parser-cache: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+
+spring:
+  redis:
+    # Redis 服务器地址
+    host: localhost
+    # Redis 数据库索引，默认为0
+    database: 0
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    password:
+    # 连接超时时间（毫秒）
+    timeout: 3000ms
+    # lettuce 和 jedis 的区别：
+    # jedis ==》 如果在多线程环境下是非线程安全的，这个时候只有使用连接池，为每个Jedis实例增加物理连接
+    # lettuce ==》 lettuce 在多线程环境下也是线程安全的，所以一个连接实例就可以满足多线程环境下
+    # 的并发访问，当然一个实例不够的情况下也可以增加多个连接实例
+    jedis: # 或 jedis SpringBoot默认是 lettuce
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制）
+        max-active: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池中的最小空闲连接
+        min-idle: 0
+        # 超时关闭时间
+      shutdown-timeout: 100ms
+
+
