@@ -1,5 +1,6 @@
 package com.onnoa.shop.demo.elk.component;
 
+import com.google.common.collect.Maps;
 import io.swagger.annotations.ApiOperation;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -13,10 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
@@ -44,10 +47,13 @@ public class WebLogAspect {
 
     @Around("webLog()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
+        LOGGER.info("", joinPoint.getArgs());
         Long startTime = System.currentTimeMillis();
         //获取当前请求对象
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
+        Map map = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        LOGGER.info("{}", map);
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
@@ -62,7 +68,7 @@ public class WebLogAspect {
                 request.getRequestURI(), request.getRequestURL() + "",
                 request.getMethod(), getParameter(method, joinPoint.getArgs()), methodDesc);
         Object result = joinPoint.proceed();
-        LOGGER.info("\n请求结束:耗时：>>> {}ms ,响应结果: 》》》》》》》 {} \n ", (System.currentTimeMillis() - startTime) , result);
+        LOGGER.info("\n请求结束:耗时： 》》》》》》》  {}ms , \n 响应结果: 》》》》》》》 {} ", (System.currentTimeMillis() - startTime), result);
         return result;
     }
 
@@ -74,10 +80,12 @@ public class WebLogAspect {
     /**
      * 根据方法和传入的参数获取请求参数
      */
-    private Object getParameter(Method method, Object[] args) {
+    private Object getParameter( Method method, Object[] args) {
         List<Object> argList = new ArrayList<>();
         Parameter[] parameters = method.getParameters();
+        LOGGER.info("parameters{}", parameters);
         for (int i = 0; i < parameters.length; i++) {
+
             //将RequestBody注解修饰的参数作为请求参数
             RequestBody requestBody = parameters[i].getAnnotation(RequestBody.class);
             if (requestBody != null) {
@@ -94,8 +102,15 @@ public class WebLogAspect {
                 map.put(key, args[i]);
                 argList.add(map);
             }
+            // 将PathVariable注解修饰的参数作为请求参数
+            PathVariable pathVariable = parameters[i].getAnnotation(PathVariable.class);
+            if(pathVariable != null){
+                Map<String, Object> map = Maps.newHashMap();
+                map.put(pathVariable.name(),pathVariable.value());
+                argList.add(map);
+            }
         }
-        if (argList.size() == 0) {
+        if (argList.isEmpty()) {
             return null;
         } else if (argList.size() == 1) {
             return argList.get(0);

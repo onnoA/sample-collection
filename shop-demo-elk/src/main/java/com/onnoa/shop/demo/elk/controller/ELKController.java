@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +29,14 @@ public class ELKController {
     public ResultBean elk(@RequestParam String elk) {
 
         return ResultBean.success(elk);
+    }
+
+
+    @PostMapping(value = "/path")
+    @ApiOperation(value = "elk日志测试控制层方法")
+    public ResultBean path(@RequestBody String name, @RequestParam String value) {
+
+        return ResultBean.success(name+value);
     }
 
 
