@@ -1,2 +1,2 @@
 # sample-collection
-示例基金
+示例集锦
