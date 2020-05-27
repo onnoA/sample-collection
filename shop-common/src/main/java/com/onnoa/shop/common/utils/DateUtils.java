@@ -1,12 +1,20 @@
 package com.onnoa.shop.common.utils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * @Description: 时间转换工具类
@@ -14,6 +22,8 @@ import java.util.GregorianCalendar;
  * @Date: 2019/11/11 15:57
  */
 public class DateUtils {
+
+    private static Logger LOGGER = LoggerFactory.getLogger(DateUtils.class);
 
     /**
      * 返回当天最早的事件 00:00:00
@@ -625,5 +635,55 @@ public class DateUtils {
         day.set(Calendar.SECOND, 59);
         day.set(Calendar.MILLISECOND, 999);
         return day.getTime();
+    }
+
+
+    //文件时间转javaDate
+    public static Date  switchTime(String day){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        format.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        String fileTime =day.substring(0, 10)+" "+day.substring(11, 19);
+        Date date = null;
+        try {
+            date = format.parse(fileTime);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        if (date == null)
+            return null;
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.HOUR, 8);// 24小时制
+        date = cal.getTime();
+        LOGGER.info("转换后的Date时间:" + format.format(date));  //显示更新后的日期
+        cal = null;
+        return date;
+    }
+
+    /**
+     * 判断文件时间是否大于某个值.
+     * @param filePath 文件路径
+     * @param interval 间隔时间
+     * @return  true 超过间隔 , fasle 未超过间隔
+     */
+    public static Boolean compareTime(String filePath,Long interval ){
+        //获取文件时间
+        FileTime fileTime= null;
+        try {
+            fileTime = Files.readAttributes(Paths.get(filePath), BasicFileAttributes.class).creationTime();
+            LOGGER.info("文件时间(有时区问题在转换时会处理: "+fileTime);
+            Date date = DateUtils.switchTime(fileTime.toString());
+
+            Long overtopTime =new Date().getTime()-date.getTime();
+            if (!(overtopTime/1000>interval)) {
+                LOGGER.info("时间未超过设定间隔: " +date);
+                return false;
+            }
+        } catch (IOException e) {
+            LOGGER.error("Exception:{}", e);
+        }
+
+        LOGGER.info("时间超过设定间隔 重新从ftp拉取");
+        return  true;
     }
 }
