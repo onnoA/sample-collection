@@ -53,4 +53,10 @@ public class ELKController {
         return ResultBean.success(null);
     }
 
+    @PostMapping(value = "/branchTest")
+    @ApiOperation(value = "分支测试")
+    public ResultBean branchTest() {
+        return ResultBean.success(null);
+    }
+
 }
