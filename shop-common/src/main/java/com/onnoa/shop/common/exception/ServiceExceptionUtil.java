@@ -30,6 +30,10 @@ public class ServiceExceptionUtil {
         return ResultBean.error(code, messages.get(code));
     }
 
+    public static <T> ResultBean<T> error(SysErrorCodeEnum codeEnum) {
+        return ResultBean.error(codeEnum.getCode(), codeEnum.getMessage());
+    }
+
     public static ResultBean error(Integer code, Object... params) {
         String message = doFormat(code, messages.get(code), params);
         return ResultBean.error(code, message);

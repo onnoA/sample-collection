@@ -70,5 +70,7 @@ spring:
         min-idle: 0
         # 超时关闭时间
       shutdown-timeout: 100ms
+pic:
+  url: 2355
 
 

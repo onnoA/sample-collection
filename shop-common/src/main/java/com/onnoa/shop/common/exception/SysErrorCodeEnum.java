@@ -9,7 +9,9 @@ public enum SysErrorCodeEnum {
 
     SYSTEM_INTERNAL_ERROR(1000000001,"系统不舒服，请稍后再试。。。"),
 
-    SYSTEM_GATEWAY_ERROR(1000000002,"系统出错。。。。"),
+    SYSTEM_GATEWAY_ERROR(1000000002,"系统出错 >> "),
+
+    COMMON_PARAMS_IS_ILLICIT(1000000003,"参数{}非法"),
 
 
 

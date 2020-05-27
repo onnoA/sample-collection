@@ -1,6 +1,7 @@
 package com.onnoa.shop.demo.elk.controller;
 
 import com.onnoa.shop.common.result.ResultBean;
+import com.onnoa.shop.demo.elk.domain.User;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -39,5 +40,17 @@ public class ELKController {
         return ResultBean.success(name+value);
     }
 
+    @PostMapping(value = "/validation")
+    @ApiOperation(value = "elk日志测试控制层方法")
+    public ResultBean validation(@RequestBody User user) {
+        return ResultBean.success(user);
+    }
+
+    @PostMapping(value = "/an")
+    @ApiOperation(value = "elk日志测试控制层方法")
+    public ResultBean an() {
+        System.out.println(picUtil.getRequestUrl());
+        return ResultBean.success(null);
+    }
 
 }
