@@ -1,5 +1,6 @@
 package com.onnoa.shop.demo.video.service.impl;
 
+import com.google.common.collect.Lists;
 import com.onnoa.shop.common.properties.base.ShopProperties;
 import com.onnoa.shop.common.utils.BeanUtils;
 import com.onnoa.shop.demo.video.constant.VideoConstants;
@@ -25,6 +26,9 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -55,11 +59,20 @@ public class VideoInfoServiceImpl implements VideoInfoService {
             // 获取文件后缀，并判断是否符合视频文件格式
             String originalFilename = file.getOriginalFilename();
             String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
+            List<String> formatList = Lists.newArrayList();
             for (VideoFileFormatEnum videoFileFormatEnum : VideoFileFormatEnum.values()) {
-                if (!suffix.equalsIgnoreCase(videoFileFormatEnum.getFormat())) {
-                    throw VideoException.VIDEO_FORMAT_ABNORMAL.format(suffix);
-                }
+                formatList.add(videoFileFormatEnum.getFormat());
+
+                LOGGER.info("后缀:{},枚举:{}",suffix,videoFileFormatEnum.getFormat());
+
+                /*if (!suffix.equalsIgnoreCase(videoFileFormatEnum.getFormat())) {
+
+                }*/
             }
+            if(!formatList.contains(suffix)){
+                throw VideoException.VIDEO_FORMAT_ABNORMAL.format(suffix);
+            }
+
             CommonsMultipartFile cf = (CommonsMultipartFile) file;
             DiskFileItem dfi = (DiskFileItem) cf.getFileItem();
             // 通过ffProbe读取视频文件信息

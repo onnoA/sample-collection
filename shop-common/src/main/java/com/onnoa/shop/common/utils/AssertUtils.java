@@ -11,13 +11,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * 断言工具类
- *
- * @author MinChiang
- * @version 1.0.0
- * @date 2018-12-29 13:36
- */
 public final class AssertUtils {
 
     /**

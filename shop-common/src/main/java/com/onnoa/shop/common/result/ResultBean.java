@@ -1,5 +1,6 @@
 package com.onnoa.shop.common.result;
 
+import com.onnoa.shop.common.exception.ErrorCode;
 import org.springframework.util.Assert;
 
 /**
@@ -36,6 +37,10 @@ public class ResultBean<T> {
 
     public static <T> ResultBean<T> error(ResultBean<?> result) {
         return error(result.getCode(), result.getMessage());
+    }
+
+    public static <T> ResultBean<T> error(ErrorCode errorCode) {
+        return error(errorCode.getCode(), errorCode.getMessage());
     }
 
     public static <T> ResultBean<T> error(Integer code, String message) {

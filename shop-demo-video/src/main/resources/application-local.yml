@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/mall?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://127.0.0.1:3306/sample_collections?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
     username: root
-    password: root
+    password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       initial-size: 5
@@ -42,13 +42,15 @@ spring:
         min-idle: 0
         # 超时关闭时间
       shutdown-timeout: 100ms
+  application:
+    name: video
 
 # Mybatis-plus
 mybatis-plus:
   # 放在resource目录 classpath:/mapper/*Mapper.xml
   mapper-locations: classpath:/mapper/*Mapper.xml
   # 实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.onnoa.shop.demo.comment.domain
+  typeAliasesPackage: com.onnoa.shop.demo.video.domain
   global-config:
     # 主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
     id-type: 0
@@ -71,12 +73,12 @@ mybatis-plus:
 
 #视频流
 shop:
-  ffmpegPath: D:\IDEATools\开发工具\Java开发工具\ffmpeg-20200303-60b1f85-win64-static\ffmpeg-20200303-60b1f85-win64-static\bin\ffmpeg.exe #视频处理工具
-  ffprobePath: D:\IDEATools\开发工具\Java开发工具\ffmpeg-20200303-60b1f85-win64-static\ffmpeg-20200303-60b1f85-win64-static\bin\ffprobe.exe #读取视频工具
+  ffmpegPath: D:\developEnv\ffmpeg\bin\ffmpeg.exe #视频处理工具
+  ffprobePath: D:\developEnv\ffmpeg\bin\ffprobe.exe #读取视频工具
   screenShotPath: /data/videostream/tmpfiles/img/   #缓存视频封面截图处理的中间临时图片文件（需要定时清理）
   transcodeOutputPath: /data/videostream/tmpfiles/mv/  #缓存视频转码输出的临时视频文件（需要定时清理）
   fileMaxSize: 209715200 #最大可上传为200M
-    speed: faster  #调节编码速度 从左到右 从快到慢 ultrafast、superfast、veryfast、faster、fast、medium、slow、slower编码加快，意味着信息丢失越严重，输出图像质量越差。
+  speed: faster  #调节编码速度 从左到右 从快到慢 ultrafast、superfast、veryfast、faster、fast、medium、slow、slower编码加快，意味着信息丢失越严重，输出图像质量越差。
   #视频时长要求,限制生成gif小于该值则抛异常
   duration : 3
   #配置截图格式
@@ -99,18 +101,21 @@ shop:
     small: 335 #小规格
     medium: 750 #中规格
     advanced: 1080 #高规格
+  zk:
+    zkAddressList: 192.168.18.129:2181
 
 
 #ftp
 ftp:
   ftpPrefixPath: /data/videostrm/ftp/vod/ #ftp服务器存储路径前缀
-  ftpHost: 192.168.118.131 #ftp服务器IP
+  ftpHost: 10.160.132.22 #ftp服务器IP
   ftpPort: 21 #ftp服务器端口
-  ftpUserName: onnoa #ftp服务器登录账号
-  ftpPassword: 123456 #ftp服务器登录密码
+  ftpUserName: ftpadmin #ftp服务器登录账号
+  ftpPassword: ENMbviRQzr3rYSNWR6nnIFylL #ftp服务器登录密码
   localPrefixPath: /data/videostream/tmpfiles/mv/  #处理时从FTP下载源视频文件到时该路径存储然后处理（需要定时清理）
   interval: 900 #从ftp下载文件的间隔时间 单位是秒
-  playUrl: http://192.168.118.131/videostream/vod/ #视频播放部分路径
+  playUrl: https://video-dev.myutopa.com/videostream/hlsoriginal/vod/ #视频播放部分路径
+
 
 
 

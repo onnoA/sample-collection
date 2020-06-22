@@ -9,11 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Optional;
 
-/**
- * @author MinChiang
- * @version 1.0.0
- * @date 2019-09-02 11:05
- */
+
 @Configuration
 public class ToolsConfig {
 

@@ -30,10 +30,6 @@ public class ServiceExceptionUtil {
         return ResultBean.error(code, messages.get(code));
     }
 
-    public static <T> ResultBean<T> error(SysErrorCodeEnum codeEnum) {
-        return ResultBean.error(codeEnum.getCode(), codeEnum.getMessage());
-    }
-
     public static <T> ResultBean<T> error(ErrorCode errorCode) {
         return ResultBean.error(errorCode.getCode(), errorCode.getMessage());
     }

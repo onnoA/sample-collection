@@ -4,9 +4,9 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/mall?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://127.0.0.1:3306/sample_collections?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
     username: root
-    password: root
+    password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       initial-size: 5
@@ -47,7 +47,7 @@ spring:
 
 shop:
   zk:
-    zkAddressList: 192.168.118.131:2181
+    zkAddressList: 192.168.18.129:2181
 
 # Mybatis-plus
 mybatis-plus:

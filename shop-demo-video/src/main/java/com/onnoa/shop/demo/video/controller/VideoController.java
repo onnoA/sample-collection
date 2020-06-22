@@ -1,57 +1,46 @@
 package com.onnoa.shop.demo.video.controller;
 
 import com.onnoa.shop.common.result.ResultBean;
+import com.onnoa.shop.demo.video.constant.VideoErrorCodeEnum;
 import com.onnoa.shop.demo.video.service.VideoInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * @Description:
  * @Author: onnoA
  * @Date: 2020/5/28 09:31
  */
-@RestController
 @Slf4j
 @Api(tags = "视频相关接口", description = "提供视频相关的 Rest API")
-@RequestMapping(value = "video")
+@RequestMapping(value = "/video")
+@RestController
 public class VideoController {
 
     @Autowired
     private VideoInfoService videoInfoService;
 
-    @PostMapping(value = "add")
+    @PostMapping(value = "/add")
     @ApiOperation(value = "上传视频接口", notes = "上传视频")
     public ResultBean uploadVideo(@RequestParam String videoId, MultipartFile file, HttpServletRequest request) {
-        boolean isSuccess = videoInfoService.uploadVideo(videoId,file,request);
-
-
-        return null;
-
-
+        boolean isSuccess = videoInfoService.uploadVideo(videoId, file, request);
+        return isSuccess ? ResultBean.success(isSuccess) : ResultBean.error(VideoErrorCodeEnum.VIDEO_FAIL_TO_UPLOAD);
     }
-
 
 
     @GetMapping("/list")
     @ApiOperation(value = "视频列表接口", notes = "视频列表")
     public ResultBean getAvatarByUserId(@RequestParam("ownerId") String ownerId) {
 
-        /*if (info == null){
-            return null;
-        }
-        return new UserInfoForComments(info.getId(), info.getAvatar());*/
         return ResultBean.success(null);
     }
 
