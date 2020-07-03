@@ -47,7 +47,7 @@ spring:
 
 shop:
   zk:
-    zkAddressList: 192.168.18.129:2181
+    zkAddressList: 47.115.175.38:2181
 
 # Mybatis-plus
 mybatis-plus:

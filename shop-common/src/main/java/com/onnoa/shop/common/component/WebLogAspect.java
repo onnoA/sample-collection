@@ -68,7 +68,7 @@ public class WebLogAspect {
                 request.getRequestURI(), request.getRequestURL() + "",
                 request.getMethod(), getParameter(method, joinPoint.getArgs()), methodDesc);
         Object result = joinPoint.proceed();
-        LOGGER.info("\n请求结束:耗时： 》》》》》》》  {}ms , \n 响应结果: 》》》》》》》 {} ", (System.currentTimeMillis() - startTime), result);
+        LOGGER.info("\n请求结束:耗时： 》》》》》》》  {}ms , 响应结果: 》》》》》》》\n  {} ", (System.currentTimeMillis() - startTime), result);
         return result;
     }
 

@@ -15,8 +15,8 @@ import com.onnoa.shop.demo.video.service.VideoInfoService;
 import com.onnoa.shop.demo.video.utils.FtpUtil;
 import com.onnoa.shop.demo.video.utils.VideoResolveResult;
 import com.onnoa.shop.demo.video.utils.VideoResolveUtil;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +26,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,15 +59,10 @@ public class VideoInfoServiceImpl implements VideoInfoService {
             String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
             List<String> formatList = Lists.newArrayList();
             for (VideoFileFormatEnum videoFileFormatEnum : VideoFileFormatEnum.values()) {
+                LOGGER.info("后缀:{},枚举:{}", suffix, videoFileFormatEnum.getFormat());
                 formatList.add(videoFileFormatEnum.getFormat());
-
-                LOGGER.info("后缀:{},枚举:{}",suffix,videoFileFormatEnum.getFormat());
-
-                /*if (!suffix.equalsIgnoreCase(videoFileFormatEnum.getFormat())) {
-
-                }*/
             }
-            if(!formatList.contains(suffix)){
+            if (!formatList.contains(suffix)) {
                 throw VideoException.VIDEO_FORMAT_ABNORMAL.format(suffix);
             }
 

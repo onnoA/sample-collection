@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
-	@Value("${shop.fileMaxSize}")
+	@Value("${shop.video.fileMaxSize}")
 	private Long fileMaxSize;
 
 	@Bean(name = "multipartResolver")

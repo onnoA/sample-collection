@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
  */
 @Data
 @ConfigurationProperties(prefix = GlobalConstant.ROOT_PREFIX)
-@Component
 public class ShopProperties {
 
     public VideoFFMpegProperties video = new VideoFFMpegProperties();

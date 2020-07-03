@@ -1,7 +1,7 @@
 package com.onnoa.shop.demo.comment.converter;
 
-import com.onnoa.shop.demo.comment.domain.CommentsInfo;
-import com.onnoa.shop.demo.comment.dto.CommentsInfoDTO;
+import com.onnoa.shop.demo.comment.domain.ContentComments;
+import com.onnoa.shop.demo.comment.dto.ContentCommentsAddDto;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
@@ -12,19 +12,19 @@ import java.util.stream.Collectors;
  */
 public class CommentsConverter {
 
-    public static CommentsInfoDTO info2DTO(CommentsInfo info) {
-        CommentsInfoDTO dto = new CommentsInfoDTO();
+    public static ContentCommentsAddDto info2DTO(ContentComments info) {
+        ContentCommentsAddDto dto = new ContentCommentsAddDto();
         BeanUtils.copyProperties(info, dto);
         return dto;
     }
 
-    public static CommentsInfo DTO2Info(CommentsInfoDTO dto) {
-        CommentsInfo info = new CommentsInfo();
+    public static ContentComments DTO2Info(ContentCommentsAddDto dto) {
+        ContentComments info = new ContentComments();
         BeanUtils.copyProperties(dto, info);
         return info;
     }
 
-    public static List<CommentsInfoDTO> infos2DTOList(List<CommentsInfo> infos) {
+    public static List<ContentCommentsAddDto> infos2DTOList(List<ContentComments> infos) {
         return infos.stream().map(info -> info2DTO(info)).collect(Collectors.toList());
     }
 }

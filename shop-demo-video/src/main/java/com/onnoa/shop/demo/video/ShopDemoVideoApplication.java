@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication(scanBasePackages = "com.onnoa.shop")
-@ComponentScan(basePackages = {"com.onnoa.shop.**"})
+@ComponentScan(basePackages = {"com.onnoa.shop"})
 @MapperScan("com.onnoa.shop.demo.video.mapper")
 public class ShopDemoVideoApplication {
 
