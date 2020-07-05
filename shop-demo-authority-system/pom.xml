@@ -7,9 +7,9 @@
         <artifactId>sample-collection</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>shop-demo-comment</artifactId>
+    <artifactId>shop-demo-authority-system</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>shop-demo-comment</name>
+    <name>shop-demo-authority-system</name>
     <description>Demo project for Spring Boot</description>
 
 

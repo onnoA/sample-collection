@@ -1,4 +1,4 @@
-package com.onnoa.shop.demo.comment.domain;
+package com.onnoa.shop.demo.authority.system.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

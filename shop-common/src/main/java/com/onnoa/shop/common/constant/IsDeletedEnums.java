@@ -1,4 +1,4 @@
-package com.onnoa.shop.demo.comment.constants;
+package com.onnoa.shop.common.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

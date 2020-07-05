@@ -23,6 +23,7 @@
         <module>shop-demo-comment</module>
         <module>shop-demo-video</module>
         <module>shop-demo-qiniu</module>
+        <module>shop-demo-authority-system</module>
     </modules>
 
     <distributionManagement>
@@ -52,7 +53,7 @@
         <httpclient.version>4.5.12</httpclient.version>
         <fastjson.version>1.2.62</fastjson.version>
         <swagger2.version>2.7.0</swagger2.version>
-        <mybatisPlus.version>3.2.0</mybatisPlus.version>
+        <mybatisPlus.version>3.3.0</mybatisPlus.version>
         <mybatisPlus-extension.version>3.0.6</mybatisPlus-extension.version>
         <ali.druid.version>1.1.10</ali.druid.version>
         <mysql.connector.version>8.0.19</mysql.connector.version>
@@ -161,11 +162,18 @@
                 <version>${mybatisPlus.version}</version>
             </dependency>
 
-            <!--<dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-support</artifactId>
+                <version>2.2.0</version>
+            </dependency>
+
+           <!-- <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-extension</artifactId>
                 <version>${mybatisPlus-extension.version}</version>
-            </dependency>-->
+            </dependency>
+-->
 
             <!--数据库连接池-->
             <dependency>

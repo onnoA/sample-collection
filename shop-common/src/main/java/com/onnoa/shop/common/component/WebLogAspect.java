@@ -63,8 +63,8 @@ public class WebLogAspect {
             ApiOperation log = method.getAnnotation(ApiOperation.class);
             methodDesc = log.value();
         }
-        LOGGER.info("\n 请求开始 》》》》》》》》》》》 \n" +
-                        "方法名:【{}】,路径:【{}】,请求方式:【{}】,请求参数【{}】,方法描述:【{}】 ",
+        LOGGER.info("\n 请求开始 》》》》》》》》》》》 " +
+                        "方法名:【{}】,路径:【{}】,请求方式:【{}】,\n请求参数【{}】,方法描述:【{}】 ",
                 request.getRequestURI(), request.getRequestURL() + "",
                 request.getMethod(), getParameter(method, joinPoint.getArgs()), methodDesc);
         Object result = joinPoint.proceed();

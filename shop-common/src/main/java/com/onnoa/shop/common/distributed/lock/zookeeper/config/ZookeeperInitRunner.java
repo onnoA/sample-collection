@@ -16,7 +16,7 @@ import java.net.InetAddress;
  * @date 2019/8/9 16:34
  * @description
  */
-@Component
+//@Component
 @Order
 @Slf4j
 public class ZookeeperInitRunner implements CommandLineRunner {

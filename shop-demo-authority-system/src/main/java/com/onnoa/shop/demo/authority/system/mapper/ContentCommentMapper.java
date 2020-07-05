@@ -1,4 +1,4 @@
-package com.onnoa.shop.demo.comment.mapper;
+package com.onnoa.shop.demo.authority.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -7,7 +7,6 @@ import com.onnoa.shop.demo.comment.dto.ContentCommentsListDto;
 import com.onnoa.shop.demo.comment.vo.ContentCommentsListVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
