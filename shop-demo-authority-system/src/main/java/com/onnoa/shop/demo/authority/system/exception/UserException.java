@@ -9,8 +9,10 @@ import com.onnoa.shop.common.exception.ServiceException;
  */
 public class UserException extends ServiceException {
 
-    public static final ServiceException USER_NOT_EXITS = new ServiceException(400010001, "用户不存在！,{}");
-
+    public static final ServiceException USER_NOT_EXITS = new ServiceException(400010001, "用户不存在！{}");
+    public static final ServiceException USER_VERIFY_CODE_FAILURE = new ServiceException(400010002, "用户验证码失效！");
+    public static final ServiceException USER_VERIFY_CODE_ERROR = new ServiceException(400010003, "用户验证码错误！");
+    public static final ServiceException USER_PASSWORD_WRONG = new ServiceException(400010004, "用户密码错误！");
 
 
     protected int code;

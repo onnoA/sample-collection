@@ -3,10 +3,13 @@ package com.onnoa.shop.demo.authority.system.controller;
 import com.onnoa.shop.common.result.ResultBean;
 import com.onnoa.shop.demo.authority.system.dto.SysUserLoginDto;
 import com.onnoa.shop.demo.authority.system.service.SysUserService;
-import com.onnoa.shop.demo.authority.system.vo.LoginVo;
 import com.onnoa.shop.demo.authority.system.vo.VerifyCodeVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -17,8 +20,8 @@ public class SysUserController {
 
     @PostMapping(value = "/login")
     public ResultBean login(@RequestBody SysUserLoginDto loginDto) {
-        LoginVo loginVo = userService.login(loginDto);
-        return ResultBean.success(loginVo);
+        String accessToken = userService.login(loginDto);
+        return ResultBean.success(accessToken);
     }
 
 

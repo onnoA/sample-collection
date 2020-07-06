@@ -61,6 +61,7 @@
         <curator.version>4.2.0</curator.version>
         <collections4.version>4.4</collections4.version>
         <commons-lang3.version>3.9</commons-lang3.version>
+        <jjwt.version>0.9.1</jjwt.version>
 
 
     </properties>
@@ -168,13 +169,6 @@
                 <version>2.2.0</version>
             </dependency>
 
-           <!-- <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-extension</artifactId>
-                <version>${mybatisPlus-extension.version}</version>
-            </dependency>
--->
-
             <!--数据库连接池-->
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -240,6 +234,12 @@
                 <groupId>org.apache.curator</groupId>
                 <artifactId>curator-recipes</artifactId>
                 <version>${curator.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${jjwt.version}</version>
             </dependency>
 
 

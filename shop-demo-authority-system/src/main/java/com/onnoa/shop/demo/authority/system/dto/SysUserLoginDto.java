@@ -23,5 +23,10 @@ public class SysUserLoginDto implements Serializable {
      */
     private String verifyCode;
 
+    /**
+     * 验证码uuid
+     */
+    private String uuid;
+
 
 }

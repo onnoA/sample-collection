@@ -9,7 +9,6 @@ public class LoginVo implements Serializable {
 
     private String accessToken;
 
-    private String username;
 
 
 }
