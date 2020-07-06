@@ -17,13 +17,13 @@ spring:
       min-evictable-idle-time-millis: 300000
   redis:
     # Redis 服务器地址
-    host: localhost
+    host: 127.0.0.1
     # Redis 数据库索引，默认为0
-    database: 0
+    #    database: 0
     # Redis服务器连接端口
     port: 6379
     # Redis服务器连接密码（默认为空）
-    password:
+    password: 123456
     # 连接超时时间（毫秒）
     timeout: 3000ms
     # lettuce 和 jedis 的区别：
@@ -40,10 +40,8 @@ spring:
         max-idle: 8
         # 连接池中的最小空闲连接
         min-idle: 0
-        # 超时关闭时间
-      shutdown-timeout: 100ms
   application:
-    name: comment-service
+    name: authority-system-service
 
 shop:
   zk:
@@ -54,16 +52,16 @@ mybatis-plus:
   # 放在resource目录 classpath:/mapper/*Mapper.xml
   mapper-locations: classpath:/mapper/*Mapper.xml
   # 实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.onnoa.shop.demo.comment.domain
+  typeAliasesPackage: com.onnoa.shop.demo.authority.system.domain
   global-config:
     # 主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
-#    id-type: 0
+    #    id-type: 0
     # 字段策略 0:"忽略判断",1:"非 NULL 判断",2:"非空判断"
-#    field-strategy: 1
+    #    field-strategy: 1
     # 驼峰下划线转换
-#    db-column-underline: true
+    #    db-column-underline: true
     # 刷新mapper 调试神器
-#    refresh-mapper: true
+    #    refresh-mapper: true
     # 数据库大写下划线转换
     #capital-mode: true
     # 逻辑删除配置

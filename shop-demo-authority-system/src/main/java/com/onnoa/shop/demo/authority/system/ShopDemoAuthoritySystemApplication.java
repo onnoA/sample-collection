@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication(scanBasePackages = "com.onnoa.shop")
 @ComponentScan(basePackages = {"com.onnoa.shop"})
-@MapperScan("com.onnoa.shop.demo.comment.mapper")
+@MapperScan("com.onnoa.shop.demo.authority.system.mapper")
 public class ShopDemoAuthoritySystemApplication {
 
     public static void main(String[] args) {

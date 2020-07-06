@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onnoa.shop.demo.authority.system.mapper.SysUserBusinessMapper">
+  <resultMap id="BaseResultMap" type="com.onnoa.shop.demo.authority.system.domain.SysUserBusiness">
+    <!--@mbg.generated-->
+    <!--@Table sys_user_business-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="business_no" jdbcType="VARCHAR" property="businessNo" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_id, business_no, create_time, update_time
+  </sql>
+</mapper>

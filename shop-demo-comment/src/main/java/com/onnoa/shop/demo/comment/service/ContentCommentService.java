@@ -22,15 +22,6 @@ public interface ContentCommentService {
      */
     long save(ContentCommentsAddDto dto);
 
-    /**
-     * 根据被评论的资源id查询评论列表
-     *
-     * @param ownerId
-     * @return
-     */
-    List<ContentCommentsAddDto> findByOwnerId(String ownerId);
-
-
     Boolean comment(ContentCommentsAddDto addDto);
 
     PageDto<ContentCommentsListVo> commentList(ContentCommentsListDto listDto);

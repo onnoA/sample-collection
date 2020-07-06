@@ -9,7 +9,7 @@ import com.onnoa.shop.common.exception.ServiceException;
  */
 public class UserException extends ServiceException {
 
-    public static final ServiceException USER_NOT_EXITS = new ServiceException(400010001, "用户不存在！");
+    public static final ServiceException USER_NOT_EXITS = new ServiceException(400010001, "用户不存在！,{}");
 
 
 

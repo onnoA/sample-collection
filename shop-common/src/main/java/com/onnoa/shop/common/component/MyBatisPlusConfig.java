@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@MapperScan("com.onnoa.shop.demo.*.mapper")
+//@MapperScan("com.onnoa.shop.demo.*.mapper")
 public class MyBatisPlusConfig {
 
     /**

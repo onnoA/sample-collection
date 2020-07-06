@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onnoa.shop.demo.authority.system.mapper.SysFrontViewResourceRoleMapper">
+  <resultMap id="BaseResultMap" type="com.onnoa.shop.demo.authority.system.domain.SysFrontViewResourceRole">
+    <!--@mbg.generated-->
+    <!--@Table sys_front_view_resource_role-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+    <result column="view_id" jdbcType="VARCHAR" property="viewId" />
+    <result column="select_type" jdbcType="INTEGER" property="selectType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, role_id, view_id, select_type, create_time, update_time
+  </sql>
+</mapper>

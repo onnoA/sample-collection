@@ -3,15 +3,15 @@
 
  Source Server         : 本地数据库
  Source Server Type    : MySQL
- Source Server Version : 80016
+ Source Server Version : 50727
  Source Host           : localhost:3306
  Source Schema         : sample_collections
 
  Target Server Type    : MySQL
- Target Server Version : 80016
+ Target Server Version : 50727
  File Encoding         : 65001
 
- Date: 06/07/2020 00:18:50
+ Date: 06/07/2020 18:03:27
 */
 
 SET NAMES utf8mb4;
@@ -22,8 +22,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `content_comments`;
 CREATE TABLE `content_comments`  (
-  `id` bigint(64) NOT NULL AUTO_INCREMENT COMMENT '评论主键id',
-  `pid` bigint(64) NULL DEFAULT NULL COMMENT '父评论id',
+  `id` bigint(32) NOT NULL AUTO_INCREMENT COMMENT '评论主键id',
+  `pid` bigint(32) NULL DEFAULT NULL COMMENT '父评论id',
   `resource_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '被评论的资源id，可以是项目、资源、内容等',
   `type` tinyint(1) NOT NULL COMMENT '评论类型：1：对内容评论，2：回复评论',
   `user_id` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '评论者id',
@@ -38,20 +38,77 @@ CREATE TABLE `content_comments`  (
   `deleted` int(2) NULL DEFAULT 0 COMMENT '是否删除 0：未删除；1：删除',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `owner_id`(`resource_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1279680000016166915 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '评论表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '评论表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of content_comments
 -- ----------------------------
-INSERT INTO `content_comments` VALUES (7, NULL, '123456789', 1, '690569177', 1, NULL, 0, '这是内容的第一条评论', '2020-07-05 01:00:11', NULL, '690569177', NULL, 0);
-INSERT INTO `content_comments` VALUES (8, NULL, '123456789', 1, '690569177', 1, NULL, 0, '这是内容的第二条评论', '2020-07-05 01:01:27', NULL, '690569177', NULL, 0);
-INSERT INTO `content_comments` VALUES (13, NULL, '123456789', 1, '690569177', 2, NULL, 0, '这是内容的第七条评论', '2020-07-05 01:01:58', '2020-07-05 10:39:37', '690569177', NULL, 0);
-INSERT INTO `content_comments` VALUES (14, NULL, '123456789', 1, '690569177', 1, NULL, 0, '这是内容的第八条评论', '2020-07-05 01:02:04', '2020-07-05 10:16:29', '690569177', NULL, 0);
-INSERT INTO `content_comments` VALUES (17, 7, '123456789', 2, '760171358', 1, '690569177', 0, '这是回复内容的第一条评论的回复评论', '2020-07-05 01:04:33', NULL, '760171358', NULL, 0);
-INSERT INTO `content_comments` VALUES (18, 8, '123456789', 2, '760171358', 1, '690569177', 0, '这是回复内容的第二条评论的回复评论', '2020-07-05 01:04:47', '2020-07-05 01:05:03', '760171358', NULL, 0);
-INSERT INTO `content_comments` VALUES (19, 11, '123456789', 2, '760171358', 1, '690569177', 0, '这是回复内容的第五条评论的回复评论', '2020-07-05 01:05:19', NULL, '760171358', NULL, 0);
-INSERT INTO `content_comments` VALUES (20, 17, '123456789', 2, '22222222', 1, '760171358', 0, '这是回复回复评论的回复评论第一条', '2020-07-05 01:06:15', NULL, '22222222', NULL, 0);
-INSERT INTO `content_comments` VALUES (1279680000016166914, NULL, '123456789', 1, '690569177', 1, NULL, 0, '这是内容的第八条评论', '2020-07-05 15:34:22', NULL, '690569177', NULL, 0);
+INSERT INTO `content_comments` VALUES (7, NULL, '12345678', 1, 'onnoa', 1, NULL, 0, '这是我的第一条评论', '2020-07-03 15:45:04', '2020-07-03 15:45:32', 'onnoa', NULL, 0);
+INSERT INTO `content_comments` VALUES (8, NULL, '12345678', 1, 'onnoa', 1, NULL, 0, '这是我的第二条评论。', '2020-07-03 15:45:51', NULL, 'onnoa', NULL, 0);
+INSERT INTO `content_comments` VALUES (9, NULL, '12345678', 1, 'onnoa', 1, NULL, 0, '这是我的第三条评论。', '2020-07-03 15:46:08', NULL, 'onnoa', NULL, 0);
+INSERT INTO `content_comments` VALUES (10, 7, '12345678', 2, 'heng', 1, 'onnoa', 0, '这是回复onnoa的第一条评论。', '2020-07-03 15:50:18', NULL, 'heng', NULL, 0);
+INSERT INTO `content_comments` VALUES (11, 8, '12345678', 2, 'heng', 1, 'onnoa', 0, '这是回复onnoa的第二条评论。', '2020-07-03 15:50:52', NULL, 'heng', NULL, 0);
+INSERT INTO `content_comments` VALUES (12, 10, '12345678', 2, 'zhang', 1, 'heng', 0, '这是回复heng的回复评论评论。', '2020-07-03 15:51:55', NULL, 'zhang', NULL, 0);
+
+-- ----------------------------
+-- Table structure for sys_back_end_inter_resource
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_back_end_inter_resource`;
+CREATE TABLE `sys_back_end_inter_resource`  (
+  `id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '主键',
+  `interface_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '访问路径',
+  `interface_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '菜单功能名称',
+  `descr` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '描述',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后端资源菜单表' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for sys_front_view_resource
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_front_view_resource`;
+CREATE TABLE `sys_front_view_resource`  (
+  `id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '主键',
+  `parent_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '父级id',
+  `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '菜单路径',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '菜单名称',
+  `descr` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '菜单描述',
+  `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '图标',
+  `type` int(2) NULL DEFAULT NULL COMMENT '类型：1菜单文件夹2菜单文件3按钮功能',
+  `level` int(2) NULL DEFAULT NULL COMMENT '层级',
+  `sort` int(3) NULL DEFAULT 1 COMMENT '排序',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '前端菜单资源表' ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for sys_front_view_resource_back_inter_resource
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_front_view_resource_back_inter_resource`;
+CREATE TABLE `sys_front_view_resource_back_inter_resource`  (
+  `id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '主键',
+  `back_end_view_url_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '后端菜单资源id',
+  `front_view_path_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '前端菜单资源id',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Table structure for sys_front_view_resource_role
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_front_view_resource_role`;
+CREATE TABLE `sys_front_view_resource_role`  (
+  `id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '主键',
+  `role_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '角色id',
+  `view_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '视图菜单id',
+  `select_type` int(2) NULL DEFAULT 1 COMMENT '1:选中2:半选中状态',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色菜单关系表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -69,20 +126,6 @@ CREATE TABLE `sys_role`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色表' ROW_FORMAT = Compact;
 
 -- ----------------------------
--- Table structure for sys_url_resource
--- ----------------------------
-DROP TABLE IF EXISTS `sys_url_resource`;
-CREATE TABLE `sys_url_resource`  (
-  `id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '主键',
-  `method_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '访问路径',
-  `method_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '菜单功能名称',
-  `descr` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '描述',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '后端资源菜单表' ROW_FORMAT = Compact;
-
--- ----------------------------
 -- Table structure for sys_user
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_user`;
@@ -92,14 +135,13 @@ CREATE TABLE `sys_user`  (
   `password` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '密码MD5',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  `reg_origin` int(11) NULL DEFAULT NULL COMMENT '注册来源',
   `mobile_phone` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '手机号',
   `last_login_time` datetime(0) NULL DEFAULT NULL COMMENT '最后登录时间',
   `last_login_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '最后登录IP',
   `login_count` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '登录次数',
   `real_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '真实姓名',
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮箱',
-  `state` int(1) NULL DEFAULT NULL COMMENT '用户状态1-正常，2-禁用',
+  `status` int(1) NULL DEFAULT NULL COMMENT '用户状态1-正常，2-禁用',
   `deleted` int(1) UNSIGNED NULL DEFAULT 0 COMMENT '是否可以删除用户 0-正常，1删除',
   `creator` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建者',
   PRIMARY KEY (`id`) USING BTREE
@@ -130,52 +172,6 @@ CREATE TABLE `sys_user_role`  (
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户角色关系表' ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for sys_view_resource
--- ----------------------------
-DROP TABLE IF EXISTS `sys_view_resource`;
-CREATE TABLE `sys_view_resource`  (
-  `id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '主键',
-  `parent_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '父级id',
-  `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '菜单路径',
-  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '菜单名称',
-  `descr` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '菜单描述',
-  `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '图标',
-  `type` int(2) NULL DEFAULT NULL COMMENT '类型：1菜单文件夹2菜单文件3按钮功能',
-  `level` int(2) NULL DEFAULT NULL COMMENT '层级',
-  `sort` int(3) NULL DEFAULT 1 COMMENT '排序',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '前端菜单资源表' ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for sys_view_resource_role
--- ----------------------------
-DROP TABLE IF EXISTS `sys_view_resource_role`;
-CREATE TABLE `sys_view_resource_role`  (
-  `id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '主键',
-  `role_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '角色id',
-  `view_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '视图菜单id',
-  `select_type` int(2) NULL DEFAULT 1 COMMENT '1:选中2:半选中状态',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色菜单关系表' ROW_FORMAT = Compact;
-
--- ----------------------------
--- Table structure for sys_viewresource_urlresource
--- ----------------------------
-DROP TABLE IF EXISTS `sys_viewresource_urlresource`;
-CREATE TABLE `sys_viewresource_urlresource`  (
-  `id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '主键',
-  `view_url_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '后端菜单资源id',
-  `view_path_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '前端菜单资源id',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for utopa_videostream_svc_video_info
