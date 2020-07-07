@@ -15,4 +15,13 @@
     <!--@mbg.generated-->
     id, interface_url, interface_name, descr, create_time, update_time
   </sql>
+
+  <select id="getBackEndInterResourceByFrontId" resultType="com.onnoa.shop.demo.authority.system.domain.SysBackEndInterResource">
+    select back_resource.*
+    from sys_back_inter_resource back_resource
+    inner join sys_front_view_resource_back_inter_source front_back_resource on back_resource.id = front_back_resource.back_end_view_url_id
+    inner join sys_front_view_resource front_resource on front_resource.id = front_back_resource.front_view_path_id
+    where front_resource.id = #{frontViewPathId}
+  </select>
+
 </mapper>

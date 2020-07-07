@@ -176,7 +176,7 @@ CREATE TABLE `sys_user_role`  (
 -- ----------------------------
 -- Table structure for utopa_videostream_svc_video_info
 -- ----------------------------
-DROP TABLE IF EXISTS `utopa_videostream_svc_video_info`;
+DROP TABLE IF EXISTS `videostream_svc_video_info`;
 CREATE TABLE `utopa_videostream_svc_video_info`  (
   `id` varchar(36) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `video_name` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '视频名称',

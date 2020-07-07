@@ -10,21 +10,24 @@ import com.onnoa.shop.common.utils.MD5Util;
 import com.onnoa.shop.common.utils.UuidUtil;
 import com.onnoa.shop.common.utils.jwt.JWTConstant;
 import com.onnoa.shop.common.utils.jwt.JWtObj;
-import com.onnoa.shop.common.utils.jwt.JwtTokenUtils;
 import com.onnoa.shop.common.utils.jwt.JwtTokenUtils2;
 import com.onnoa.shop.demo.authority.system.cache.AuthoritySystemCache;
+import com.onnoa.shop.demo.authority.system.domain.SysBackEndInterResource;
+import com.onnoa.shop.demo.authority.system.domain.SysFrontViewResource;
 import com.onnoa.shop.demo.authority.system.domain.SysRole;
 import com.onnoa.shop.demo.authority.system.domain.SysUser;
 import com.onnoa.shop.demo.authority.system.dto.AuthDto;
 import com.onnoa.shop.demo.authority.system.dto.RedisLoginUserDto;
 import com.onnoa.shop.demo.authority.system.dto.SysUserLoginDto;
 import com.onnoa.shop.demo.authority.system.exception.UserException;
+import com.onnoa.shop.demo.authority.system.mapper.SysBackEndInterResourceMapper;
+import com.onnoa.shop.demo.authority.system.mapper.SysFrontViewResourceMapper;
 import com.onnoa.shop.demo.authority.system.mapper.SysRoleMapper;
 import com.onnoa.shop.demo.authority.system.mapper.SysUserMapper;
 import com.onnoa.shop.demo.authority.system.service.SysUserService;
-import com.onnoa.shop.demo.authority.system.vo.LoginVo;
 import com.onnoa.shop.demo.authority.system.vo.VerifyCodeVo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +45,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysUserMapper userMapper;
     @Autowired
     private SysRoleMapper sysRoleMapper;
+    @Autowired
+    private SysFrontViewResourceMapper frontViewResourceMapper;
+    @Autowired
+    private SysBackEndInterResourceMapper backEndInterResourceMapper;
 
     @Override
     public String login(SysUserLoginDto loginDto) {
@@ -104,7 +111,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public Boolean auth(AuthDto authDto) {
+        if (authDto.getFrontPath().equals("/")) {
+            return true;
+        }
         List<SysRole> roleList = sysRoleMapper.getRolesByUsername(authDto.getUsername());
-        return null;
+        if (CollectionUtils.isNotEmpty(roleList)) {
+            for (SysRole role : roleList) {
+                SysFrontViewResource frontViewResource = frontViewResourceMapper.getViewResourcesByRoleIdAndPath(role.getId(), authDto.getFrontPath());
+                if (frontViewResource != null) {
+                    SysBackEndInterResource backEndInterResource = backEndInterResourceMapper.getBackEndInterResourceByFrontId(frontViewResource.getId());
+                    if (backEndInterResource != null) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
