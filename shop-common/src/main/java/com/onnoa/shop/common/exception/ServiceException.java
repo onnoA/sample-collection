@@ -40,8 +40,9 @@ public class ServiceException extends RuntimeException implements Serializable {
 
     public static final ServiceException COMMON_PARAMS_NOT_NULL = new ServiceException(99990003, "参数{0}不能为空。。");
 
-    public static final ServiceException OBJECT_IS_NOT_EXIST = new ServiceException(700080002, "对象信息不存在：{0}");
+    public static final ServiceException OBJECT_IS_NOT_EXIST = new ServiceException(99990004, "对象信息不存在：{0}");
 
+    public static final ServiceException DATA_INVALID = new ServiceException(99990005, "{0}");
 
 
     protected int code;

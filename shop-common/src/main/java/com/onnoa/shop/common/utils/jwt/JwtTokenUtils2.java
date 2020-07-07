@@ -2,6 +2,7 @@ package com.onnoa.shop.common.utils.jwt;
 
 import com.onnoa.shop.common.utils.BeanUtils;
 import com.onnoa.shop.common.utils.JsonUtil;
+import com.onnoa.shop.common.utils.MD5Util;
 import com.onnoa.shop.common.utils.UuidUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -12,10 +13,7 @@ import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Description: JWT 工具类
@@ -27,24 +25,25 @@ public class JwtTokenUtils2 {
     /**
      * 创建jwt
      * Header: JSON 对象
-     *      {
-     *      "alg": "HS256",
-     *      "typ": "JWT"
-     *      }
+     * {
+     * "alg": "HS256",
+     * "typ": "JWT"
+     * }
      * Payload : JSON 对象      JWT 规定了7个官方字段，供选用
-     *      iss (issuer)：签发人
-     *      exp (expiration time)：过期时间
-     *      sub (subject)：主题
-     *      aud (audience)：受众
-     *      nbf (Not Before)：生效时间
-     *      iat (Issued At)：签发时间
-     *      jti (JWT ID)：编号
-     *      除了官方字段，你还可以在这个部分定义私有字段，下面就是一个例子 ==>  如果有私有声明，一定要先设置这个自己创建的私有的声明
-     *              {
-     *                 "sub": "1234567890",
-     *                 "name": "John Doe",
-     *                 "admin": true
-     *               }
+     * iss (issuer)：签发人
+     * exp (expiration time)：过期时间
+     * sub (subject)：主题
+     * aud (audience)：受众
+     * nbf (Not Before)：生效时间
+     * iat (Issued At)：签发时间
+     * jti (JWT ID)：编号
+     * 除了官方字段，你还可以在这个部分定义私有字段，下面就是一个例子 ==>  如果有私有声明，一定要先设置这个自己创建的私有的声明
+     * {
+     * "sub": "1234567890",
+     * "name": "John Doe",
+     * "admin": true
+     * }
+     *
      * @param jwtId     是JWT的唯一标识，根据业务需要，这个可以设置为一个不重复的值，主要用来作为一次性token,从而回避重放攻击。
      * @param subject   代表这个JWT的主体，即它的所有人，这个是一个json格式的字符串，可以存放什么userid，roldid之类的，作为什么用户的唯一标志。
      * @param ttlMillis 过期的时间长度 以秒为单位
@@ -52,7 +51,7 @@ public class JwtTokenUtils2 {
      * @return token 返回token
      * @throws Exception
      */
-    public static String createJWT(JWtObj obj, String jwtId, String subject, String secret, long ttlMillis) throws Exception {
+    public static String createJWT(JWtObj obj, String jwtId, String subject, String secret, long ttlMillis) {
         Map<String, Object> headerMap = new HashMap<>();
         //指定签名的时候使用的签名算法，也就是header那部分，jjwt已经将这部分内容封装好了。
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -100,7 +99,7 @@ public class JwtTokenUtils2 {
      * @return
      * @throws Exception
      */
-    public static Jws<Claims> parseJWT(String jwt, String secret) throws Exception {
+    public static Jws<Claims> resolveJWT(String jwt, String secret) {
         //签名秘钥，和生成的签名的秘钥一模一样
         SecretKey key = generateKey(secret);
         //得到DefaultJwtParser
@@ -114,13 +113,14 @@ public class JwtTokenUtils2 {
 
     /**
      * 功能描述:
-     * @param jwt 加密后的jwt
-     * @param secret 密钥secret
+     *
+     * @param accessToken 加密后的jwt
+     * @param secret      密钥secret
      * @return jwt 自定义对象
      * @date 2019/11/30 12:12
      */
-    public static JWtObj tranJWTObj(String jwt, String secret) throws Exception {
-        Jws<Claims> claimsJws = parseJWT(jwt, secret);
+    public static JWtObj tranJWTObj(String accessToken, String secret) {
+        Jws<Claims> claimsJws = resolveJWT(accessToken, secret);
         String subject = claimsJws.getBody().getSubject();
         return JsonUtil.fromJson(subject, JWtObj.class);
     }
@@ -129,6 +129,7 @@ public class JwtTokenUtils2 {
     /**
      * 由字符串生成加密key
      * 根据密钥secret生成签名
+     *
      * @return 加密key
      */
     public static SecretKey generateKey(String secret) {
@@ -137,20 +138,41 @@ public class JwtTokenUtils2 {
         return new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
     }
 
-    public static void main(String[] args) throws Exception {
+
+    /**
+     * 获取accessToken的过期时间
+     *
+     * @param minutes
+     * @return
+     */
+    public static long getTokenFailureTime(Integer minutes) {
+        minutes = (minutes == null || minutes == 0) ? 30 : minutes;
+        Calendar nowTime = Calendar.getInstance();
+        nowTime.add(Calendar.MINUTE, minutes);
+        return nowTime.getTimeInMillis();
+    }
+
+    public static void main(String[] args) {
+
+        String s = UuidUtil.genUuidNoLine();
+        System.out.println("uuid:" + s);
+
+        String enPwd = MD5Util.generate("123456");
+        System.out.println("加密后的密码：" + enPwd);
 
 
-        JWtObj obj = new JWtObj().setId(4).setUsername("ls");
+
+        /*JWtObj obj = new JWtObj().setId(4).setUsername("ls");
 
         String ab = createJWT(new JWtObj().setId(1).setUsername("zh"), UuidUtil.genUuid(), JsonUtil.obj2Json(obj), JWTConstant.JWT_SECRET, 6000000);
         System.out.println(ab);
         JWtObj jWtObj = tranJWTObj(ab, JWTConstant.JWT_SECRET);
         Map<String, Object> userMap = BeanUtils.beanToMapInFields(obj, Arrays.asList("username"));
-        userMap.put("token",ab);
+        userMap.put("token", ab);
         Map<String, Object> map = BeanUtils.beanToMap(jWtObj);
         System.out.println(map.values());
         //注意：如果jwt已经过期了，这里会抛出jwt过期异常。
-        Jws<Claims> claimsJws = parseJWT(ab, JWTConstant.JWT_SECRET);
+        Jws<Claims> claimsJws = resolveJWT(ab, JWTConstant.JWT_SECRET);
         // 第三部分: 签证（signature)
         System.out.println("signature:" + claimsJws.getSignature());
         // 第一部分:头部（header)
@@ -168,6 +190,9 @@ public class JwtTokenUtils2 {
         System.out.println(body.getIssuer());
         //DSSFAWDWADAS...
         System.out.println(body.get("uid", Integer.class));
+        long tokenFailureTime = getTokenFailureTime(60 * 24);
+        System.out.println(tokenFailureTime);*/
     }
+
 
 }

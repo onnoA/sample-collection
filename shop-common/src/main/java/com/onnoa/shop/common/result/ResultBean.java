@@ -10,30 +10,39 @@ import org.springframework.util.Assert;
  */
 public class ResultBean<T> {
 
+    // 状态码
+    private Integer code;
+
+    private String message;
+
+    private Long timestamp;
+
 
     private static final Integer SUCCESS_CODE = 200;
 
     private static final Integer FAIL_CODE = 500;
 
-    /**
-     * 错误码
-     */
-    private Integer code;
+    // 成功提示消息
+    private static String successMsg = "success";
 
-    /**
-     * 时间戳
-     */
-    private Long timestamp = System.currentTimeMillis();
+    // 失败提示消息
+    private static String failMsg = "Failed";
 
-    /**
-     * 提示消息
-     */
-    private static String message = "success";
+    // 当前时间戳
+    private static Long currentTimeMillis = System.currentTimeMillis();
 
-    /**
-     * 返回数据
-     */
+    // 返回数据
     private T data;
+
+    public ResultBean() {
+    }
+
+    public ResultBean(Integer code, Long timestamp, String message, T data) {
+        this.code = code;
+        this.timestamp = timestamp;
+        this.data = data;
+        this.message = message;
+    }
 
     public static <T> ResultBean<T> error(ResultBean<?> result) {
         return error(result.getCode(), result.getMessage());
@@ -45,26 +54,17 @@ public class ResultBean<T> {
 
     public static <T> ResultBean<T> error(Integer code, String message) {
         Assert.isTrue(!SUCCESS_CODE.equals(code), "状态码必须是错误的!");
-        ResultBean<T> result = new ResultBean<>();
-        result.code = code;
-        result.message = message;
-        return result;
+        return new ResultBean<>(code, currentTimeMillis, message, null);
     }
 
     public static <T> ResultBean<T> success(T data) {
-        ResultBean<T> result = new ResultBean<>();
-        result.code = SUCCESS_CODE;
-        result.message = message;
-        result.data = data;
-        return result;
+        return new ResultBean<>(SUCCESS_CODE, currentTimeMillis, successMsg, data);
     }
 
     public static <T> ResultBean<T> error(Throwable e) {
-        ResultBean<T> result = new ResultBean<>();
-        result.code = FAIL_CODE;
-        result.message = e.getMessage();
-        return result;
+        return new ResultBean<>(FAIL_CODE, currentTimeMillis, e.getMessage(), null);
     }
+
 
     public Integer getCode() {
         return code;

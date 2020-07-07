@@ -1,5 +1,6 @@
 package com.onnoa.shop.demo.authority.system.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.onnoa.shop.common.utils.BeanUtils;
@@ -7,33 +8,45 @@ import com.onnoa.shop.common.utils.CreateVerifyCodeUtil;
 import com.onnoa.shop.common.utils.IPUtil;
 import com.onnoa.shop.common.utils.MD5Util;
 import com.onnoa.shop.common.utils.UuidUtil;
+import com.onnoa.shop.common.utils.jwt.JWTConstant;
+import com.onnoa.shop.common.utils.jwt.JWtObj;
+import com.onnoa.shop.common.utils.jwt.JwtTokenUtils;
+import com.onnoa.shop.common.utils.jwt.JwtTokenUtils2;
 import com.onnoa.shop.demo.authority.system.cache.AuthoritySystemCache;
+import com.onnoa.shop.demo.authority.system.domain.SysRole;
 import com.onnoa.shop.demo.authority.system.domain.SysUser;
+import com.onnoa.shop.demo.authority.system.dto.AuthDto;
 import com.onnoa.shop.demo.authority.system.dto.RedisLoginUserDto;
 import com.onnoa.shop.demo.authority.system.dto.SysUserLoginDto;
 import com.onnoa.shop.demo.authority.system.exception.UserException;
+import com.onnoa.shop.demo.authority.system.mapper.SysRoleMapper;
 import com.onnoa.shop.demo.authority.system.mapper.SysUserMapper;
 import com.onnoa.shop.demo.authority.system.service.SysUserService;
 import com.onnoa.shop.demo.authority.system.vo.LoginVo;
 import com.onnoa.shop.demo.authority.system.vo.VerifyCodeVo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Service
+@Slf4j
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
     @Autowired
     private SysUserMapper userMapper;
+    @Autowired
+    private SysRoleMapper sysRoleMapper;
 
     @Override
     public String login(SysUserLoginDto loginDto) {
         // 校验验证码是否正确
-        String verifyCode = (String) AuthoritySystemCache.USER_VERIFY_CODE.get(loginDto.getUuid());
+        String verifyCode = (String) AuthoritySystemCache.USER_VERIFY_CODE.get(loginDto.getCodeUUID());
         if (StringUtils.isBlank(verifyCode)) {
             throw UserException.USER_VERIFY_CODE_FAILURE;
         }
@@ -43,7 +56,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         SysUser sysUser = userMapper.selectOne(new QueryWrapper<SysUser>().eq("username", loginDto.getUsername()));
         if (Objects.isNull(sysUser)) {
-            throw UserException.USER_NOT_EXITS.format("用户名为:" + loginDto.getUsername());
+            throw UserException.USER_NOT_EXITS.format(loginDto.getUsername());
         }
 
         // 校验密码是否正确
@@ -59,12 +72,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         sysUser.setLastLoginTime(new Date());
         userMapper.updateById(sysUser);
 
-        // 生成accessToken
-        String accessToken = "";
-        RedisLoginUserDto redisLoginUserDto = new RedisLoginUserDto();
-        BeanUtils.copyToBeanInFields(sysUser, redisLoginUserDto, Arrays.asList("id", "username", "password"));
-        redisLoginUserDto.setAccessToken(accessToken);
-        AuthoritySystemCache.USER_ACCESS_TOKEN.set(sysUser.getId(), redisLoginUserDto, 24 * 60 * 60);
+        // 签发 accessToken
+        JWtObj jWtObj = new JWtObj();
+        BeanUtils.copyToBean(sysUser, jWtObj);
+        // 一天过期
+        String accessToken = JwtTokenUtils2.createJWT(jWtObj, UuidUtil.genUuid(), JSONObject.toJSONString(jWtObj), JWTConstant.ACCESS_TOKEN_SECRET, 24 * 60 * 60 * 1000);
+        RedisLoginUserDto redisLoginDto = new RedisLoginUserDto();
+        BeanUtils.copyToBeanInFields(sysUser, redisLoginDto, Arrays.asList("id", "username", "password"));
+        redisLoginDto.setAccessToken(accessToken);
+        redisLoginDto.setRefTime(JwtTokenUtils2.getTokenFailureTime(24 * 60));
+        boolean boo = AuthoritySystemCache.USER_ACCESS_TOKEN.set(sysUser.getId(), redisLoginDto, 24 * 60 * 60);
+        log.info("boo:{}", boo);
 
         return accessToken;
     }
@@ -82,5 +100,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         verifyCodeVo.setCodeBase64(base64);
         verifyCodeVo.setCodeUUID(uuid);
         return verifyCodeVo;
+    }
+
+    @Override
+    public Boolean auth(AuthDto authDto) {
+        List<SysRole> roleList = sysRoleMapper.getRolesByUsername(authDto.getUsername());
+        return null;
     }
 }

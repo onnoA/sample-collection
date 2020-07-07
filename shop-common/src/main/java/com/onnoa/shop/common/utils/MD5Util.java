@@ -83,13 +83,13 @@ public class MD5Util {
     /**
      * 校验原始密码和加密后的密码是否一致
      *
-     * @param password 原始密码
+     * @param enterPassword 原始密码
      * @param encryptedPwd 加密后的密码
      * @return
      * @author daniel
      * @time 2016-6-11 下午8:45:39
      */
-    public static boolean verify(String password, String encryptedPwd) {
+    public static boolean verify(String enterPassword, String encryptedPwd) {
         char[] cs1 = new char[32];
         char[] cs2 = new char[16];
         for (int i = 0; i < 48; i += 3) {
@@ -98,7 +98,7 @@ public class MD5Util {
             cs2[i / 3] = encryptedPwd.charAt(i + 1);
         }
         String salt = new String(cs2);
-        return md5Hex(password + salt).equals(new String(cs1));
+        return md5Hex(enterPassword + salt).equals(new String(cs1));
     }
 
     /**

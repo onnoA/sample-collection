@@ -11,6 +11,6 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class JWtObj {
-    private int id;
+    private String id;
     private String username;
 }

@@ -41,7 +41,8 @@ public class WebLogAspect {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-    @Pointcut("execution(public * com.onnoa.shop.*.*.controller.*.*(..))")
+    @Pointcut("execution(public * com.onnoa.shop.*.*.controller..*.*(..)) ||" +
+            "execution(public * com.onnoa.shop.*.*.*.controller..*.*(..))")
     public void webLog() {
     }
 

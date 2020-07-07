@@ -31,13 +31,14 @@ public class JwtTokenUtils3 {
 
     /**
      * 功能描述:
-     * @param userId      - 用户编号
-     * @param userName    - 用户名
-     * @param identities  - 客户端信息（变长参数），目前包含浏览器信息，用于客户端拦截器校验，防止跨域非法访问
-     *  格式：A.B.C
-     * A-header头信息
-     * B-payload 有效负荷
-     * C-signature 签名信息 是将header和payload进行加密生成的
+     *
+     * @param userId     - 用户编号
+     * @param userName   - 用户名
+     * @param identities - 客户端信息（变长参数），目前包含浏览器信息，用于客户端拦截器校验，防止跨域非法访问
+     *                   格式：A.B.C
+     *                   A-header头信息
+     *                   B-payload 有效负荷
+     *                   C-signature 签名信息 是将header和payload进行加密生成的
      * @return
      * @date 2019/11/29 16:05
      */
@@ -48,7 +49,7 @@ public class JwtTokenUtils3 {
         long nowTimeMillis = System.currentTimeMillis();
         Date now = new Date(nowTimeMillis);
         //将BASE64SECRET常量字符串使用base64解码成字节数组
-        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(JWTConstant.JWT_SECRET);
+        byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(JWTConstant.ACCESS_TOKEN_SECRET);
         //使用HmacSHA256签名算法生成一个HS256的签名秘钥Key
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
         //添加构成JWT的参数
