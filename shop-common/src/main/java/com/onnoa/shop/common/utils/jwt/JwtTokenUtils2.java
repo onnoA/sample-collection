@@ -154,11 +154,14 @@ public class JwtTokenUtils2 {
 
     public static void main(String[] args) {
 
-        String s = UuidUtil.genUuidNoLine();
-        System.out.println("uuid:" + s);
+        for (int i = 0; i < 10; i++) {
+            String s = UuidUtil.genUuidNoLine();
+            System.out.println("uuid:" + s);
+        }
 
-        String enPwd = MD5Util.generate("123456");
-        System.out.println("加密后的密码：" + enPwd);
+
+        /*String enPwd = MD5Util.generate("123456");
+        System.out.println("加密后的密码：" + enPwd);*/
 
 
 
