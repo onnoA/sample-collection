@@ -16,6 +16,7 @@ public class UserException extends ServiceException {
     public static final ServiceException ACCESS_TOKEN_HAS_EXPIRED = new ServiceException(400010005, "accessToken已过期！");
     public static final ServiceException USERID_AUTH_NOT_PASSED = new ServiceException(400010006, "用户ID验证不通过！");
     public static final ServiceException USER_HAS_NOT_PERMISSION = new ServiceException(400010007, "用户没有该权限！");
+    public static final ServiceException DATA_INVALID = new ServiceException(400010008, "{0}");
 
     protected int code;
     protected String msg;

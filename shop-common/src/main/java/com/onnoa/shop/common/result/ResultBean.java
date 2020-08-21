@@ -3,6 +3,8 @@ package com.onnoa.shop.common.result;
 import com.onnoa.shop.common.exception.ErrorCode;
 import org.springframework.util.Assert;
 
+import java.io.Serializable;
+
 /**
  * @Description: 包装通用的返回结果
  * @Author: onnoA
@@ -46,6 +48,10 @@ public class ResultBean<T> {
 
     public static <T> ResultBean<T> error(ResultBean<?> result) {
         return error(result.getCode(), result.getMessage());
+    }
+
+    public static <T> ResultBean<T> error(T data) {
+        return new ResultBean<>(FAIL_CODE, currentTimeMillis, failMsg, data);
     }
 
     public static <T> ResultBean<T> error(ErrorCode errorCode) {
@@ -103,6 +109,7 @@ public class ResultBean<T> {
         return "ResultBean{" +
                 "code=" + code +
                 ", message='" + message + '\'' +
+                ", timestamp=" + timestamp +
                 ", data=" + data +
                 '}';
     }

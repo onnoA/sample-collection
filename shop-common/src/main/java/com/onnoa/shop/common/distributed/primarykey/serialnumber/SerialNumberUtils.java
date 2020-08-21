@@ -8,11 +8,9 @@ import java.util.List;
  * 注意：序列号模板和备注仅在第一创建时有效，用户初始化数据配置<br>
  * 在第二次执行时，模板使用数据库中已有的，备注也不会被更新到数据库。
  *
- * @author 丁伟
- * @date 2016年3月30日
- * @version 1.0
  */
 public abstract class SerialNumberUtils {
+
 	private static ISerialNumberGenerator snGenerator = new DefaultSerialNumberGenerator();
 
 	/** 添加单据系统默认产生规则 */
@@ -99,6 +97,10 @@ public abstract class SerialNumberUtils {
 		return genSn("pay_order_no");
 	}
 
+	public static void main(String[] args) {
+		String payOrderNo = getPayOrderNo();
+		System.out.println(payOrderNo);
+	}
 	/*public static final String getEshopOrderNo() {
 		return genSn("eshop_order_no");
 	}

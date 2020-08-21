@@ -25,6 +25,12 @@ public class DateUtils {
 
     private static Logger LOGGER = LoggerFactory.getLogger(DateUtils.class);
 
+    // 系统默认日期格式
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
+
+    // 系统默认日期时间格式
+    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
     /**
      * 返回当天最早的事件 00:00:00
      *

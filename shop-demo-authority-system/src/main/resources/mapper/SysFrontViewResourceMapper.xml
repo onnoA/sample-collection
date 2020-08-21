@@ -1,34 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.onnoa.shop.demo.authority.system.mapper.SysFrontViewResourceMapper">
-  <resultMap id="BaseResultMap" type="com.onnoa.shop.demo.authority.system.domain.SysFrontViewResource">
-    <!--@mbg.generated-->
-    <!--@Table sys_front_view_resource-->
-    <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="parent_id" jdbcType="VARCHAR" property="parentId" />
-    <result column="path" jdbcType="VARCHAR" property="path" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="descr" jdbcType="VARCHAR" property="descr" />
-    <result column="icon" jdbcType="VARCHAR" property="icon" />
-    <result column="type" jdbcType="INTEGER" property="type" />
-    <result column="level" jdbcType="INTEGER" property="level" />
-    <result column="sort" jdbcType="INTEGER" property="sort" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, parent_id, `path`, `name`, descr, icon, `type`, `level`, sort, create_time, update_time
-  </sql>
+    <resultMap id="BaseResultMap" type="com.onnoa.shop.demo.authority.system.domain.SysFrontViewResource">
+        <!--@mbg.generated-->
+        <!--@Table sys_front_view_resource-->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="parent_id" jdbcType="VARCHAR" property="parentId"/>
+        <result column="path" jdbcType="VARCHAR" property="path"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="descr" jdbcType="VARCHAR" property="descr"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="level" jdbcType="INTEGER" property="level"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, parent_id, `path`, `name`, descr, icon, `type`, `level`, sort, create_time, update_time
+    </sql>
 
-  <select id="getViewResourcesByRoleIdAndPath" resultType="com.onnoa.shop.demo.authority.system.domain.SysFrontViewResource">
-    select
+    <select id="getViewResourcesByRoleIdAndPath"
+            resultType="com.onnoa.shop.demo.authority.system.domain.SysFrontViewResource">
+        select
         front.*
-    from sys_front_view_resource front
-    inner join sys_front_view_resource_role front_role on front.id = front_role.view_id
-    inner join sys_role role on role.id = front_role.role_id
-    where front.path=#{frontPath} and role.id = #{roleId}
+        from sys_front_view_resource front
+        inner join sys_front_view_resource_role front_role on front.id = front_role.view_id
+        inner join sys_role role on role.id = front_role.role_id
+        where front.path=#{frontPath} and role.id = #{roleId}
+    </select>
 
-  </select>
+    <select id="getFrontViewResourceByRoleId" resultType="com.onnoa.shop.demo.authority.system.dto.BaseSysFrontViewResourceDto">
+        select
+            front.*
+        from sys_front_view_resource_role front_role
+        inner join sys_front_view_resource front on front_role.view_id = front.id
+        where front_role.role_id = #{roleId} and front.type != 3
+    </select>
+
+    <select id="getFrontButtonList" resultMap="BaseResultMap">
+        select
+            front.*
+        from sys_front_view_resource_role front_role
+        inner join sys_front_view_resource front on front_role.view_id = front.id
+        where front_role.role_id = #{roleId} and front.parent_id= #{parentId} and front.type = 3
+    </select>
+
+    <select id="getAllFrontResourceList" resultType="com.onnoa.shop.demo.authority.system.dto.BaseSysFrontViewResourceDto">
+        select
+            front.*
+        from sys_front_view_resource front
+        order by sort asc
+    </select>
+
+    <select id="selectViewResourceById" resultType="com.onnoa.shop.demo.authority.system.dto.FrontViewResourceDto">
+        select
+            front.*,
+            back_resource.interface_url as interfaceUrl
+        from sys_front_view_resource_back_inter_resource front_back_resource
+        inner join sys_front_view_resource front on front.id = front_back_resource.front_view_path_id
+        inner join sys_back_end_inter_resource back_resource on front_back_resource.back_end_view_url_id = back_resource.id
+        where front_back_resource.front_view_path_id = #{frontViewId}
+    </select>
 
 </mapper>

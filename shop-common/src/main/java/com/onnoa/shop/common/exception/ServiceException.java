@@ -48,12 +48,20 @@ public class ServiceException extends RuntimeException implements Serializable {
     protected int code;
     protected String msg;
 
+
+    public ServiceException(String errMsg) {
+        super(errMsg);
+    }
+
     public ServiceException(int code, String msg) {
         super(msg);
         this.code = code;
         this.msg = msg == null ? "" : msg;
     }
 
+    public ServiceException(String errMsg, Throwable e) {
+        super(errMsg, e);
+    }
 
     public Integer getCode() {
         return code;

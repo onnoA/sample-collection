@@ -20,12 +20,12 @@
     <select id="getRolesByUsername" resultMap="BaseResultMap">
         select
             role.id,
-            role.role_name as roleName,
-            role.role_no as roleNo,
+            role.role_name,
+            role.role_no,
             role.status,
-            role.role_descr as roleDescr,
-            role.create_time as createTime,
-            role.update_time as updateTime
+            role.role_descr,
+            role.create_time,
+            role.update_time
         from sys_user as user
         inner join sys_user_role as user_role on user.id = user_role.user_id
         inner join sys_role as role on user_role.role_id = role.id

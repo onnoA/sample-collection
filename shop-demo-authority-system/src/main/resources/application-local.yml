@@ -1,10 +1,10 @@
 server:
-  port: 9090
+  port: 9091
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/sample_collections?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://127.0.0.1:3306/sample_collections?characterEncoding=UTF8&serverTimezone=GMT%2B8&allowMultiQueries=true
     username: root
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
@@ -23,7 +23,7 @@ spring:
     # Redis服务器连接端口
     port: 6379
     # Redis服务器连接密码（默认为空）
-    password: 123456
+    password:
     # 连接超时时间（毫秒）
     timeout: 3000ms
     # lettuce 和 jedis 的区别：
@@ -76,10 +76,3 @@ mybatis-plus:
     cache-enabled: true
     # mybatis plus sql 日志打印
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
-
-
-
-
-
-

@@ -19,6 +19,7 @@ public class DefaultSerialNumberGenerator implements ISerialNumberGenerator {
 		requestBizData.put("key", key);
 		requestBizData.put("template", template);
 		requestBizData.put("remark", remark);
+
 		/*IRemoteServiceAccessor accessor = RemoteCallFactory.createAccessor();
 		CooperatorContext result = accessor.remoteCall("common.serialnumber.generate", requestBizData);
 		if (result.getCode() == 0) {

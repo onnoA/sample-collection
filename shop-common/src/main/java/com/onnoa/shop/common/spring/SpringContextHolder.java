@@ -9,9 +9,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
 /**
- * @Author gfxiang
- * @date 2019/8/9 16:34
- * @description
+ * 功能描述: springContext 工具类
+ * @date 2020/8/8 15:09
  */
 @Component
 @Slf4j

@@ -41,8 +41,9 @@ public class WebLogAspect {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-    @Pointcut("execution(public * com.onnoa.shop.*.*.controller..*.*(..)) ||" +
-            "execution(public * com.onnoa.shop.*.*.*.controller..*.*(..))")
+    @Pointcut("execution(public * com.onnoa.shop.*.*.controller..*.*(..)) ||"
+        + "execution(public * com.onnoa.shop.*.*.*.controller..*.*(..)) ||"
+        + "execution(public * com.onnoa.*.*.*.controller..*.*(..))")
     public void webLog() {
     }
 
@@ -50,7 +51,7 @@ public class WebLogAspect {
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         LOGGER.info("", joinPoint.getArgs());
         Long startTime = System.currentTimeMillis();
-        //获取当前请求对象
+        // 获取当前请求对象
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         Map map = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
@@ -58,21 +59,24 @@ public class WebLogAspect {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
+        Object target = joinPoint.getTarget();
+        LOGGER.info(
+            "signature:{},signature.getName():{},target：{},target.getClass().getName():{},joinPoint.getThis():{}",
+            signature, signature.getName(), target, target.getClass().getName(), joinPoint.getThis());
         String methodDesc = "";
         // swagger 注解
         if (method.isAnnotationPresent(ApiOperation.class)) {
             ApiOperation log = method.getAnnotation(ApiOperation.class);
             methodDesc = log.value();
         }
-        LOGGER.info("\n 请求开始 》》》》》》》》》》》 " +
-                        "方法名:【{}】,路径:【{}】,请求方式:【{}】,\n请求参数【{}】,方法描述:【{}】 ",
-                request.getRequestURI(), request.getRequestURL() + "",
-                request.getMethod(), getParameter(method, joinPoint.getArgs()), methodDesc);
+        LOGGER.info("\n 请求开始 》》》》》》》》》》》 " + "方法名:【{}】,路径:【{}】,请求方式:【{}】,\n请求参数【{}】,方法描述:【{}】 ",
+            request.getRequestURI(), request.getRequestURL() + "", request.getMethod(),
+            getParameter(method, joinPoint.getArgs()), methodDesc);
         Object result = joinPoint.proceed();
-        LOGGER.info("\n请求结束:耗时： 》》》》》》》  {}ms , 响应结果: 》》》》》》》\n  {} ", (System.currentTimeMillis() - startTime), result);
+        LOGGER.info("\n请求结束:耗时： 》》》》》》》  {}ms , 响应结果: 》》》》》》》\n  {} ", (System.currentTimeMillis() - startTime),
+            result);
         return result;
     }
-
 
     /**
      * 根据方法和传入的参数获取请求参数
@@ -83,12 +87,12 @@ public class WebLogAspect {
         LOGGER.info("parameters{}", parameters);
         for (int i = 0; i < parameters.length; i++) {
 
-            //将RequestBody注解修饰的参数作为请求参数
+            // 将RequestBody注解修饰的参数作为请求参数
             RequestBody requestBody = parameters[i].getAnnotation(RequestBody.class);
             if (requestBody != null) {
                 argList.add(args[i]);
             }
-            //将RequestParam注解修饰的参数作为请求参数
+            // 将RequestParam注解修饰的参数作为请求参数
             RequestParam requestParam = parameters[i].getAnnotation(RequestParam.class);
             if (requestParam != null) {
                 Map<String, Object> map = new HashMap<>();
@@ -109,9 +113,11 @@ public class WebLogAspect {
         }
         if (argList.isEmpty()) {
             return null;
-        } else if (argList.size() == 1) {
+        }
+        else if (argList.size() == 1) {
             return argList.get(0);
-        } else {
+        }
+        else {
             return argList;
         }
     }

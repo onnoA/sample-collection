@@ -62,7 +62,7 @@
         <collections4.version>4.4</collections4.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <jjwt.version>0.9.1</jjwt.version>
-
+        <happy-captcha.version>1.0.1</happy-captcha.version>
 
     </properties>
 
@@ -240,6 +240,12 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
                 <version>${jjwt.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.ramostear</groupId>
+                <artifactId>Happy-Captcha</artifactId>
+                <version>${happy-captcha.version}</version>
             </dependency>
 
 
