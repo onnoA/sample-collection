@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onnoa.shop.demo.authority.system.mapper.SysUserMapper">
+  <resultMap id="BaseResultMap" type="com.onnoa.shop.demo.authority.system.domain.SysUser">
+    <!--@mbg.generated-->
+    <!--@Table sys_user-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="mobile_phone" jdbcType="VARCHAR" property="mobilePhone" />
+    <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime" />
+    <result column="last_login_ip" jdbcType="VARCHAR" property="lastLoginIp" />
+    <result column="login_count" jdbcType="INTEGER" property="loginCount" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="deleted" jdbcType="INTEGER" property="deleted" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, username, `password`, create_time, update_time, mobile_phone, last_login_time, 
+    last_login_ip, login_count, real_name, email, `status`, deleted, creator
+  </sql>
+</mapper>

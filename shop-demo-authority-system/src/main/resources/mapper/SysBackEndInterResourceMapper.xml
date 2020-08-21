@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onnoa.shop.demo.authority.system.mapper.SysBackEndInterResourceMapper">
+  <resultMap id="BaseResultMap" type="com.onnoa.shop.demo.authority.system.domain.SysBackEndInterResource">
+    <!--@mbg.generated-->
+    <!--@Table sys_back_end_inter_resource-->
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="interface_url" jdbcType="VARCHAR" property="interfaceUrl" />
+    <result column="interface_name" jdbcType="VARCHAR" property="interfaceName" />
+    <result column="descr" jdbcType="VARCHAR" property="descr" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, interface_url, interface_name, descr, create_time, update_time
+  </sql>
+
+  <select id="getBackEndInterResourceByFrontId" resultType="com.onnoa.shop.demo.authority.system.domain.SysBackEndInterResource">
+    select back_resource.*
+    from sys_back_inter_resource back_resource
+    inner join sys_front_view_resource_back_inter_source front_back_resource on back_resource.id = front_back_resource.back_end_view_url_id
+    inner join sys_front_view_resource front_resource on front_resource.id = front_back_resource.front_view_path_id
+    where front_resource.id = #{frontViewPathId}
+  </select>
+
+</mapper>

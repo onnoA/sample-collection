@@ -1,6 +1,7 @@
 package com.onnoa.shop.common.global;
 
 import com.onnoa.shop.common.exception.ServiceException;
+import com.onnoa.shop.common.exception.ServiceExceptionUtil;
 import com.onnoa.shop.common.exception.SysErrorCodeEnum;
 import com.onnoa.shop.common.result.ResultBean;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,14 +32,22 @@ public class GlobalExceptionHandler {
 
     private static Logger LOGGER = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    /**
+     * 功能描述: 自定义异常处理
+     *
+     * @param e
+     * @return
+     * @date 2020/6/5 15:50
+     */
     @ExceptionHandler(value = ServiceException.class)
     @ResponseBody
-    public ResultBean handleBizException(ServiceException e) {
+    public ResultBean handleServiceException(ServiceException e) {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("业务异常：", e);
         }
         return ResultBean.error(e.getCode(), e.getMessage());
     }
+
 
     @ExceptionHandler(value = BindException.class)
     @ResponseBody
@@ -70,9 +80,17 @@ public class GlobalExceptionHandler {
         return ResultBean.error(SysErrorCodeEnum.COMMON_PARAMS_IS_ILLICIT.getCode(), bindingResult.stream().map(ex -> ex.getField() + ":" + ex.getDefaultMessage()).collect(Collectors.joining("，")));
     }
 
+   /* @ExceptionHandler(value = SQLException.class)
+    @ResponseBody
+    public ResultBean handleMethodArgumentNotValidException(SQLException e) {
+        LOGGER.error("sql执行异常={}", e.getMessage(), e);
+        return ResultBean.error(ServiceExceptionUtil.error(SysErrorCodeEnum.COMMON_SQL_EXECUTE_ABNORMITY));
+    }*/
+
 
     /**
      * 功能描述: 全局未处理的异常.
+     *
      * @param e
      * @return
      * @date 2020/5/26 16:00
@@ -81,6 +99,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ResultBean exception(Exception e) {
+        LOGGER.error("系统异常：{}", e.getMessage(), e);
         return ResultBean.error(SysErrorCodeEnum.SYSTEM_GATEWAY_ERROR.getCode(), SysErrorCodeEnum.SYSTEM_GATEWAY_ERROR.getMessage() + e.getMessage() + ":" + e);
     }
 }

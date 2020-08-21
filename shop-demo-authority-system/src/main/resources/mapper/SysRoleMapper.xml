@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onnoa.shop.demo.authority.system.mapper.SysRoleMapper">
+    <resultMap id="BaseResultMap" type="com.onnoa.shop.demo.authority.system.domain.SysRole">
+        <!--@mbg.generated-->
+        <!--@Table sys_role-->
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+        <result column="role_no" jdbcType="VARCHAR" property="roleNo"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="role_descr" jdbcType="VARCHAR" property="roleDescr"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, role_name, role_no, `status`, role_descr, create_time, update_time
+    </sql>
+
+    <select id="getRolesByUsername" resultMap="BaseResultMap">
+        select
+            role.id,
+            role.role_name,
+            role.role_no,
+            role.status,
+            role.role_descr,
+            role.create_time,
+            role.update_time
+        from sys_user as user
+        inner join sys_user_role as user_role on user.id = user_role.user_id
+        inner join sys_role as role on user_role.role_id = role.id
+        where user.username = #{username}
+
+    </select>
+</mapper>
