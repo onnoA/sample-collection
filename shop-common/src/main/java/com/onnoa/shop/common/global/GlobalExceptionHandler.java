@@ -80,14 +80,6 @@ public class GlobalExceptionHandler {
         return ResultBean.error(SysErrorCodeEnum.COMMON_PARAMS_IS_ILLICIT.getCode(), bindingResult.stream().map(ex -> ex.getField() + ":" + ex.getDefaultMessage()).collect(Collectors.joining("，")));
     }
 
-   /* @ExceptionHandler(value = SQLException.class)
-    @ResponseBody
-    public ResultBean handleMethodArgumentNotValidException(SQLException e) {
-        LOGGER.error("sql执行异常={}", e.getMessage(), e);
-        return ResultBean.error(ServiceExceptionUtil.error(SysErrorCodeEnum.COMMON_SQL_EXECUTE_ABNORMITY));
-    }*/
-
-
     /**
      * 功能描述: 全局未处理的异常.
      *
@@ -102,4 +94,5 @@ public class GlobalExceptionHandler {
         LOGGER.error("系统异常：{}", e.getMessage(), e);
         return ResultBean.error(SysErrorCodeEnum.SYSTEM_GATEWAY_ERROR.getCode(), SysErrorCodeEnum.SYSTEM_GATEWAY_ERROR.getMessage() + e.getMessage() + ":" + e);
     }
+
 }

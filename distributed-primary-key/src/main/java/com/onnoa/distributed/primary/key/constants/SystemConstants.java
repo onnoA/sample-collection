@@ -8,4 +8,13 @@ package com.onnoa.distributed.primary.key.constants;
 public class SystemConstants {
 
     public static final String REDIS_KEY_PREFIX = "distributekey:redis";
+
+    public void cir (){
+        for (int i=0;i<10;i++){
+            if(i == 4){
+                return;
+            }
+
+        }
+    }
 }

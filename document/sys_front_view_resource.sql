@@ -28,7 +28,7 @@ CREATE TABLE `sys_front_view_resource`  (
   `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '菜单名称',
   `descr` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '菜单描述',
   `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '图标',
-  `type` int(2) NULL DEFAULT NULL COMMENT '类型：1菜单文件夹2菜单文件3按钮功能',
+  `type` varchar(2) NULL DEFAULT NULL COMMENT '类型：1菜单文件夹2菜单文件3按钮功能',
   `level` int(2) NULL DEFAULT NULL COMMENT '层级',
   `sort` int(3) NULL DEFAULT 1 COMMENT '排序',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',

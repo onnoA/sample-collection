@@ -1,9 +1,8 @@
 package com.onnoa.shop.common.result;
 
-import com.onnoa.shop.common.exception.ErrorCode;
 import org.springframework.util.Assert;
 
-import java.io.Serializable;
+import com.onnoa.shop.common.exception.ErrorCode;
 
 /**
  * @Description: 包装通用的返回结果
@@ -19,7 +18,6 @@ public class ResultBean<T> {
 
     private Long timestamp;
 
-
     private static final Integer SUCCESS_CODE = 200;
 
     private static final Integer FAIL_CODE = 500;
@@ -28,7 +26,7 @@ public class ResultBean<T> {
     private static String successMsg = "success";
 
     // 失败提示消息
-    private static String failMsg = "Failed";
+    private static String failMsg = "failed";
 
     // 当前时间戳
     private static Long currentTimeMillis = System.currentTimeMillis();
@@ -67,10 +65,13 @@ public class ResultBean<T> {
         return new ResultBean<>(SUCCESS_CODE, currentTimeMillis, successMsg, data);
     }
 
+    public static <T> ResultBean<T> success() {
+        return new ResultBean<>(SUCCESS_CODE, currentTimeMillis, successMsg, null);
+    }
+
     public static <T> ResultBean<T> error(Throwable e) {
         return new ResultBean<>(FAIL_CODE, currentTimeMillis, e.getMessage(), null);
     }
-
 
     public Integer getCode() {
         return code;
@@ -106,11 +107,7 @@ public class ResultBean<T> {
 
     @Override
     public String toString() {
-        return "ResultBean{" +
-                "code=" + code +
-                ", message='" + message + '\'' +
-                ", timestamp=" + timestamp +
-                ", data=" + data +
-                '}';
+        return "ResultBean{" + "code=" + code + ", message='" + message + '\'' + ", timestamp=" + timestamp + ", data="
+            + data + '}';
     }
 }

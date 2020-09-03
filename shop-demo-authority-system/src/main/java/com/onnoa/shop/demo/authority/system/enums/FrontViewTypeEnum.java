@@ -11,10 +11,10 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum FrontViewTypeEnum {
-    FOLDER(1,"菜单文件夹"),
-    FILE(2,"菜单文件"),
-    BUTTON(3,"按钮功能");
+    FOLDER("1","菜单文件夹"),
+    FILE("2","菜单文件"),
+    BUTTON("3","按钮功能");
 
-    private Integer type;
+    private String type;
     private String name;
 }

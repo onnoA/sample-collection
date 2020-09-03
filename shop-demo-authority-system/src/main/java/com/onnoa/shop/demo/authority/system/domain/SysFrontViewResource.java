@@ -1,13 +1,14 @@
 package com.onnoa.shop.demo.authority.system.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 import lombok.Data;
 
@@ -17,7 +18,7 @@ public class SysFrontViewResource implements Serializable {
     /**
      * 主键
      */
-    @TableId(value = "id", type = IdType.INPUT)
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
     private String id;
 
     /**
@@ -54,7 +55,7 @@ public class SysFrontViewResource implements Serializable {
      * 类型：1菜单文件夹2菜单文件3按钮功能
      */
     @TableField(value = "type")
-    private Integer type;
+    private String type;
 
     /**
      * 层级

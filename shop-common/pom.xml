@@ -112,11 +112,6 @@
             <artifactId>jjwt</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.ramostear</groupId>
-            <artifactId>Happy-Captcha</artifactId>
-        </dependency>
-
 
     </dependencies>
 

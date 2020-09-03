@@ -42,4 +42,13 @@ public class DistributeKeyController {
 
         return null;
     }
+
+    public void cir (){
+        for (int i=0;i<10;i++){
+            if(i == 4){
+                return;
+            }
+
+        }
+    }
 }
