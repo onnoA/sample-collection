@@ -4,11 +4,6 @@ import com.google.common.base.Preconditions;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
-/**
- * @Author gfxiang
- * @date 2019/8/9 16:34
- * @description
- */
 @Data
 public class ReliableMessageRegisterDto {
 	private String consumerGroup;

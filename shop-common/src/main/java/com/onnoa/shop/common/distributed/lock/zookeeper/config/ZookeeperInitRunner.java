@@ -11,11 +11,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.net.InetAddress;
 
-/**
- * @Author gfxiang
- * @date 2019/8/9 16:34
- * @description
- */
 //@Component
 @Order
 @Slf4j

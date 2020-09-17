@@ -21,4 +21,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public AccessTokenInterceptor accessTokenInterceptor() {
         return new AccessTokenInterceptor();
     }
+
+
 }

@@ -12,6 +12,10 @@ public class GlobalConstant {
     public static final String ZK_REGISTRY_ID_ROOT_PATH = "/shop/registry/id";
     public static final String ZK_REGISTRY_SEQ = "/shop/seq";
 
+    public static final String USER_TOKEN_AUTH_DTO = "USER_TOKEN_AUTH_DTO";
+
+    public static final String SLOW_SQL_LOG = "slowSqlLog";
+
 
     public static final class Symbol {
         private Symbol() {

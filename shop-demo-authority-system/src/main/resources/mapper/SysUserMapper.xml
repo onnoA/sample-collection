@@ -24,4 +24,15 @@
     id, username, `password`, create_time, update_time, mobile_phone, last_login_time, 
     last_login_ip, login_count, real_name, email, `status`, deleted, creator
   </sql>
+
+    <select id="selectUserPage" resultType="com.onnoa.shop.demo.authority.system.dto.UserDto">
+        select
+         id,username,realName,mobilePhone,loginCount,lastLoginIp,lastLoginTime
+        from sys_user
+          where 1=1
+            <if test="phoneOrUserName != null and phoneOrUserName != '' ">
+              and username like CONCAT('%',#{phoneOrUserName},'%') or mobile_phone like CONCAT('%',#{phoneOrUserName},'%')
+            </if>
+        order by create_time desc
+    </select>
 </mapper>

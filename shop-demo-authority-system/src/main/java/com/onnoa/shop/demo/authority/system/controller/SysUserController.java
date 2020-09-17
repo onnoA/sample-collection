@@ -7,13 +7,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.onnoa.shop.common.component.AspectLogOperation;
+import com.onnoa.shop.common.dto.PageDto;
 import com.onnoa.shop.common.result.ResultBean;
 import com.onnoa.shop.demo.authority.system.annotation.NoNeedTokenAuth;
 import com.onnoa.shop.demo.authority.system.dto.AuthDto;
 import com.onnoa.shop.demo.authority.system.dto.SysUserLoginDto;
+import com.onnoa.shop.demo.authority.system.dto.UserDto;
+import com.onnoa.shop.demo.authority.system.dto.UserReqDto;
 import com.onnoa.shop.demo.authority.system.service.SysUserService;
 import com.onnoa.shop.demo.authority.system.vo.VerifyCodeVo;
 
@@ -49,6 +53,20 @@ public class SysUserController {
     public ResultBean<Boolean> auth(@RequestBody @Valid AuthDto authDto) {
         Boolean hasAuth = userService.auth(authDto);
         return ResultBean.success(hasAuth);
+    }
+
+    @PostMapping(value = "/findUserList")
+    public ResultBean findUserList(@RequestBody UserReqDto userReqDto) {
+        PageDto<UserDto> resultPage = userService.findUserList(userReqDto);
+        return ResultBean.success(resultPage);
+    }
+
+    @PostMapping(value = "async")
+    public ResultBean async(@RequestParam int i){
+        for (int time = 0; time < i; time++) {
+            userService.async(time);
+        }
+        return ResultBean.success();
     }
 
 }

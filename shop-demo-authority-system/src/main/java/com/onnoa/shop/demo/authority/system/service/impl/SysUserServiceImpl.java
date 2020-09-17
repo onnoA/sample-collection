@@ -1,8 +1,22 @@
 package com.onnoa.shop.demo.authority.system.service.impl;
 
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.plugins.Page;
+import com.onnoa.shop.common.dto.PageDto;
 import com.onnoa.shop.common.utils.BeanUtils;
 import com.onnoa.shop.common.utils.CreateVerifyCodeUtil;
 import com.onnoa.shop.common.utils.IPUtil;
@@ -19,6 +33,8 @@ import com.onnoa.shop.demo.authority.system.domain.SysUser;
 import com.onnoa.shop.demo.authority.system.dto.AuthDto;
 import com.onnoa.shop.demo.authority.system.dto.RedisLoginUserDto;
 import com.onnoa.shop.demo.authority.system.dto.SysUserLoginDto;
+import com.onnoa.shop.demo.authority.system.dto.UserDto;
+import com.onnoa.shop.demo.authority.system.dto.UserReqDto;
 import com.onnoa.shop.demo.authority.system.exception.UserException;
 import com.onnoa.shop.demo.authority.system.mapper.SysBackEndInterResourceMapper;
 import com.onnoa.shop.demo.authority.system.mapper.SysFrontViewResourceMapper;
@@ -26,16 +42,8 @@ import com.onnoa.shop.demo.authority.system.mapper.SysRoleMapper;
 import com.onnoa.shop.demo.authority.system.mapper.SysUserMapper;
 import com.onnoa.shop.demo.authority.system.service.SysUserService;
 import com.onnoa.shop.demo.authority.system.vo.VerifyCodeVo;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -43,10 +51,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Autowired
     private SysUserMapper userMapper;
+
     @Autowired
     private SysRoleMapper sysRoleMapper;
+
     @Autowired
     private SysFrontViewResourceMapper frontViewResourceMapper;
+
     @Autowired
     private SysBackEndInterResourceMapper backEndInterResourceMapper;
 
@@ -83,7 +94,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         JWtObj jWtObj = new JWtObj();
         BeanUtils.copyToBean(sysUser, jWtObj);
         // 一天过期
-        String accessToken = JwtTokenUtils2.createJWT(jWtObj, UuidUtil.genUuid(), JSONObject.toJSONString(jWtObj), JWTConstant.ACCESS_TOKEN_SECRET, 24 * 60 * 60 * 1000);
+        String accessToken = JwtTokenUtils2.createJWT(jWtObj, UuidUtil.genUuid(), JSONObject.toJSONString(jWtObj),
+            JWTConstant.ACCESS_TOKEN_SECRET, 24 * 60 * 60 * 1000);
         RedisLoginUserDto redisLoginDto = new RedisLoginUserDto();
         BeanUtils.copyToBeanInFields(sysUser, redisLoginDto, Arrays.asList("id", "username", "password"));
         redisLoginDto.setAccessToken(accessToken);
@@ -93,7 +105,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         return accessToken;
     }
-
 
     @Override
     public VerifyCodeVo getVerifyCode() {
@@ -117,9 +128,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         List<SysRole> roleList = sysRoleMapper.getRolesByUsername(authDto.getUsername());
         if (CollectionUtils.isNotEmpty(roleList)) {
             for (SysRole role : roleList) {
-                SysFrontViewResource frontViewResource = frontViewResourceMapper.getViewResourcesByRoleIdAndPath(role.getId(), authDto.getFrontPath());
+                SysFrontViewResource frontViewResource = frontViewResourceMapper
+                    .getViewResourcesByRoleIdAndPath(role.getId(), authDto.getFrontPath());
                 if (frontViewResource != null) {
-                    SysBackEndInterResource backEndInterResource = backEndInterResourceMapper.getBackEndInterResourceByFrontId(frontViewResource.getId());
+                    SysBackEndInterResource backEndInterResource = backEndInterResourceMapper
+                        .getBackEndInterResourceByFrontId(frontViewResource.getId());
                     if (backEndInterResource != null) {
                         return true;
                     }
@@ -127,5 +140,27 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             }
         }
         return false;
+    }
+
+    @Override
+    public PageDto<UserDto> findUserList(UserReqDto userReqDto) {
+        Page<UserDto> page = new Page<>(userReqDto.getPageNo(), userReqDto.getPageSize());
+        List<UserDto> userDtoList = userMapper.selectUserPage(page, userReqDto);
+        if (CollectionUtils.isNotEmpty(userDtoList)) {
+            for (UserDto userDto : userDtoList) {
+                List<SysRole> roleList = sysRoleMapper.getRolesByUserId(userDto.getId());
+                String roleNameStr = roleList.stream().map(role -> role.getRoleName()).collect(Collectors.joining(","));
+                userDto.setRoleListStr(roleNameStr);
+            }
+        }
+        page.setRecords(userDtoList);
+        return BeanUtils.copyToNewBean(page, PageDto.class);
+    }
+
+    @Override
+    @Async("authorityServiceAsyncExecutor")
+    public void async(int time) {
+        log.info("进入异步,次数:{}", time);
+
     }
 }
