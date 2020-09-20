@@ -3,6 +3,7 @@ package com.onnoa.shop.demo.authority.system.service.impl;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -162,5 +163,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public void async(int time) {
         log.info("进入异步,次数:{}", time);
 
+    }
+
+    @Override
+    public List<UserDto> getUserMap(Map map) {
+        return userMapper.getUserMap(map);
+    }
+
+    @Override
+    public List<UserDto> getUserDto(UserDto dto) {
+        return userMapper.getUserDto(dto);
+    }
+
+    @Override
+    public List<UserDto> getUserStr(String username) {
+        return userMapper.getUserStr(username);
     }
 }

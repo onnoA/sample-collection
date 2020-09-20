@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: springcloud-nacos-test-provider
+  cloud:
+    nacos:
+      config:
+        server-addr: http://192.168.118.131:8848
+        enabled: false
+        namespace: 4faab170-f047-4434-ba9d-e837c3c322c2
+        file-extension: yaml
+        ext-config[0]:
+          data-id: springcloud-nacos-provider-test.yaml
+          refresh: true
+          #配置组名子，需要在nacos的配置设置，不然找不到
+        group: DEFAULT_GROUP
+      discovery:
+        server-addr: http://192.168.118.131:8848 #注册中心地址

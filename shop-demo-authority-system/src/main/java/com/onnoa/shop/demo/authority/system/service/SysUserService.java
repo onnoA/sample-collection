@@ -9,6 +9,9 @@ import com.onnoa.shop.demo.authority.system.dto.UserDto;
 import com.onnoa.shop.demo.authority.system.dto.UserReqDto;
 import com.onnoa.shop.demo.authority.system.vo.VerifyCodeVo;
 
+import java.util.List;
+import java.util.Map;
+
 public interface SysUserService extends IService<SysUser> {
 
     /**
@@ -43,4 +46,10 @@ public interface SysUserService extends IService<SysUser> {
     PageDto<UserDto> findUserList(UserReqDto userReqDto);
 
     void async(int time);
+
+    List<UserDto> getUserMap(Map map);
+
+    List<UserDto> getUserDto(UserDto dto);
+
+    List<UserDto> getUserStr(String username);
 }

@@ -21,7 +21,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, username, `password`, create_time, update_time, mobile_phone, last_login_time, 
+    id, username, `password`, create_time, update_time, mobile_phone, last_login_time,
     last_login_ip, login_count, real_name, email, `status`, deleted, creator
   </sql>
 
@@ -35,4 +35,16 @@
             </if>
         order by create_time desc
     </select>
+
+    <select id="getUserMap" resultType="com.onnoa.shop.demo.authority.system.dto.UserDto" parameterType="Map">
+        select * from sys_user where username = #{username}
+    </select>
+
+  <select id="getUserDto" resultType="com.onnoa.shop.demo.authority.system.dto.UserDto" parameterType="com.onnoa.shop.demo.authority.system.dto.UserDto">
+    select * from sys_user where username = #{username}
+  </select>
+
+  <select id="getUserStr" resultType="com.onnoa.shop.demo.authority.system.dto.UserDto" parameterType="java.lang.String">
+    select * from sys_user where username = #{username}
+  </select>
 </mapper>

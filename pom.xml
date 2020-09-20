@@ -24,20 +24,36 @@
         <module>shop-demo-video</module>
         <module>shop-demo-qiniu</module>
         <module>shop-demo-authority-system</module>
+        <module>myshop-springcloud-nacos</module>
     </modules>
 
-    <distributionManagement>
+   <!-- <distributionManagement>
         <repository>
             <id>nexus-releases</id>
             <name>Nexus Release Repository</name>
             <url>http://192.168.118.131:8081/repository/maven-releases/</url>
         </repository>
+
         <snapshotRepository>
             <id>nexus-snapshots</id>
             <name>Nexus Snapshot Repository</name>
             <url>http://192.168.118.131:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
-    </distributionManagement>
+
+    </distributionManagement>-->
+
+    <repositories>
+        <repository>
+            <id>nexus-releases</id>
+            <name>Nexus Release Repository</name>
+            <url>http://192.168.118.131:8081/repository/maven-releases/</url>
+        </repository>
+        <repository>
+            <id>nexus-snapshots</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>http://192.168.118.131:8081/repository/maven-snapshots/</url>
+        </repository>
+    </repositories>
 
 
     <properties>
@@ -62,6 +78,7 @@
         <collections4.version>4.4</collections4.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <jjwt.version>0.9.1</jjwt.version>
+        <hutool.version>4.5.7</hutool.version>
 
     </properties>
 
@@ -247,18 +264,11 @@
                 <version>${jjwt.version}</version>
             </dependency>
 
-
-
-
-
-
-
-
-
-
-
-
-
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
 
         </dependencies>
 
