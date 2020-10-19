@@ -2,7 +2,10 @@ package com.onnoa.shop.demo.authority.system.controller;
 
 import javax.validation.Valid;
 
+import com.onnoa.shop.common.utils.PropertyHolder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,10 +30,15 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping(value = "/user")
 @Api(tags = "用户相关接口", description = "提供用户相关的 Rest API，如登录、获取验证码等")
+@Slf4j
+@AspectLogOperation
 public class SysUserController {
 
     @Autowired
     private SysUserService userService;
+
+    @Autowired
+    private Environment environment;
 
     @PostMapping(value = "/login")
     @NoNeedTokenAuth
@@ -42,9 +50,12 @@ public class SysUserController {
 
     @GetMapping(value = "/verify")
     @NoNeedTokenAuth
-    @AspectLogOperation(option = "获取验证码操作")
+    @AspectLogOperation
     @ApiOperation(value = "登录获取验证码接口", notes = "验证码接口")
     public ResultBean<VerifyCodeVo> getVerifyCode() {
+        String property = environment.getProperty("server.port");
+        String port = PropertyHolder.getProperty("port");
+        log.info("从配置文件获取的端口:{},{}",port,property);
         VerifyCodeVo resultVo = userService.getVerifyCode();
         return ResultBean.success(resultVo);
     }

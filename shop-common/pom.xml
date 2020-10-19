@@ -112,6 +112,25 @@
             <artifactId>jjwt</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>4.5.3</version>
+        </dependency>
+
+        <!--<dependency>
+            <groupId>com.roncoo</groupId>
+            <artifactId>fastdfs-client-java</artifactId>
+            <version>1.29</version>
+        </dependency>-->
+
+        <dependency>
+            <groupId>org.csource</groupId>
+            <artifactId>fastdfs-client-java</artifactId>
+            <version>1.27-SNAPSHOT</version>
+        </dependency>
+
+
 
     </dependencies>
 

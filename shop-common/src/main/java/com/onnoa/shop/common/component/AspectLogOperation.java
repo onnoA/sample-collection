@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME) // 注解会在class中存在，运行时可通过反射获取
-@Target(ElementType.METHOD) // 目标是方法
+@Target({ElementType.METHOD,ElementType.TYPE}) // 目标是方法
 public @interface AspectLogOperation {
     String modelName() default "";
 
@@ -14,6 +14,6 @@ public @interface AspectLogOperation {
     // String user();
 
     // 接下了一个就是当前使用这个方法的用户是谁
-    String option();
+    //String option();
     // 之后就是这个用户所做的是什么操作
 }

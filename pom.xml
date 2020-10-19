@@ -24,7 +24,8 @@
         <module>shop-demo-video</module>
         <module>shop-demo-qiniu</module>
         <module>shop-demo-authority-system</module>
-        <module>myshop-springcloud-nacos</module>
+        <module>shop-demo-upload</module>
+        <module>myshop-springcloud-nacos-before</module>
     </modules>
 
    <!-- <distributionManagement>

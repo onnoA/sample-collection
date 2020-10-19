@@ -17,7 +17,10 @@ public enum  IsShieldEnums {
     ;
 
 
+
+
     private int code;
     private String msg;
+
 
 }
