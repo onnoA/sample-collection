@@ -1,6 +1,8 @@
 package com.onnoa.shop.demo.upload.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.onnoa.shop.common.result.ResultBean;
+import com.onnoa.shop.common.utils.PdfUtil;
 import com.onnoa.shop.demo.upload.exception.FileException;
 import com.onnoa.shop.demo.upload.service.CrmFileService;
 import org.apache.commons.io.IOUtils;
@@ -17,8 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -45,8 +55,33 @@ public class ImageController {
             return;
         }
         OutputStream outputStream = null;
+        BufferedInputStream bin = null;
+        FileOutputStream fout = null;
+        BufferedOutputStream bout = null;
         try {
             byte[] buf = crmFileService.download(fileId);
+            ByteArrayInputStream bais = new ByteArrayInputStream(buf);
+            bin = new BufferedInputStream(bais);
+            File file = new File("D:\\test2.pdf");
+            fout = new FileOutputStream(file);
+            bout = new BufferedOutputStream(fout);
+            byte[] buffers = new byte[1024];
+            int len = bin.read(buffers);
+            while (len != -1) {
+                bout.write(buffers, 0, len);
+                len = bin.read(buffers);
+            }
+             //刷新此输出流并强制写出所有缓冲的输出字节，必须这行代码，否则有可能有问题
+            bout.flush();
+            List<String> baseList = new ArrayList<>();
+            InputStream is = new ByteArrayInputStream(buf);
+            List<Object> imageList = PdfUtil.readImage(is, true);
+            if (imageList != null && !imageList.isEmpty()) {
+                for (Object image : imageList) {
+                    baseList.add(image.toString());
+                }
+            }
+            //logger.info(JSON.toJSONString(baseList));
             outputStream = response.getOutputStream();
             outputStream.write(buf, 0, buf.length);
             outputStream.flush();
@@ -55,6 +90,13 @@ public class ImageController {
             logger.error("输出文件流出错", e);
         } finally {
             IOUtils.closeQuietly(outputStream);
+            try {
+                bin.close();
+                fout.close();
+                bout.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return;
     }

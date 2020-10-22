@@ -9,7 +9,7 @@ import com.onnoa.shop.common.exception.ServiceException;
  */
 public class VideoException extends ServiceException {
 
-    public static final ServiceException VIDEO_FORMAT_ABNORMAL = new ServiceException(300010001, "暂不支持:{}格式的视频。");
+    public static final ServiceException VIDEO_FORMAT_ABNORMAL = new VideoException(300010001, "暂不支持:{}格式的视频。");
 
     public static VideoException FAILED_TO_READ_VIDEO_FILE = new VideoException(300010002, "解析视频信息失败");
 

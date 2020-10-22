@@ -1,6 +1,5 @@
 package com.onnoa.shop.demo.comment.dto;
 
-import com.onnoa.shop.common.dto.PageRequestDto;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;

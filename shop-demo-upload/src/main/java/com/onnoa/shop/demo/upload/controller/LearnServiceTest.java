@@ -1,17 +1,24 @@
 package com.onnoa.shop.demo.upload.controller;
 
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
+import com.onnoa.shop.common.utils.XMLUtils;
 import com.onnoa.shop.demo.upload.dto.OcrCustomerOrderAttrDTO;
+import com.onnoa.shop.demo.upload.dto.QryBusPortInfoDto;
+import com.onnoa.shop.demo.upload.service.AbilityOpenApiService;
 import com.onnoa.shop.demo.upload.service.CrmFileService;
 import com.onnoa.shop.demo.upload.service.OrderCutImageService;
+import org.apache.commons.collections.MapUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.xml.bind.JAXBException;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -24,10 +31,13 @@ public class LearnServiceTest {
     @Autowired
     OrderCutImageService orderCutImageService;
 
+    @Autowired
+    private AbilityOpenApiService abilityOpenApiService;
+
     @Test
     public void getLearn() {
         System.out.println(UUID.randomUUID());
-        String fileId = "db83965d2b91f2b5477bd8988897ff51_0";
+        String fileId = "a124285bbb9f86145f5b1468adc5acb2_0";
         byte[] download = crmFileService.download(fileId);
         System.out.println(Base64.getEncoder().encodeToString(download));
         if (download != null) {
@@ -69,7 +79,82 @@ public class LearnServiceTest {
         String url = "http://134.176.102.33:9080/api/openapi/INFSaveAuditResult/INFSaveAuditResult";
         Map<String, Object> stringObjectMap = orderCutImageService.callbackAiCheck(params, header, url);
         System.out.println(stringObjectMap);
+    }
 
+    @Test
+    public void abilityPost() {
+        String url = "http://134.176.102.33:8081/api/rest";
+        Map<String, Object> requestMap = Maps.newHashMap();
+        String configStr = "{\n" +
+                "\t\"method\": \"qry.contract.QryContractFile\",\n" +
+                "\t\"access_token\": \"OTBkMjJiM2Y0NmVjNzdmOTc0NWFkZWMyZGU1MThhMmI=\",\n" +
+                "\t\"reqSystem\": \"YWWB\",\n" +
+                "\t\"reqPwd\": \"HNYWWB\",\n" +
+                "\t\"status\": \"0\"\n" +
+                "}";
+        Map<String, Object> contentMap = new HashMap<>();
+        Map configParams = JSON.parseObject(configStr, Map.class);
+        contentMap.put("reqSystem", MapUtils.getString(configParams,"reqSystem"));
+        contentMap.put("reqPwd", MapUtils.getString(configParams,"reqPwd"));
+        contentMap.put("contractCode", "HNCSA2006921CGN00");
+        requestMap.put("content", contentMap);
+        requestMap.put("status", MapUtils.getString(configParams, "status"));
+        requestMap.put("access_token", MapUtils.getString(configParams, "access_token"));
+        requestMap.put("method", MapUtils.getString(configParams, "method"));
+        //Map<String, Object> resultMap = abilityOpenApiService.commonRequest(requestMap, url);
+        Map<String, Object> resultMap = abilityOpenApiService.postAbility(requestMap, url);
+        System.out.println("请求结束返回的结果====> :" + resultMap);
+    }
 
+    @Test
+    public void abilityPost2() {
+        String url = "http://134.176.102.33:8081/api/rest";
+        Map<String, Object> requestMap = Maps.newHashMap();
+        String configStr = "{\n" +
+                "\t\"method\": \"qry.contract.QryContractFile\",\n" +
+                "\t\"access_token\": \"OTBkMjJiM2Y0NmVjNzdmOTc0NWFkZWMyZGU1MThhMmI=\",\n" +
+                "\t\"reqSystem\": \"YWWB\",\n" +
+                "\t\"reqPwd\": \"HNYWWB\",\n" +
+                "\t\"status\": \"0\"\n" +
+                "}";
+        Map<String, Object> contentMap = new HashMap<>();
+        Map configParams = JSON.parseObject(configStr, Map.class);
+        contentMap.put("reqSystem", MapUtils.getString(configParams,"reqSystem"));
+        contentMap.put("reqPwd", MapUtils.getString(configParams,"reqPwd"));
+        contentMap.put("contractCode", "HNCSA2006921CGN00");
+        requestMap.put("content", contentMap);
+        requestMap.put("status", MapUtils.getString(configParams, "status"));
+        requestMap.put("access_token", MapUtils.getString(configParams, "access_token"));
+        requestMap.put("method", MapUtils.getString(configParams, "method"));
+        Map<String, Object> resultMap = abilityOpenApiService.postAbility(requestMap, url);
+        System.out.println("请求结束返回的结果====> :" + resultMap);
+    }
+
+    @Test
+    public void postAbility() throws JAXBException {
+        String url = "http://134.176.102.33:8081/api/rest";
+        Map<String, Object> requestMap = Maps.newHashMap();
+        String configStr = "{\n" +
+                "\t\"method\": \"qry.resinfo.qryBusPortInfo\",\n" +
+                "\t\"access_token\": \"OTBkMjJiM2Y0NmVjNzdmOTc0NWFkZWMyZGU1MThhMmI=\",\n" +
+                "\t\"reqSystem\": \"YWWB\",\n" +
+                "\t\"reqPwd\": \"HNYWWB\",\n" +
+                "\t\"status\": \"0\"\n" +
+                "}";
+        Map configParams = JSON.parseObject(configStr, Map.class);
+        QryBusPortInfoDto.OrderDto qryDto = new QryBusPortInfoDto.OrderDto();
+        qryDto.setDisSeq("73011101972821306");
+        QryBusPortInfoDto user = new QryBusPortInfoDto("qryBusPortInfo", qryDto,null);
+        String inputXml = XMLUtils.bean2XmlString(user);
+        Map<String, Object> contentMap = new HashMap<>();
+        contentMap.put("reqSystem", MapUtils.getString(configParams,"reqSystem"));
+        contentMap.put("reqPwd", MapUtils.getString(configParams,"reqPwd"));
+        contentMap.put("inputXml", inputXml);
+        requestMap.put("content", contentMap);
+        requestMap.put("status", MapUtils.getString(configParams, "status"));
+        requestMap.put("access_token", MapUtils.getString(configParams, "access_token"));
+        requestMap.put("method", MapUtils.getString(configParams, "method"));
+        Map<String, Object> returnMap = abilityOpenApiService.postAbility(requestMap, url);
+        System.out.println("请求返回的结果：{}" + returnMap);
     }
 }

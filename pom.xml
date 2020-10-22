@@ -26,22 +26,24 @@
         <module>shop-demo-authority-system</module>
         <module>shop-demo-upload</module>
         <module>myshop-springcloud-nacos-before</module>
+        <module>shop-demo-elasticsearch</module>
+        <module>shop-demo-mybatis-plus</module>
     </modules>
 
-   <!-- <distributionManagement>
-        <repository>
-            <id>nexus-releases</id>
-            <name>Nexus Release Repository</name>
-            <url>http://192.168.118.131:8081/repository/maven-releases/</url>
-        </repository>
+    <!-- <distributionManagement>
+         <repository>
+             <id>nexus-releases</id>
+             <name>Nexus Release Repository</name>
+             <url>http://192.168.118.131:8081/repository/maven-releases/</url>
+         </repository>
 
-        <snapshotRepository>
-            <id>nexus-snapshots</id>
-            <name>Nexus Snapshot Repository</name>
-            <url>http://192.168.118.131:8081/repository/maven-snapshots/</url>
-        </snapshotRepository>
+         <snapshotRepository>
+             <id>nexus-snapshots</id>
+             <name>Nexus Snapshot Repository</name>
+             <url>http://192.168.118.131:8081/repository/maven-snapshots/</url>
+         </snapshotRepository>
 
-    </distributionManagement>-->
+     </distributionManagement>-->
 
     <repositories>
         <repository>

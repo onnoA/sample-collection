@@ -69,5 +69,8 @@
         <include refid="Base_Column_List"/>
         from sys_front_view_resource where parent_id = #{parentId}
     </select>
+    <select id="selectPageList" resultMap="BaseResultMap">
+        select * from sys_front_view_resource
+    </select>
 
 </mapper>

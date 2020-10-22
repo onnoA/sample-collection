@@ -96,7 +96,7 @@ public class SqlLogInterceptor implements Interceptor {
         log.info("record slow sql, executed sql : {}, execute time :{},execute result:{} , sql params list :{}",
             wholeSql, executeTime, proceed, paramList);
         // sql 执行时间超过定义的慢sql时间 ,异步记录慢sql相关日志信息
-        if ( /* enableSqlLogInterceptor && executeTime > overTime */ true) {
+        if (  enableSqlLogInterceptor && executeTime > overTime ) {
             sendSlowSql(proceed, boundSql, executeTime, paramList, wholeSql);
         }
         return proceed;

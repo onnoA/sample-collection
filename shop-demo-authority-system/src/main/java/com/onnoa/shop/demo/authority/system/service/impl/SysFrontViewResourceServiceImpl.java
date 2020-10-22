@@ -1,24 +1,12 @@
 package com.onnoa.shop.demo.authority.system.service.impl;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.curator.shaded.com.google.common.collect.Lists;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.onnoa.shop.common.dto.PageDto;
 import com.onnoa.shop.common.utils.BeanUtils;
+import com.onnoa.shop.common.utils.ExtBeanUtils;
 import com.onnoa.shop.demo.authority.system.domain.SysBackEndInterResource;
 import com.onnoa.shop.demo.authority.system.domain.SysFrontViewResource;
 import com.onnoa.shop.demo.authority.system.domain.SysFrontViewResourceBackInterResource;
@@ -35,10 +23,24 @@ import com.onnoa.shop.demo.authority.system.mapper.SysFrontViewResourceMapper;
 import com.onnoa.shop.demo.authority.system.mapper.SysRoleMapper;
 import com.onnoa.shop.demo.authority.system.service.SysFrontViewResourceService;
 import com.onnoa.shop.demo.authority.system.util.TreeUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.curator.shaded.com.google.common.collect.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class SysFrontViewResourceServiceImpl extends ServiceImpl<SysFrontViewResourceMapper, SysFrontViewResource>
-    implements SysFrontViewResourceService {
+        implements SysFrontViewResourceService {
 
     private static Logger LOGGER = LoggerFactory.getLogger(SysFrontViewResourceService.class);
 
@@ -63,7 +65,7 @@ public class SysFrontViewResourceServiceImpl extends ServiceImpl<SysFrontViewRes
         Set<BaseSysFrontViewResourceDto> tempFrontViewResourceSet = new HashSet<>();
         rolesByUsername.parallelStream().forEach(role -> {
             List<BaseSysFrontViewResourceDto> frontViewResourceList = frontViewResourceMapper
-                .getFrontViewResourceByRoleId(role.getId());
+                    .getFrontViewResourceByRoleId(role.getId());
             tempFrontViewResourceSet.addAll(frontViewResourceList);
         });
 
@@ -74,13 +76,38 @@ public class SysFrontViewResourceServiceImpl extends ServiceImpl<SysFrontViewRes
         return frontViewResourceList;
     }
 
+    public List<BaseSysFrontViewResourceDto> getTreeList(String username) {
+        Page<SysFrontViewResource> page = new Page<>(1, 5);
+        List<SysFrontViewResource> resultList = frontViewResourceMapper.selectPageList(page);
+        page.setRecords(resultList);
+        PageDto pageDto = ExtBeanUtils.copyToNewBean(page, PageDto.class);
+        LOGGER.info("自定义分页返回的结果:{}", JSONObject.toJSON(pageDto));
+        List<SysFrontViewResource> resourceList = list();
+        QueryWrapper<SysFrontViewResource> qw = new QueryWrapper<>();
+        //LambdaQueryWrapper<SysFrontViewResource> lambda = qw.lambda();
+        Page<SysFrontViewResource> result = page(page, qw);
+        LOGGER.info("分页结果:{}", result);
+        LOGGER.info("获取的资源列表:{}", resourceList);
+        List<SysRole> rolesByUsername = roleMapper.getRolesByUsername(username);
+        Set<BaseSysFrontViewResourceDto> tempFrontViewResourceSet = new HashSet<>();
+        rolesByUsername.parallelStream().forEach(role -> {
+            List<BaseSysFrontViewResourceDto> frontViewResourceList = frontViewResourceMapper
+                    .getFrontViewResourceByRoleId(role.getId());
+            tempFrontViewResourceSet.addAll(frontViewResourceList);
+        });
+
+        List<BaseSysFrontViewResourceDto> list = Lists.newArrayList();
+        list.addAll(tempFrontViewResourceSet);
+        return TreeUtil.filterRootNode(list);
+    }
+
     @Override
     public List<BaseSysFrontViewResourceDto> getButtonList(ButtonListDto dto) {
         List<SysRole> rolesByUsername = roleMapper.getRolesByUsername(dto.getUsername());
         Set<SysFrontViewResource> tempButtonSet = new HashSet<>();
         rolesByUsername.parallelStream().forEach(role -> {
             List<SysFrontViewResource> buttonList = frontViewResourceMapper.getFrontButtonList(role.getId(),
-                dto.getParentId());
+                    dto.getParentId());
             tempButtonSet.addAll(buttonList);
         });
 
@@ -142,8 +169,7 @@ public class SysFrontViewResourceServiceImpl extends ServiceImpl<SysFrontViewRes
                 entity.setBackEndViewUrlId(backEndEntity.getId());
                 // 插入关联表
                 frontBackResourceMapper.insert(entity);
-            }
-            else {
+            } else {
                 SysBackEndInterResource entity = new SysBackEndInterResource();
                 entity.setId(frontBackResource.getBackEndViewUrlId());
                 entity.setInterfaceUrl(requestDto.getInterfaceUrl());
@@ -177,7 +203,7 @@ public class SysFrontViewResourceServiceImpl extends ServiceImpl<SysFrontViewRes
 
     /**
      * 递归删除子节点
-     * 
+     *
      * @param parentId 父id
      */
     private void recursiveRemoveChildNode(String parentId) {
@@ -193,7 +219,7 @@ public class SysFrontViewResourceServiceImpl extends ServiceImpl<SysFrontViewRes
 
     /**
      * 删除前端资源信息以及如果是按钮同时删除按钮后端资源信息以及关联信息
-     * 
+     *
      * @param viewResource 前端资源信息
      */
     void delSelfAndButtonInfo(SysFrontViewResource viewResource) {
@@ -277,13 +303,13 @@ public class SysFrontViewResourceServiceImpl extends ServiceImpl<SysFrontViewRes
 
     /**
      * 根据前端资源id获取资源关联信息
-     * 
+     *
      * @param viewId 前端资源id
      * @return 资源关联信息
      */
     SysFrontViewResourceBackInterResource getFrontViewEntity(String viewId) {
         SysFrontViewResourceBackInterResource frontViewEntity = frontBackResourceMapper.selectOne(
-            new QueryWrapper<>(new SysFrontViewResourceBackInterResource()).eq("front_view_path_id", viewId));
+                new QueryWrapper<>(new SysFrontViewResourceBackInterResource()).eq("front_view_path_id", viewId));
         if (frontViewEntity == null) {
             throw UserException.OBJECT_IS_NULL;
         }
@@ -292,7 +318,7 @@ public class SysFrontViewResourceServiceImpl extends ServiceImpl<SysFrontViewRes
 
     /**
      * 参数校验方法
-     * 
+     *
      * @param addInfoDto 新增参数
      */
     private void paramsValidation(AddOrUpdateResourceInfoDto addInfoDto) {
@@ -303,7 +329,7 @@ public class SysFrontViewResourceServiceImpl extends ServiceImpl<SysFrontViewRes
             }
             // 按钮
             if (FrontViewTypeEnum.BUTTON.getType().equals(addInfoDto.getType())
-                && StringUtils.isBlank(addInfoDto.getInterfaceUrl())) {
+                    && StringUtils.isBlank(addInfoDto.getInterfaceUrl())) {
                 throw UserException.DATA_INVALID.format("后端访问路径不能为空。");
             }
         }

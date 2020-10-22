@@ -1,6 +1,5 @@
 package com.onnoa.shop.demo.video.service.impl;
 
-import com.google.common.collect.Lists;
 import com.onnoa.shop.common.properties.base.ShopProperties;
 import com.onnoa.shop.common.utils.BeanUtils;
 import com.onnoa.shop.demo.video.constant.VideoConstants;
@@ -57,11 +56,12 @@ public class VideoInfoServiceImpl implements VideoInfoService {
             // 获取文件后缀，并判断是否符合视频文件格式
             String originalFilename = file.getOriginalFilename();
             String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
-            List<String> formatList = Lists.newArrayList();
+            /*List<String> formatList = Lists.newArrayList();
             for (VideoFileFormatEnum videoFileFormatEnum : VideoFileFormatEnum.values()) {
                 LOGGER.info("后缀:{},枚举:{}", suffix, videoFileFormatEnum.getFormat());
                 formatList.add(videoFileFormatEnum.getFormat());
-            }
+            }*/
+            List<String> formatList = VideoFileFormatEnum.getAllFormat();
             if (!formatList.contains(suffix)) {
                 throw VideoException.VIDEO_FORMAT_ABNORMAL.format(suffix);
             }

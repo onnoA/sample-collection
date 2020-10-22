@@ -1,12 +1,9 @@
 package com.onnoa.shop.demo.comment.service;
 
 import com.onnoa.shop.common.dto.PageDto;
-import com.onnoa.shop.common.dto.PageRequestDto;
 import com.onnoa.shop.demo.comment.dto.ContentCommentsAddDto;
 import com.onnoa.shop.demo.comment.dto.ContentCommentsListDto;
 import com.onnoa.shop.demo.comment.vo.ContentCommentsListVo;
-
-import java.util.List;
 
 /**
  * @Description:

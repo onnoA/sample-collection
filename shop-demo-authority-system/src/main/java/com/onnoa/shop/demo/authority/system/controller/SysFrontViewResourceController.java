@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.onnoa.shop.demo.authority.system.annotation.NoNeedTokenAuth;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +32,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping(value = "sys/frontViewResource")
 @Api(tags = "获取资源相关接口", description = "提供获取资源相关的 Rest API")
+@Slf4j
 public class SysFrontViewResourceController {
 
     @Autowired
@@ -43,10 +46,13 @@ public class SysFrontViewResourceController {
      * @date 2020/7/20 19:58
      */
     @GetMapping(value = "/menuTree")
+    @NoNeedTokenAuth
     @ApiOperation(value = "获取前端资源树", notes = "获取前端资源树")
     public ResultBean getFrontViewResource(@RequestParam String username) {
         List<BaseSysFrontViewResourceDto> frontResourceList = frontViewResourceService.getFrontViewResource(username);
-        return ResultBean.success(frontResourceList);
+        List<BaseSysFrontViewResourceDto> treeList = frontViewResourceService.getTreeList(username);
+        //log.info("获取到的前端资源树形结构，1 ：普通实现 :{}  \n 2 : java8 新特性实现 ：{}", frontResourceList, treeList);
+        return ResultBean.success(treeList);
     }
 
     /**
@@ -103,15 +109,14 @@ public class SysFrontViewResourceController {
         Boolean isSuccess = frontViewResourceService.modifyResource(requestDto);
         if (Boolean.TRUE == isSuccess) {
             return ResultBean.success(Boolean.TRUE);
-        }
-        else {
+        } else {
             return ResultBean.error(Boolean.FALSE);
         }
     }
 
     /**
      * 根据id删除资源信息
-     * 
+     *
      * @param viewId 前端资源id
      */
     @PostMapping(value = "/deleteResourceByViewId")
@@ -124,7 +129,7 @@ public class SysFrontViewResourceController {
 
     /**
      * 新增菜单资源文件(包括文件夹、文件或按钮)
-     * 
+     *
      * @param addInfoDto 请求参数
      */
     @PostMapping(value = "/addResourceInfo")
@@ -136,6 +141,7 @@ public class SysFrontViewResourceController {
 
     /**
      * 修改资源文件(包括文件夹、文件或按钮)
+     *
      * @param addInfoDto
      * @return
      */
@@ -145,11 +151,6 @@ public class SysFrontViewResourceController {
         frontViewResourceService.updateResourceInfo(addInfoDto);
         return ResultBean.success();
     }
-
-
-
-
-
 
 
 }
