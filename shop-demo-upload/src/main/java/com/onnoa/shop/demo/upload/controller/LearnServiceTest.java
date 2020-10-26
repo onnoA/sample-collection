@@ -2,14 +2,27 @@ package com.onnoa.shop.demo.upload.controller;
 
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
+import com.onnoa.shop.common.utils.BeanUtils;
 import com.onnoa.shop.common.utils.XMLUtils;
+import com.onnoa.shop.demo.upload.dto.Company;
+import com.onnoa.shop.demo.upload.dto.HuaWei;
 import com.onnoa.shop.demo.upload.dto.OcrCustomerOrderAttrDTO;
+import com.onnoa.shop.demo.upload.dto.OcsRmInterfaceResponse;
+import com.onnoa.shop.demo.upload.dto.Project;
 import com.onnoa.shop.demo.upload.dto.QryBusPortInfoDto;
+import com.onnoa.shop.demo.upload.dto.ResponseDto;
+import com.onnoa.shop.demo.upload.dto.UserDto;
+import com.onnoa.shop.demo.upload.dto.XMLResponseDto;
 import com.onnoa.shop.demo.upload.service.AbilityOpenApiService;
 import com.onnoa.shop.demo.upload.service.CrmFileService;
+import com.onnoa.shop.demo.upload.service.DcoosApiService;
+import com.onnoa.shop.demo.upload.service.OcsRmApiService;
 import com.onnoa.shop.demo.upload.service.OrderCutImageService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
+import org.apache.curator.shaded.com.google.common.collect.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,27 +30,38 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.xml.bind.JAXBException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Slf4j
 public class LearnServiceTest {
 
     @Autowired
     CrmFileService crmFileService;
     @Autowired
     OrderCutImageService orderCutImageService;
-
     @Autowired
     private AbilityOpenApiService abilityOpenApiService;
+    @Autowired
+    private OcsRmApiService ocsRmApiService;
+
+    @Autowired
+    private DcoosApiService dcoosApiService;
 
     @Test
     public void getLearn() {
         System.out.println(UUID.randomUUID());
-        String fileId = "a124285bbb9f86145f5b1468adc5acb2_0";
+        String fileId = "260c8bd26f2209cec38d5b4b1f9592d8_0";
         byte[] download = crmFileService.download(fileId);
         System.out.println(Base64.getEncoder().encodeToString(download));
         if (download != null) {
@@ -94,8 +118,8 @@ public class LearnServiceTest {
                 "}";
         Map<String, Object> contentMap = new HashMap<>();
         Map configParams = JSON.parseObject(configStr, Map.class);
-        contentMap.put("reqSystem", MapUtils.getString(configParams,"reqSystem"));
-        contentMap.put("reqPwd", MapUtils.getString(configParams,"reqPwd"));
+        contentMap.put("reqSystem", MapUtils.getString(configParams, "reqSystem"));
+        contentMap.put("reqPwd", MapUtils.getString(configParams, "reqPwd"));
         contentMap.put("contractCode", "HNCSA2006921CGN00");
         requestMap.put("content", contentMap);
         requestMap.put("status", MapUtils.getString(configParams, "status"));
@@ -119,8 +143,8 @@ public class LearnServiceTest {
                 "}";
         Map<String, Object> contentMap = new HashMap<>();
         Map configParams = JSON.parseObject(configStr, Map.class);
-        contentMap.put("reqSystem", MapUtils.getString(configParams,"reqSystem"));
-        contentMap.put("reqPwd", MapUtils.getString(configParams,"reqPwd"));
+        contentMap.put("reqSystem", MapUtils.getString(configParams, "reqSystem"));
+        contentMap.put("reqPwd", MapUtils.getString(configParams, "reqPwd"));
         contentMap.put("contractCode", "HNCSA2006921CGN00");
         requestMap.put("content", contentMap);
         requestMap.put("status", MapUtils.getString(configParams, "status"));
@@ -143,18 +167,248 @@ public class LearnServiceTest {
                 "}";
         Map configParams = JSON.parseObject(configStr, Map.class);
         QryBusPortInfoDto.OrderDto qryDto = new QryBusPortInfoDto.OrderDto();
-        qryDto.setDisSeq("73011101972821306");
-        QryBusPortInfoDto user = new QryBusPortInfoDto("qryBusPortInfo", qryDto,null);
-        String inputXml = XMLUtils.bean2XmlString(user);
+        //qryDto.setDisSeq("7331310295033085");
+        //QryBusPortInfoDto user = new QryBusPortInfoDto("qryBusPortInfo", qryDto);
+        //String inputXml = XMLUtils.bean2XmlString(user);
         Map<String, Object> contentMap = new HashMap<>();
-        contentMap.put("reqSystem", MapUtils.getString(configParams,"reqSystem"));
-        contentMap.put("reqPwd", MapUtils.getString(configParams,"reqPwd"));
-        contentMap.put("inputXml", inputXml);
+        contentMap.put("reqSystem", MapUtils.getString(configParams, "reqSystem"));
+        contentMap.put("reqPwd", MapUtils.getString(configParams, "reqPwd"));
+        contentMap.put("DIS_SEQ", "7331310294998776");
+        //requestMap.put("inputXml",inputXml);
         requestMap.put("content", contentMap);
         requestMap.put("status", MapUtils.getString(configParams, "status"));
         requestMap.put("access_token", MapUtils.getString(configParams, "access_token"));
         requestMap.put("method", MapUtils.getString(configParams, "method"));
         Map<String, Object> returnMap = abilityOpenApiService.postAbility(requestMap, url);
-        System.out.println("请求返回的结果：{}" + returnMap);
+        System.out.println("请求返回的结果：" + returnMap);
+    }
+
+    @Test
+    public void postAbility2() throws JAXBException {
+        String url = "http://134.176.102.33:8081/api/rest";
+        Map<String, Object> requestMap = Maps.newHashMap();
+        String configStr = "{\n" +
+                "\t\"method\": \"qry.resinfo.qryCodeBarPortInfo\",\n" +
+                "\t\"access_token\": \"OTBkMjJiM2Y0NmVjNzdmOTc0NWFkZWMyZGU1MThhMmI=\",\n" +
+                "\t\"reqSystem\": \"YWWB\",\n" +
+                "\t\"reqPwd\": \"HNYWWB\",\n" +
+                "\t\"status\": \"0\"\n" +
+                "}";
+        Map configParams = JSON.parseObject(configStr, Map.class);
+        QryBusPortInfoDto.CodeDto codeDto = new QryBusPortInfoDto.CodeDto();
+        codeDto.setCodeBar("7321010000021");
+        QryBusPortInfoDto user = new QryBusPortInfoDto("qryBusPortInfo", null, codeDto);
+        String inputXml = XMLUtils.bean2XmlString(user);
+        Map<String, Object> contentMap = new HashMap<>();
+        contentMap.put("reqSystem", MapUtils.getString(configParams, "reqSystem"));
+        contentMap.put("reqPwd", MapUtils.getString(configParams, "reqPwd"));
+        contentMap.put("CODE_BAR", "7321010000021");
+        //requestMap.put("inputXml",inputXml);
+        requestMap.put("content", contentMap);
+        requestMap.put("status", MapUtils.getString(configParams, "status"));
+        requestMap.put("access_token", MapUtils.getString(configParams, "access_token"));
+        requestMap.put("method", MapUtils.getString(configParams, "method"));
+        Map<String, Object> returnMap = abilityOpenApiService.postAbility(requestMap, url);
+        System.out.println("请求返回的结果：" + returnMap);
+        Object data = returnMap.get("result");
+        String jsonString = JSONObject.toJSONString(data);
+        ResponseDto response1 = JSON.parseObject(jsonString, ResponseDto.class);
+        log.info("json转实体后输出:{}", response1);
+    }
+
+    public static void main(String[] args) {
+        Object o = JSONObject.toJSON("{\n" +
+                "\t\"Return\": {\n" +
+                "\t\t\"MESSAGE\": \"\",\n" +
+                "\t\t\"RETURN_CODE\": \"0\",\n" +
+                "\t\t\"PORT_LIST\": {\n" +
+                "\t\t\t\"PORT_NO\": [\n" +
+                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/02\",\n" +
+                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/03\",\n" +
+                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/04\",\n" +
+                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/05\",\n" +
+                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/06\",\n" +
+                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/07\",\n" +
+                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/08\",\n" +
+                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/00\"\n" +
+                "\t\t\t],\n" +
+                "\t\t\t\"PORT_NUM\": [\n" +
+                "\t\t\t\t\"2\",\n" +
+                "\t\t\t\t\"3\",\n" +
+                "\t\t\t\t\"4\",\n" +
+                "\t\t\t\t\"5\",\n" +
+                "\t\t\t\t\"6\",\n" +
+                "\t\t\t\t\"7\",\n" +
+                "\t\t\t\t\"8\",\n" +
+                "\t\t\t\t\"0\"\n" +
+                "\t\t\t]\n" +
+                "\t\t}\n" +
+                "\t},\n" +
+                "\t\"IntfCode\": \" qryCodeBarPortInfo\"\n" +
+                "}");
+        XMLResponseDto.Response response = new XMLResponseDto.Response();
+        BeanUtils.copyToBean(o, response);
+        log.info("返回对象：{}", response);
+
+    }
+
+    @Test
+    public void test() {
+        ArrayList<String> list = Lists.newArrayList();
+        list.add("7342010256661299");
+        list.add("7332010256717909");
+        list.add("7372010234069260");
+        list.add("7352010242127249");
+        list.add("7462010256426018");
+        list.add("7462010256426020");
+        list.add("7392010225559134");
+        list.add("7312010256502707");
+        list.add("7342010256823341");
+        list.add("7312010256580704");
+        list.add("7392010225559144");
+        list.parallelStream().forEach(entity -> {
+            OcsRmInterfaceResponse response = ocsRmApiService.qryBusPortInfo(entity);
+            log.info("请求接口返回数据:{}", response);
+        });
+    }
+
+
+    @Test
+    public void qryCodeTest() {
+        OcsRmInterfaceResponse response = ocsRmApiService.qryCodeBarPortInfo("7321010000021");
+        log.info("请求接口返回数据:{}", response);
+    }
+
+    @Test
+    public void protocolTest() {
+        String configParamsStr = "{\"basicUrl\":\"http://134.176.102.33:9080/api/openapi\", \"XAPPID\":\"8f2782be113374f3d9b9d49cdd050427\", \"XAPPKEY\":\"75776fb5f128928dfefec6697b285e1e\", \"clientId\":\"AI_APR\"}";
+        String callbackMethod = "acceptMssContactAnalysisResult/acceptMssContactAnalysisResul/acceptMssContactAnalysisResulacceptMssContactAnalysisResult/acceptMssContactAnalysisResul/acceptMssContactAnalysisResul";
+        Map<String, Object> params = new HashMap<>();
+        Map contractInstVO = new HashMap();
+        List<Map> contractInfoVOList = new ArrayList<>();
+        //contractInfoVOList.add("")
+        contractInstVO.put("request_code", "3232324343243432");
+        contractInstVO.put("accept_date", "2018-03-24 18:36:36");
+        contractInstVO.put("contract_code", "HNCSA2006921CGN00");
+        contractInstVO.put("contract_info", contractInfoVOList);
+        params.put("params", "{\"accept_date\":\"2018-03-24 18:36:36\",\"contract_code\":\"HNCSA2006921CGN00\",\"request_code\":\"3232324343243432\",\"contract_info\":[{\"order_attr_inst\":[{\"attr_value\":\"100\",\"attr_id\":\"一次性开通调测费用X元\"},{\"attr_value\":\"300000\",\"attr_id\":\"专线速率\"},{\"attr_value\":\"订购\",\"attr_id\":\"业务类型\"},{\"attr_value\":\"4000\",\"attr_id\":\"互联网专线协议月使用费\"},{\"attr_value\":\"互联网专线\",\"attr_id\":\"产品\"},{\"attr_value\":\"2020/10/15\",\"attr_id\":\"合同服务开始时间\"},{\"attr_value\":\"2021/10/14\",\"attr_id\":\"合同服务结束时间\"},{\"attr_value\":\"\",\"attr_id\":\"合同编号\"},{\"attr_value\":\"湖南省公安厅\",\"attr_id\":\"客户名称\"},{\"attr_value\":\"731234567890037971\",\"attr_id\":\"客户证件\"},{\"attr_value\":\"183\",\"attr_id\":\"序号\"},{\"attr_value\":\"3\",\"attr_id\":\"开通条数\"},{\"attr_value\":\"\",\"attr_id\":\"接入号\"},{\"attr_value\":\"2\",\"attr_id\":\"类型标识\"}],\"index_id\":\"1\"}]}");
+        params.put("method", callbackMethod);
+        Map configParams = JSON.parseObject(configParamsStr, Map.class);
+        Map resultMap = dcoosApiService.post(params, configParams);
+        log.info("返回结果:{}", resultMap);
+    }
+
+    @Test
+    public void optionalTest() {
+//        OptionalTestDto dto = new OptionalTestDto();
+//        OcrCustomerOrderAttrDTO attrDto = new OcrCustomerOrderAttrDTO();
+//        attrDto.setCustOrderId(null).setLivingImage("2555");
+//        dto.setDto(attrDto);
+//        String str = Optional.ofNullable(dto)
+//                .map(entity -> entity.getDto())
+//                .map(entity -> entity.getCustOrderId())
+//                .orElse(null);
+//
+//        if (dto != null) {
+//            OcrCustomerOrderAttrDTO attrDto1 = dto.getDto();
+//            if (attrDto1 != null) {
+//                String custOrderId = attrDto1.getCustOrderId();
+//            }
+//        }
+//        System.out.println(str);
+
+        Company company = new Company();
+        HuaWei huaWei = new HuaWei();
+        Project pro = new Project();
+        pro.setSpecificItem("手机行业");
+        huaWei.setProject(pro);
+        company.setHuawei(huaWei);
+        String result = Optional.ofNullable(company)
+                .map(entity -> entity.getHuawei())
+                .map(entity -> entity.getProject())
+                .map(item -> item.getSpecificItem())
+                //.orElseThrow(()->new RuntimeException("抛异常处理。。。"))
+                .orElse("默认项目 ");
+        log.info("result : {}", result);
+
+        // 返回结果 : 当 company 、huawei 、project、specificItem 为空时： result : 默认项目
+        // 当对象都不为空时： result : 手机行业
+
+        // --------------------------分割线-----------------------------------------
+        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> project = new HashMap<>();
+        project.put("phone", "mate40pro");
+        project.put("comm", "5G");
+
+        Map<String, Object> huawei = new HashMap<>();
+        huawei.put("project", project);
+
+        Map<String, Object> org = new HashMap<>();
+        org.put("huawei", huawei);
+        map.put("org", org);
+        Object o = Optional.ofNullable(map)
+                .map(map1 -> ((Map) map1).get("org"))
+                .map(map1 -> ((Map) map1).get("huawei"))
+                .map(map1 -> ((Map) map1).get("project"))
+                .map(map1 -> ((Map) map1).get("phone"))
+                //.orElse("默认值 。。。");
+                .orElseThrow(() -> new RuntimeException("参数异常 。。。"));
+        log.info("返回:{}", o);
+
+
+        //Comparator.comparing(Project::getSpecificItem)
+
+    }
+
+
+    @Test
+    public void comTest() {
+        UserDto dto = new UserDto();
+        dto.setUsername("zh");
+        dto.setAge(19);
+        dto.setMobile("13411111111");
+        UserDto dto1 = new UserDto();
+        dto1.setUsername("zhh");
+        dto1.setAge(20);
+        dto1.setMobile("13411111112");
+        UserDto dto2 = new UserDto();
+        dto2.setUsername("zhhh");
+        dto2.setAge(19);
+        dto2.setMobile("13411111112");
+        UserDto dto3 = new UserDto();
+        dto3.setUsername("zh");
+        dto3.setAge(21);
+        dto3.setMobile("13411111112");
+        ArrayList<UserDto> list = Lists.newArrayList();
+        list.add(dto);
+        list.add(dto1);
+        list.add(dto2);
+        list.add(dto3);
+
+//        Collections.sort(employees, (o1, o2) -> o1.getName().compareTo(o2.getName()));
+        //list.sort((o1, o2) -> o1.getUsername().compareTo(o1.getUsername()));
+        // 根据年龄升序
+        //Collections.sort(list, (o1, o2) -> Integer.valueOf(o1.getAge()).compareTo(Integer.valueOf(o2.getAge())));
+        // 根据年龄升序
+//        Collections.sort(list, Comparator.comparing(UserDto::getAge, (o1, o2) -> {
+//            return o1.compareTo(o2);
+//        }));
+        log.info("排序前的集合:{}", list);
+        // 根据年龄降序
+        //list.sort(Comparator.comparing(UserDto::getAge, Comparator.reverseOrder()));
+        // 根据年龄升序
+        //list.sort(Comparator.comparing(UserDto::getAge, Comparator.reverseOrder()).reversed());
+        // 根据年龄降序
+//        Collections.sort(list, Comparator.comparing(UserDto::getAge, (o1, o2) -> {
+//            return o2.compareTo(o1);
+//        }));
+        // 升序 先根据年龄升序，在根据名字降序
+        list.sort(Comparator.comparingInt(UserDto::getAge).thenComparing(UserDto::getUsername));
+        // 降序
+        list.sort(Comparator.comparingInt(UserDto::getAge).reversed());
+        log.info("排序后的集合:{}", list);
+
+
+
     }
 }

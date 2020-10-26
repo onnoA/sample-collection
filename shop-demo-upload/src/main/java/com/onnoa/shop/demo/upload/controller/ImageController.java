@@ -41,6 +41,38 @@ public class ImageController {
 
     @Autowired
     CrmFileService crmFileService;
+    @GetMapping("/getFile1")
+    public void getFile(@Param("fileId") String fileId, @Param("type") String type, HttpServletResponse response) {
+        InputStream in = null;
+        OutputStream outputStream = null;
+        try {
+            byte[] tempBytes = crmFileService.download(fileId);
+            in = new ByteArrayInputStream(tempBytes);
+            // 输出图片流
+            // 设置返回类型
+            if ("1".equals(type)) {
+                response.setContentType("application/pdf");
+            }
+            else {
+                response.setContentType("image/jpeg");
+            }
+            outputStream = response.getOutputStream();
+            byte[] arr = new byte[1024]; // 该数组用来存入从输入文件中读取到的数据
+            int len; // 变量len用来存储每次读取数据后的返回值
+            while ((len = in.read(arr)) != -1) {
+                outputStream.write(arr, 0, len);
+            }
+            outputStream.flush();
+            outputStream.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            IOUtils.closeQuietly(in);
+            IOUtils.closeQuietly(outputStream);
+        }
+    }
 
     /**
      * 从crm获取文件流

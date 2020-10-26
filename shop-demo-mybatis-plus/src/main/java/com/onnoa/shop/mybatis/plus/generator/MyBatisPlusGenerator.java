@@ -70,7 +70,7 @@ public class MyBatisPlusGenerator {
         globalConfig.setAuthor("onnoA");
         globalConfig.setOpen(false);
         //实体属性 Swagger2 注解
-        globalConfig.setSwagger2(true);
+        globalConfig.setSwagger2(false);
         //  XML ResultMap
         globalConfig.setBaseResultMap(true);
         // 是否覆盖同名文件，默认是false

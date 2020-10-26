@@ -1,9 +1,15 @@
 package com.onnoa.shop.demo.upload.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.onnoa.shop.demo.upload.dto.PortInfoResponse;
+import com.onnoa.shop.demo.upload.dto.ResponseDto;
+import com.onnoa.shop.demo.upload.service.OcsRmApiService;
 import com.onnoa.shop.demo.upload.service.UploadService;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +23,7 @@ import java.util.Map;
 
 //@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
+@Slf4j
 public class UploadController {
 
     @Value("${fastdfs.base.url}")
@@ -24,6 +31,8 @@ public class UploadController {
 
     @Autowired
     private UploadService storageService;
+
+
 
     /**
      * 文件上传
@@ -79,4 +88,45 @@ public class UploadController {
         // 返回文件完整路径
         return url;
     }
+
+    public static void main(String[] args) {
+        String jsonString = JSONObject.toJSONString("{\n" +
+                "\t\"Return\": {\n" +
+                "\t\t\"MESSAGE\": \"\",\n" +
+                "\t\t\"RETURN_CODE\": \"0\",\n" +
+                "\t\t\"PORT_LIST\": {\n" +
+                "\t\t\t\"PORT_NO\": [\n" +
+                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/02\",\n" +
+                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/03\",\n" +
+                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/04\",\n" +
+                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/05\",\n" +
+                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/06\",\n" +
+                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/07\",\n" +
+                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/08\",\n" +
+                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/00\"\n" +
+                "\t\t\t],\n" +
+                "\t\t\t\"PORT_NUM\": [\n" +
+                "\t\t\t\t\"2\",\n" +
+                "\t\t\t\t\"3\",\n" +
+                "\t\t\t\t\"4\",\n" +
+                "\t\t\t\t\"5\",\n" +
+                "\t\t\t\t\"6\",\n" +
+                "\t\t\t\t\"7\",\n" +
+                "\t\t\t\t\"8\",\n" +
+                "\t\t\t\t\"0\"\n" +
+                "\t\t\t]\n" +
+                "\t\t}\n" +
+                "\t},\n" +
+                "\t\"IntfCode\": \" qryCodeBarPortInfo\"\n" +
+                "}");
+//        XMLResponseDto.Response response = new XMLResponseDto.Response();
+//        BeanUtils.copyToBean(o, response);
+//        log.info("返回对象：{}",response);
+
+        ResponseDto response1 = JSON.parseObject(jsonString, ResponseDto.class);
+        log.info("json转实体后输出:{}", response1);
+
+    }
+
+
 }

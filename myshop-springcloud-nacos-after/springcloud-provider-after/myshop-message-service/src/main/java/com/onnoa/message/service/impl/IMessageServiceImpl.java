@@ -19,7 +19,7 @@ public class IMessageServiceImpl implements IMessageService {
 
     @Override
     public boolean sendMessage(String phoneNumber, String templateCode, Map<String, Object> verifyCode) {
-        DefaultProfile profile = DefaultProfile.getProfile("ch-hangzhou", "LTAI4GB2hzCnTpqTD8PGrJNn", "ezNovhZJPKIv3TZu6tnYwQMy1yDS2E");
+        DefaultProfile profile = DefaultProfile.getProfile("ch-hangzhou", "LTAI4GB2hzCnTpqTD8PGrJNn", "秘钥");
         DefaultAcsClient client = new DefaultAcsClient(profile);
         CommonRequest request = new CommonRequest();
         request.setSysMethod(MethodType.POST);
