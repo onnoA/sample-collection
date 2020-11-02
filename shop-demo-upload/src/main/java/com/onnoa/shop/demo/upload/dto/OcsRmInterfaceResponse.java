@@ -1,10 +1,7 @@
 package com.onnoa.shop.demo.upload.dto;
 
-import lombok.ToString;
-
 import javax.validation.Valid;
 
-@ToString
 public class OcsRmInterfaceResponse<T> {
     /**
      * 编码

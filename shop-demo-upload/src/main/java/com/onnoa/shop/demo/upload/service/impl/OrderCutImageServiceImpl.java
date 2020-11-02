@@ -34,6 +34,14 @@ public class OrderCutImageServiceImpl implements OrderCutImageService {
      **/
     public static final String RESULT_MSG = "RESULT_MSG";
 
+    /** 程序返回数据 **/
+    public static final String RESULT_DATA = "RESULT_DATA";
+
+    /**
+     * 后台返回前台操作成功
+     */
+    public static final String RESULT_CODE_SUCCESS = "0";
+
     /**
      * 后台返回前台操作失败
      */
@@ -47,7 +55,7 @@ public class OrderCutImageServiceImpl implements OrderCutImageService {
         Map<String, Object> returnObj = new HashMap<>();
         // 调接口
         String callbackMethod = "INFSaveClassifiedImages/INFSaveClassifiedImages";
-        String configParamsStr = "{\"basicUrl\":\"http://134.176.102.33:9080/api/openapi\", \"XAPPID\":\"f4751dc73f5f9914ca955b6649d8fde8\", \"XAPPKEY\":\"131b9d55683a537d1a4c9e46ccfa673b\", \"clientId\":\"AI_APR\"}";
+        String configParamsStr = "{\"basicUrl\":\"http://134.176.102.33:8081/api/openapi\", \"XAPPID\":\"5b857da01fe325f3f2dbdf77121534ae\", \"XAPPKEY\":\"054c7e6cf535a019592f8bc1d6cc3211\", \"clientId\":\"AI_APR\"}";
         Map<String, Object> params = new HashMap<>();
         Map customerOrderMap = new HashMap();
         String livingImage = customerOrder.getLivingImage();

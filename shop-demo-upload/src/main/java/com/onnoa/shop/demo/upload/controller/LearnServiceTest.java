@@ -4,8 +4,13 @@ package com.onnoa.shop.demo.upload.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
-import com.onnoa.shop.common.utils.BeanUtils;
+import com.onnoa.shop.common.result.ResultBean;
+import com.onnoa.shop.common.utils.DowloadZipUtil;
+import com.onnoa.shop.common.utils.HttpClient;
+import com.onnoa.shop.common.utils.ImageUtil;
+import com.onnoa.shop.common.utils.MD5Util;
 import com.onnoa.shop.common.utils.XMLUtils;
+import com.onnoa.shop.common.utils.ZipUtil;
 import com.onnoa.shop.demo.upload.dto.Company;
 import com.onnoa.shop.demo.upload.dto.HuaWei;
 import com.onnoa.shop.demo.upload.dto.OcrCustomerOrderAttrDTO;
@@ -14,8 +19,8 @@ import com.onnoa.shop.demo.upload.dto.Project;
 import com.onnoa.shop.demo.upload.dto.QryBusPortInfoDto;
 import com.onnoa.shop.demo.upload.dto.ResponseDto;
 import com.onnoa.shop.demo.upload.dto.UserDto;
-import com.onnoa.shop.demo.upload.dto.XMLResponseDto;
 import com.onnoa.shop.demo.upload.service.AbilityOpenApiService;
+import com.onnoa.shop.demo.upload.service.AnZhenTongApiService;
 import com.onnoa.shop.demo.upload.service.CrmFileService;
 import com.onnoa.shop.demo.upload.service.DcoosApiService;
 import com.onnoa.shop.demo.upload.service.OcsRmApiService;
@@ -30,7 +35,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.xml.bind.JAXBException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -38,8 +48,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
+
+import static com.onnoa.shop.demo.upload.service.impl.OrderCutImageServiceImpl.RESULT_DATA;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -114,7 +127,7 @@ public class LearnServiceTest {
                 "\t\"access_token\": \"OTBkMjJiM2Y0NmVjNzdmOTc0NWFkZWMyZGU1MThhMmI=\",\n" +
                 "\t\"reqSystem\": \"YWWB\",\n" +
                 "\t\"reqPwd\": \"HNYWWB\",\n" +
-                "\t\"status\": \"0\"\n" +
+                "\t\"status\": \"1\"\n" +
                 "}";
         Map<String, Object> contentMap = new HashMap<>();
         Map configParams = JSON.parseObject(configStr, Map.class);
@@ -216,67 +229,33 @@ public class LearnServiceTest {
         log.info("json转实体后输出:{}", response1);
     }
 
-    public static void main(String[] args) {
-        Object o = JSONObject.toJSON("{\n" +
-                "\t\"Return\": {\n" +
-                "\t\t\"MESSAGE\": \"\",\n" +
-                "\t\t\"RETURN_CODE\": \"0\",\n" +
-                "\t\t\"PORT_LIST\": {\n" +
-                "\t\t\t\"PORT_NO\": [\n" +
-                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/02\",\n" +
-                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/03\",\n" +
-                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/04\",\n" +
-                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/05\",\n" +
-                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/06\",\n" +
-                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/07\",\n" +
-                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/08\",\n" +
-                "\t\t\t\t\"732YTQ.ZDKXM/GF001/OBD01/00\"\n" +
-                "\t\t\t],\n" +
-                "\t\t\t\"PORT_NUM\": [\n" +
-                "\t\t\t\t\"2\",\n" +
-                "\t\t\t\t\"3\",\n" +
-                "\t\t\t\t\"4\",\n" +
-                "\t\t\t\t\"5\",\n" +
-                "\t\t\t\t\"6\",\n" +
-                "\t\t\t\t\"7\",\n" +
-                "\t\t\t\t\"8\",\n" +
-                "\t\t\t\t\"0\"\n" +
-                "\t\t\t]\n" +
-                "\t\t}\n" +
-                "\t},\n" +
-                "\t\"IntfCode\": \" qryCodeBarPortInfo\"\n" +
-                "}");
-        XMLResponseDto.Response response = new XMLResponseDto.Response();
-        BeanUtils.copyToBean(o, response);
-        log.info("返回对象：{}", response);
-
-    }
-
     @Test
     public void test() {
         ArrayList<String> list = Lists.newArrayList();
-        list.add("7342010256661299");
-        list.add("7332010256717909");
-        list.add("7372010234069260");
-        list.add("7352010242127249");
-        list.add("7462010256426018");
-        list.add("7462010256426020");
-        list.add("7392010225559134");
-        list.add("7312010256502707");
-        list.add("7342010256823341");
-        list.add("7312010256580704");
-        list.add("7392010225559144");
+        //7442010255457631
+        list.add("7431027206565945"); // 7311310295102577
+//        list.add("7442010255457631");
+//        list.add("7372010234069260");
+//        list.add("7352010242127249");
+//        list.add("7462010256426018");
+//        list.add("7462010256426020");
+//        list.add("7392010225559134");
+//        list.add("7312010256502707");
+//        list.add("7342010256823341");
+//        list.add("7312010256580704");
+//        list.add("7392010225559144");
         list.parallelStream().forEach(entity -> {
             OcsRmInterfaceResponse response = ocsRmApiService.qryBusPortInfo(entity);
-            log.info("请求接口返回数据:{}", response);
+            log.info("请求参数：{}，返回数据:{}", entity, response);
         });
     }
 
 
     @Test
     public void qryCodeTest() {
-        OcsRmInterfaceResponse response = ocsRmApiService.qryCodeBarPortInfo("7321010000021");
-        log.info("请求接口返回数据:{}", response);
+        String obdScanCode = "743101200374166";
+        OcsRmInterfaceResponse response = ocsRmApiService.qryCodeBarPortInfo(obdScanCode);
+        log.info("请求参数：{},返回数据:{}", obdScanCode, response);
     }
 
     @Test
@@ -324,9 +303,9 @@ public class LearnServiceTest {
         huaWei.setProject(pro);
         company.setHuawei(huaWei);
         String result = Optional.ofNullable(company)
-                .map(entity -> entity.getHuawei())
-                .map(entity -> entity.getProject())
-                .map(item -> item.getSpecificItem())
+                .map(Company::getHuawei)
+                .map(HuaWei::getProject)
+                .map(Project::getSpecificItem)
                 //.orElseThrow(()->new RuntimeException("抛异常处理。。。"))
                 .orElse("默认项目 ");
         log.info("result : {}", result);
@@ -347,7 +326,7 @@ public class LearnServiceTest {
         org.put("huawei", huawei);
         map.put("org", org);
         Object o = Optional.ofNullable(map)
-                .map(map1 -> ((Map) map1).get("org"))
+                .map(map1 -> map1.get("org"))
                 .map(map1 -> ((Map) map1).get("huawei"))
                 .map(map1 -> ((Map) map1).get("project"))
                 .map(map1 -> ((Map) map1).get("phone"))
@@ -385,6 +364,7 @@ public class LearnServiceTest {
         list.add(dto2);
         list.add(dto3);
 
+        log.info("排序前的集合:{}", list);
 //        Collections.sort(employees, (o1, o2) -> o1.getName().compareTo(o2.getName()));
         //list.sort((o1, o2) -> o1.getUsername().compareTo(o1.getUsername()));
         // 根据年龄升序
@@ -393,7 +373,6 @@ public class LearnServiceTest {
 //        Collections.sort(list, Comparator.comparing(UserDto::getAge, (o1, o2) -> {
 //            return o1.compareTo(o2);
 //        }));
-        log.info("排序前的集合:{}", list);
         // 根据年龄降序
         //list.sort(Comparator.comparing(UserDto::getAge, Comparator.reverseOrder()));
         // 根据年龄升序
@@ -408,7 +387,144 @@ public class LearnServiceTest {
         list.sort(Comparator.comparingInt(UserDto::getAge).reversed());
         log.info("排序后的集合:{}", list);
 
+        String[] strArr = {"1", "3", "5", "7"};
+        Stream.of(strArr).forEach(str -> System.out.println(str));
+
+    }
+
+    @Test
+    public void java8Test() {
+//        String creator = "";
+//        User dto = new User();
+//        Stream<String> stream = Stream.of("zh", "zhh", "zzhh");
+//        dto.setLoginName("登录名称");
+//        dto.setUsername("用户名");
+//        stream.forEach(entity -> System.out.println(entity));
+//        creator = Optional
+//                .ofNullable(dto)
+//                .map(user -> Stream.of(user.getUsername(), user.getLoginName(), user.getNickName()))
+//                .orElse(Stream.empty())
+//                .filter(Objects::nonNull)
+//                .findFirst()
+//                .orElse(creator);
+//
+//        System.out.println(creator);
+//
+//        ArrayList<User> list = Lists.newArrayList();
+//        Optional<User> first = Optional.ofNullable(list)
+//                .map(Collection::stream)
+//                .orElse(Stream.empty())
+//                .findFirst();
+//        ArrayList<Long> numbers = Lists.newArrayList();
+//        numbers.add(1L);
+//        numbers.add(5L);
+//        long reduce = numbers.parallelStream().map(x -> new BigDecimal(x.toString())).reduce(BigDecimal.ZERO, BigDecimal::add).longValue();
+//        log.info("求和:{}", reduce);
+
+        ArrayList<String> strList = new ArrayList<>(Arrays.asList("zh", "zz", "onnoA"));
+        String str = strList.stream().reduce("", (a, b) -> a + b);
+        log.info("str:{}", str);
+        Integer startIndex = null;
+        startIndex = Optional.ofNullable(startIndex)
+                .orElse(1);
+
+        log.info("开始标志位:{}", startIndex);
 
 
     }
+
+    @Test
+    public void md5Test() throws IOException {
+        String md5 = MD5Util.MD5("TEST20201030115359" + "1603941569000" + "!@##@!");
+        log.info("md5：{}", md5);
+        //File zipp = File.createTempFile("zipp", "");
+        File file = DowloadZipUtil.downloadFile("http://202.103.124.84:7201/portal/foreign/downZip/11ffa288cf7140f58b9c39ad53f1b225.zip", "F:\\code\\MyGitHub\\sample-collection\\shop-demo-upload\\zip");
+
+        //FileInputStream fileInputStream = new FileInputStream(file);
+
+        //        ZipUtil.unZip("F:\\code\\MyGitHub\\sample-collection\\shop-demo-upload\\zip\\portal\\foreign\\downZip\\5ba230d733034bbe81aaee666d68b46d.zip");
+
+        List<File> files = ZipUtil.upzipFile(file, "F:\\code\\MyGitHub\\sample-collection\\shop-demo-upload\\zip\\portal\\foreign\\downZip");
+        files.stream().forEach(file1 -> {
+            //System.out.println(file);
+            try {
+                FileInputStream inputStream = new FileInputStream(file1);
+                String base64 = ImageUtil.getBase64(inputStream);
+                log.info("base64:{}", base64);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        });
+
+
+//        String s = DowloadZipUtil.downloadFromUrl("http://202.103.124.84:7201/portal/foreign/downZip/f81b97059caf473ba8f0a9de61b16cc0.zip", "F:\\code\\MyGitHub\\sample-collection\\shop-demo-upload\\zip");
+
+
+    }
+
+
+    @Test
+    public void hunanTest() throws IOException {
+        //StringBuffer sb = new StringBuffer();
+        File file = new File("F:\\code\\MyGitHub\\sample-collection\\shop-demo-upload\\pic\\15BB2C8C4D83F8CB86E74BAFD2DBD297.jpg");
+        FileInputStream fileInputStream = new FileInputStream(file);
+        String base64 = ImageUtil.getBase64(fileInputStream);
+        String abilityPlatformHttp = "http://port-check-hunan-group.namespace11601101654625.134.176.170.168.xip.io/main/service";
+        Map params = new HashMap();
+        Map postMap = new HashMap();
+        ArrayList<Integer> portIdWorkList = Lists.newArrayList();
+        portIdWorkList.add(1);
+        ArrayList<Integer> portIdAllList = Lists.newArrayList();
+        portIdAllList.add(2);
+        portIdAllList.add(3);
+        portIdAllList.add(4);
+        postMap.put("service_name", "port_check_hunan");
+        params.put("image", base64);
+        params.put("port_id_work", portIdWorkList);
+        params.put("port_id_all", portIdAllList);
+        postMap.put("params", params);
+        String param = JSON.toJSONString(postMap);
+        log.info("OBD端口稽核请求地址：" + abilityPlatformHttp);
+        ResultBean response = new ResultBean();
+        String result = "";
+        try {
+            result = HttpClient.post(abilityPlatformHttp, param, 50000);
+            //HttpClient.
+            //result = HttpUtils.doPost(abilityPlatformHttp, postMap);
+            log.info("OBD端口稽核返回报文:{}", result);
+            response = JSON.parseObject(result, ResultBean.class);
+        } catch (RuntimeException e) {
+            response.setCode(-1);
+            response.setMessage(result + "\n" + e);
+            log.info("调用算法平台OBD端口稽核失败！{}", e.getMessage());
+
+        }
+        //成功时，将返回报文装入message
+        response.setMessage(result);
+        log.info("响应结果：{}", response);
+    }
+
+    @Autowired
+    AnZhenTongApiService anZhenTongApiService;
+
+    @Test
+    public void anzhentongTest() {
+        OcsRmInterfaceResponse<List<String>> list = anZhenTongApiService.getImageList("TEST20201030115359");
+        log.info("请求结果:{}", JSONObject.toJSON(list));
+    }
+
+    @Test
+    public void subTest(){
+        String url = "http://202.103.124.84:7201/portal/foreign/downZip/e04cdb8bd769479a8270eb6cafac39d2";
+        // 测试： http://134.176.46.8
+        // 生产： http://134.175.22.219
+        String replaceUrl = url.replace(url.substring(0, url.lastIndexOf(":")),"http://134.175.22.219");
+        System.out.println(replaceUrl);
+    }
+
+
+
 }

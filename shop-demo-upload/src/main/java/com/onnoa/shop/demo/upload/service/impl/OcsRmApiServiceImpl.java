@@ -33,8 +33,8 @@ public class OcsRmApiServiceImpl implements OcsRmApiService {
                 "\t\"method\": \"qry.resinfo.qryBusPortInfo\",\n" +
                 "\t\"access_token\": \"OTBkMjJiM2Y0NmVjNzdmOTc0NWFkZWMyZGU1MThhMmI=\",\n" +
                 "\t\"reqSystem\": \"YWWB\",\n" +
-                "\t\"reqPwd\": \"HNYWWB\"\n" +
-                // "\t\"status\": \"1\"\n" +
+                "\t\"reqPwd\": \"HNYWWB\",\n" +
+                "\t\"status\": \"1\"\n" +
                 "}";
         Map configParams = JSON.parseObject(configStr, Map.class);
         Map<String, Object> params = Maps.newHashMap();
@@ -47,9 +47,10 @@ public class OcsRmApiServiceImpl implements OcsRmApiService {
         params.put("access_token", MapUtils.getString(configParams, "access_token"));
         params.put("method", MapUtils.getString(configParams, "method"));
         Map<String, Object> resultMap = openApiService.postAbility(params, url);
+        log.info("数据返回:{}", resultMap);
         String resultStr = JSON.toJSONString(resultMap.get("result"));
         PortInfoResponse portInfoResponse = JSON.parseObject(resultStr, PortInfoResponse.class);
-        String returnCode = portInfoResponse.getBody().getOtherWSInterfaceResponse().getOut().getData().getReturn().getRETURN_CODE();
+        //String returnCode = portInfoResponse.getBody().getOtherWSInterfaceResponse().getOut().getData().getReturn().getRETURN_CODE();
         OcsRmInterfaceResponse response = new OcsRmInterfaceResponse();
         //PortInfoResponse.BodyBean.OtherWSInterfaceResponseBean.OutBean.DataBean.ReturnBean returnBean = portInfoResponse.getBody().getOtherWSInterfaceResponse().getOut().getData().getReturn();
         PortInfoResponse.BodyBean.OtherWSInterfaceResponseBean.OutBean.DataBean.ReturnBean returnBean = Optional.ofNullable(portInfoResponse)
@@ -61,7 +62,7 @@ public class OcsRmApiServiceImpl implements OcsRmApiService {
                 .orElse(new PortInfoResponse.BodyBean.OtherWSInterfaceResponseBean.OutBean.DataBean.ReturnBean());
         response.setData(returnBean);
         //String returnCode = returnBean.getRETURN_CODE();
-        if (StringUtils.isNotBlank(returnCode) && returnCode.equals("0")) {
+        if (StringUtils.isNotBlank(returnBean.getRETURN_CODE()) && "0".equals(returnBean.getRETURN_CODE())) {
             response.setCode(0);
         } else {
             response.setCode(-1);
@@ -80,7 +81,7 @@ public class OcsRmApiServiceImpl implements OcsRmApiService {
                 "\t\"access_token\": \"OTBkMjJiM2Y0NmVjNzdmOTc0NWFkZWMyZGU1MThhMmI=\",\n" +
                 "\t\"reqSystem\": \"YWWB\",\n" +
                 "\t\"reqPwd\": \"HNYWWB\",\n" +
-                "\t\"status\": \"0\"\n" +
+                "\t\"status\": \"1\"\n" +
                 "}";
         Map configParams = JSON.parseObject(configStr, Map.class);
         Map<String, Object> params = Maps.newHashMap();
@@ -93,6 +94,7 @@ public class OcsRmApiServiceImpl implements OcsRmApiService {
         params.put("access_token", MapUtils.getString(configParams, "access_token"));
         params.put("method", MapUtils.getString(configParams, "method"));
         Map<String, Object> resultMap = openApiService.postAbility(params, url);
+        log.info("数据返回:{}", resultMap);
         String resultStr = JSON.toJSONString(resultMap.get("result"));
         CodeBarResponse codeBarResponse = JSON.parseObject(resultStr, CodeBarResponse.class);
         CodeBarResponse.BodyBean.OtherWSInterfaceResponseBean.OutBean.DataBean.ReturnBean returnBean = Optional.ofNullable(codeBarResponse)
