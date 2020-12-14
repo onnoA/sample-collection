@@ -28,17 +28,19 @@ public class KafkaSender implements IMessageSendTemplate {
      */
     @Override
     public void sendMessage(String topic, String data) {
-        ListenableFuture<SendResult<Integer, String>> future = kafkaTemplate.send(topic, data);
-        future.addCallback(new ListenableFutureCallback<SendResult<Integer, String>>() {
-            @Override
-            public void onFailure(Throwable ex) {
-                log.error("kafka sendMessage error, ex = {}, topic = {}, data = {}", ex, topic, data);
-            }
+        for (int i = 0; i < 10; i++) {
+            ListenableFuture<SendResult<Integer, String>> future = kafkaTemplate.send(topic, data);
+            future.addCallback(new ListenableFutureCallback<SendResult<Integer, String>>() {
+                @Override
+                public void onFailure(Throwable ex) {
+                    log.error("kafka sendMessage error, ex = {}, topic = {}, data = {}", ex, topic, data);
+                }
 
-            @Override
-            public void onSuccess(SendResult<Integer, String> result) {
-                log.info("kafka sendMessage success topic = {}, data = {}", topic, data);
-            }
-        });
+                @Override
+                public void onSuccess(SendResult<Integer, String> result) {
+                    log.info("kafka sendMessage success topic = {}, data = {}", topic, data);
+                }
+            });
+        }
     }
 }

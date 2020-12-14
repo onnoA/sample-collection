@@ -41,11 +41,11 @@ import lombok.extern.slf4j.Slf4j;
  * 慢sql日志切面，对慢sql发送mq进行记录
  */
 @Intercepts({
-    @Signature(type = org.apache.ibatis.executor.Executor.class, method = "update", args = {
-        MappedStatement.class, Object.class
-    }), @Signature(type = Executor.class, method = "query", args = {
+        @Signature(type = org.apache.ibatis.executor.Executor.class, method = "update", args = {
+                MappedStatement.class, Object.class
+        }), @Signature(type = Executor.class, method = "query", args = {
         MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class
-    })
+})
 })
 @Order(1)
 @Slf4j
@@ -94,9 +94,9 @@ public class SqlLogInterceptor implements Interceptor {
         long endTime = System.currentTimeMillis();
         long executeTime = TimeUnit.MILLISECONDS.toSeconds(endTime - beginTime);
         log.info("record slow sql, executed sql : {}, execute time :{},execute result:{} , sql params list :{}",
-            wholeSql, executeTime, proceed, paramList);
+                wholeSql, executeTime, proceed, paramList);
         // sql 执行时间超过定义的慢sql时间 ,异步记录慢sql相关日志信息
-        if (  enableSqlLogInterceptor && executeTime > overTime ) {
+        if (true /*enableSqlLogInterceptor && executeTime > overTime*/) {
             sendSlowSql(proceed, boundSql, executeTime, paramList, wholeSql);
         }
         return proceed;
@@ -104,15 +104,15 @@ public class SqlLogInterceptor implements Interceptor {
 
     /**
      * 发送慢sql入kafka队列
-     * 
-     * @param result 执行sql后的结果集
+     *
+     * @param result      执行sql后的结果集
      * @param boundSql
      * @param executeTime sql 执行时间
-     * @param paramList 参数集合
+     * @param paramList   参数集合
      */
     @Async
     protected void sendSlowSql(Object result, BoundSql boundSql, long executeTime, List<String> paramList,
-        String wholeSql) {
+                               String wholeSql) {
         String sql = boundSql.getSql().replaceAll("[\\s]+", " ");
         Map<String, Object> slowSqlMap = Maps.newHashMap();
         slowSqlMap.put("executed sql", wholeSql);
@@ -139,8 +139,7 @@ public class SqlLogInterceptor implements Interceptor {
                 params.add(getParameterValue(parameterObject));
                 sql = sql.replaceFirst("\\?", getParameterValue(parameterObject));
 
-            }
-            else {
+            } else {
                 MetaObject metaObject = configuration.newMetaObject(parameterObject);
                 for (ParameterMapping parameterMapping : parameterMappings) {
                     String propertyName = parameterMapping.getProperty();
@@ -148,8 +147,7 @@ public class SqlLogInterceptor implements Interceptor {
                         Object obj = metaObject.getValue(propertyName);
                         params.add(getParameterValue(obj));
                         sql = sql.replaceFirst("\\?", getParameterValue(obj));
-                    }
-                    else if (boundSql.hasAdditionalParameter(propertyName)) {
+                    } else if (boundSql.hasAdditionalParameter(propertyName)) {
                         Object obj = boundSql.getAdditionalParameter(propertyName);
                         params.add(getParameterValue(obj));
                         sql = sql.replaceFirst("\\?", getParameterValue(obj));
@@ -170,16 +168,13 @@ public class SqlLogInterceptor implements Interceptor {
         String value;
         if (obj instanceof String) {
             value = "'" + obj.toString() + "'";
-        }
-        else if (obj instanceof Date) {
+        } else if (obj instanceof Date) {
             DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.CHINA);
             value = "'" + formatter.format(obj) + "'";
-        }
-        else {
+        } else {
             if (obj != null) {
                 value = obj.toString();
-            }
-            else {
+            } else {
                 value = "";
             }
 

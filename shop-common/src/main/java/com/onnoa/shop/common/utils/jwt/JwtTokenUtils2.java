@@ -1,8 +1,6 @@
 package com.onnoa.shop.common.utils.jwt;
 
-import com.onnoa.shop.common.utils.BeanUtils;
 import com.onnoa.shop.common.utils.JsonUtil;
-import com.onnoa.shop.common.utils.MD5Util;
 import com.onnoa.shop.common.utils.UuidUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -13,7 +11,10 @@ import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Description: JWT 工具类

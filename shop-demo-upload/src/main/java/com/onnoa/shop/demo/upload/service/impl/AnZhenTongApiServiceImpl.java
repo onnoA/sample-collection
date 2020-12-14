@@ -59,9 +59,8 @@ public class AnZhenTongApiServiceImpl implements AnZhenTongApiService {
         response.setMessage(MapUtils.getString(callbackResult, RESULT_MSG));
         if (RESULT_CODE_SUCCESS.equals(MapUtils.getString(callbackResult, RESULT_CODE))) {
             String url = MapUtils.getString(callbackResult, RESULT_DATA);
-            int begin = url.indexOf("://");
             int last = url.indexOf(":");
-            url.replace("134.175.22.219",url.substring(begin,last));
+            url.replace("http://134.175.22.219",url.substring(0,last));
             try {
                 List<String> list = getPhotosZip(url, custOrderId);
                 response.setData(list);

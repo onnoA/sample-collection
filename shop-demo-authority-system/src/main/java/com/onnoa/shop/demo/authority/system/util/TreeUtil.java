@@ -65,11 +65,9 @@ public class TreeUtil {
      * @return
      */
     public static List<BaseSysFrontViewResourceDto> filterRootNode(List<BaseSysFrontViewResourceDto> list) {
-        List<BaseSysFrontViewResourceDto> collect = list.stream()
-                .filter(resource -> resource.getParentId().equals("1"))
-                .map(resource -> treeListForJava8(resource, list)
-                ).collect(Collectors.toList());
-        return collect;
+        return list.stream().filter(resource ->
+                resource.getParentId().equals("1"))
+                .map(resource -> treeListForJava8(resource, list)).collect(Collectors.toList());
     }
 
 }

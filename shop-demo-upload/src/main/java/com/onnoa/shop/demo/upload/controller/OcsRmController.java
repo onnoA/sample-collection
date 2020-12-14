@@ -25,17 +25,17 @@ public class OcsRmController {
 
     @ResponseBody
     @PostMapping("/qryBusPortInfo")
-    public ResultBean qryBusPortInfo(@RequestBody Map<String, Object> params) {
+    public OcsRmInterfaceResponse qryBusPortInfo(@RequestBody Map<String, Object> params) {
         String orderId = MapUtils.getString(params, "orderId");
-        OcsRmInterfaceResponse response = ocsRmApiService.qryBusPortInfo(orderId);
-        return ResultBean.success(response);
+        return ocsRmApiService.qryBusPortInfo(orderId);
+        //return ResultBean.success(response);
     }
 
     @ResponseBody
     @PostMapping("/qryCodeBarPortInfo")
-    public ResultBean addContractTemplate(@RequestBody Map<String, Object> params) {
+    public OcsRmInterfaceResponse addContractTemplate(@RequestBody Map<String, Object> params) {
         String obdScanCode = MapUtils.getString(params, "obdScanCode");
-        OcsRmInterfaceResponse response = ocsRmApiService.qryCodeBarPortInfo(obdScanCode);
-        return ResultBean.success(response);
+        return ocsRmApiService.qryCodeBarPortInfo(obdScanCode);
+        //return ResultBean.success(response);
     }
 }

@@ -5,26 +5,30 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Maps;
 import com.onnoa.shop.common.result.ResultBean;
-import com.onnoa.shop.common.utils.DowloadZipUtil;
 import com.onnoa.shop.common.utils.HttpClient;
 import com.onnoa.shop.common.utils.ImageUtil;
 import com.onnoa.shop.common.utils.MD5Util;
 import com.onnoa.shop.common.utils.XMLUtils;
-import com.onnoa.shop.common.utils.ZipUtil;
 import com.onnoa.shop.demo.upload.dto.Company;
 import com.onnoa.shop.demo.upload.dto.HuaWei;
 import com.onnoa.shop.demo.upload.dto.OcrCustomerOrderAttrDTO;
+import com.onnoa.shop.demo.upload.dto.OcrMaintenanceAudit;
+import com.onnoa.shop.demo.upload.dto.OcrMaintenanceOrder;
 import com.onnoa.shop.demo.upload.dto.OcsRmInterfaceResponse;
 import com.onnoa.shop.demo.upload.dto.Project;
 import com.onnoa.shop.demo.upload.dto.QryBusPortInfoDto;
 import com.onnoa.shop.demo.upload.dto.ResponseDto;
+import com.onnoa.shop.demo.upload.dto.SmsAlertsDto;
 import com.onnoa.shop.demo.upload.dto.UserDto;
 import com.onnoa.shop.demo.upload.service.AbilityOpenApiService;
 import com.onnoa.shop.demo.upload.service.AnZhenTongApiService;
 import com.onnoa.shop.demo.upload.service.CrmFileService;
 import com.onnoa.shop.demo.upload.service.DcoosApiService;
+import com.onnoa.shop.demo.upload.service.ExcelTemplateService;
+import com.onnoa.shop.demo.upload.service.OcsFuBaoApiService;
 import com.onnoa.shop.demo.upload.service.OcsRmApiService;
 import com.onnoa.shop.demo.upload.service.OrderCutImageService;
+import com.onnoa.shop.demo.upload.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.apache.curator.shaded.com.google.common.collect.Lists;
@@ -37,22 +41,21 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import static com.onnoa.shop.demo.upload.service.impl.OrderCutImageServiceImpl.RESULT_DATA;
+import static com.baomidou.mybatisplus.core.toolkit.StringPool.SEMICOLON;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -80,10 +83,10 @@ public class LearnServiceTest {
         if (download != null) {
             System.out.println("下载成功，长度： " + download.length);
             // 2.上传文件测试
-            String file_id = crmFileService.upload(download, "pdf");
-            if (file_id != null) {
-                System.out.println("上传成功，返回文件ID:" + file_id);
-            }
+//            String file_id = crmFileService.upload(download, "pdf");
+//            if (file_id != null) {
+//                System.out.println("上传成功，返回文件ID:" + file_id);
+//            }
         }
     }
 
@@ -435,29 +438,29 @@ public class LearnServiceTest {
 
     @Test
     public void md5Test() throws IOException {
-        String md5 = MD5Util.MD5("TEST20201030115359" + "1603941569000" + "!@##@!");
+        String md5 = MD5Util.MD5("873220110650142690" + "1603941569000" + "!@##@!");
         log.info("md5：{}", md5);
         //File zipp = File.createTempFile("zipp", "");
-        File file = DowloadZipUtil.downloadFile("http://202.103.124.84:7201/portal/foreign/downZip/11ffa288cf7140f58b9c39ad53f1b225.zip", "F:\\code\\MyGitHub\\sample-collection\\shop-demo-upload\\zip");
+//        File file = DowloadZipUtil.downloadFile("http://202.103.124.84:7201/portal/foreign/downZip/11ffa288cf7140f58b9c39ad53f1b225.zip", "F:\\code\\MyGitHub\\sample-collection\\shop-demo-upload\\zip");
 
         //FileInputStream fileInputStream = new FileInputStream(file);
 
         //        ZipUtil.unZip("F:\\code\\MyGitHub\\sample-collection\\shop-demo-upload\\zip\\portal\\foreign\\downZip\\5ba230d733034bbe81aaee666d68b46d.zip");
 
-        List<File> files = ZipUtil.upzipFile(file, "F:\\code\\MyGitHub\\sample-collection\\shop-demo-upload\\zip\\portal\\foreign\\downZip");
-        files.stream().forEach(file1 -> {
-            //System.out.println(file);
-            try {
-                FileInputStream inputStream = new FileInputStream(file1);
-                String base64 = ImageUtil.getBase64(inputStream);
-                log.info("base64:{}", base64);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        });
+//        List<File> files = ZipUtil.upzipFile(file, "F:\\code\\MyGitHub\\sample-collection\\shop-demo-upload\\zip\\portal\\foreign\\downZip");
+//        files.stream().forEach(file1 -> {
+//            //System.out.println(file);
+//            try {
+//                FileInputStream inputStream = new FileInputStream(file1);
+//                String base64 = ImageUtil.getBase64(inputStream);
+//                log.info("base64:{}", base64);
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//        });
 
 
 //        String s = DowloadZipUtil.downloadFromUrl("http://202.103.124.84:7201/portal/foreign/downZip/f81b97059caf473ba8f0a9de61b16cc0.zip", "F:\\code\\MyGitHub\\sample-collection\\shop-demo-upload\\zip");
@@ -517,14 +520,105 @@ public class LearnServiceTest {
     }
 
     @Test
-    public void subTest(){
+    public void subTest() {
         String url = "http://202.103.124.84:7201/portal/foreign/downZip/e04cdb8bd769479a8270eb6cafac39d2";
         // 测试： http://134.176.46.8
         // 生产： http://134.175.22.219
-        String replaceUrl = url.replace(url.substring(0, url.lastIndexOf(":")),"http://134.175.22.219");
+        String replaceUrl = url.replace(url.substring(0, url.lastIndexOf(":")), "http://134.175.22.219");
         System.out.println(replaceUrl);
     }
 
+    @Autowired
+    private ExcelTemplateService excelTemplateService;
+
+    @Test
+    public void downloadTest() {
+        Map<String, Object> params = Maps.newHashMap();
+        ResultBean resultBean = excelTemplateService.downTemplate(params);
+        log.info("excel导出结果:{}", resultBean);
+    }
+
+    @Test
+    public void alertsTest() {
+        String value = "{\"lan_id\":\"11\",\"target_obj_id\":\"921678685665\",\"contact_nbr\":\"17749682752\"};{\"lan_id\":\"16\",\"target_obj_id\":\"920471572096\",\"contact_nbr\":\"19973676687\"};{\"lan_id\":\"11\",\"target_obj_id\":\"600187160103\",\"contact_nbr\":\"18973175360\"}";
+        String[] semicolonSpilt = value.split(SEMICOLON);
+        for (int i = 0; i < semicolonSpilt.length; i++) {
+            // 执行短信告警业务
+            invokeMsgBusiness(semicolonSpilt[i]);
+        }
+
+    }
+
+    private void invokeMsgBusiness(String singleObjConfig) {
+        try {
+            SmsAlertsDto smsAlertsDto = JSON.parseObject(singleObjConfig, SmsAlertsDto.class);
+            String msgText = "textContent=ocr工单数据采集异常，请及时处理！";//dcSystemConfService.getSystemConf(DATA_COLLECTION_SMS_ALTERS).getDcValue();
+            smsAlertsDto.setOthers(msgText).setAccsNbr(smsAlertsDto.getContactNbr());
+            // 调用短信告警接口
+            String url = "http://134.176.102.33:8081/api/rest";//dcSystemConfService.getSystemConf(ABILITY_OPEN_URL).getDcValue();
+            Map<String, Object> params = Maps.newHashMap();
+            String configStr = "{\"method\":\"data.data.synDataState\", \"access_token\":\"OTBkMjJiM2Y0NmVjNzdmOTc0NWFkZWMyZGU1MThhMmI=\", \"reqSystem\":\"YWWB\", \"reqPwd\":\"HNYWWB\",\"status\":\"1\" }";//dcSystemConfService.getSystemConf(QRY_BUS_PORT_INFO_API_CONFIG).getDcValue();
+            Map configParams = JSON.parseObject(configStr, Map.class);
+            Map<String, Object> contentMap = new HashMap<>();
+            String method = MapUtils.getString(configParams, "method");
+            buildContent(contentMap, smsAlertsDto);
+            params.put("content", contentMap);
+            params.put("status", MapUtils.getString(configParams, "status"));
+            params.put("access_token", MapUtils.getString(configParams, "access_token"));
+            params.put("method", method);
+            //Map<String, Object> resultMap = abilityOpenApiService.postAbility(params, url);
+            //log.info("短信告警返回信息:{}", resultMap);
+        } catch (Exception e) {
+            log.error("发送短信告警信息异常:{}", e);
+        }
+
+
+    }
+
+    private void buildContent(Map<String, Object> contentMap, SmsAlertsDto alertsDto) {
+        contentMap.put("lan_id", alertsDto.getLanId());
+        // 固定参数
+        contentMap.put("event_code", "210310001");
+        contentMap.put("others", alertsDto.getOthers());
+        Random random = new Random();
+        String currentTimeStr = DateUtil.formate(new Date(), DateUtil.DATETIME_FORMAT_2);
+        int rannum = (int) (random.nextDouble() * (99999 - 10000 + 1)) + 10000;
+        contentMap.put("distinct_id", currentTimeStr + rannum);
+        contentMap.put("target_obj_id", alertsDto.getTargetObjId());
+        contentMap.put("req_time", currentTimeStr);
+        contentMap.put("oper_time", DateUtil.formatDate(new Date(), DateUtil.DATE_TIME_FORMAT));
+        // 固定参数
+        contentMap.put("target_obj_type", "1000");
+        contentMap.put("contact_nbr", alertsDto.getContactNbr());
+        contentMap.put("accs_nbr", alertsDto.getContactNbr());
+
+    }
+
+    @Autowired
+    private OcsFuBaoApiService fuBaoApiService;
+
+    @Test
+    public void aiPicResultTest() {
+        List<OcrMaintenanceAudit> auditInsertList = new ArrayList<>();
+        OcrMaintenanceAudit audit = new OcrMaintenanceAudit();
+        audit.setExistBarcode("1");
+        audit.setIsSpoof("0");
+        audit.setIsPaste("1");
+        audit.setIsOnlyTag("0");
+        audit.setHasPort("1");
+        audit.setIsFake("0");
+        audit.setIsPass(1);
+        audit.setAttrId("BF68E0B1BC8B6AF6EF41A06DD5AEC134");
+        auditInsertList.add(audit);
+        OcrMaintenanceOrder request = new OcrMaintenanceOrder();
+        request.setMainSn("202011100000162");
+        request.setSubApplyNo("873120111055761736");
+        request.setOrderId("7312011107810114");
+        request.setPassFlag(1);
+        Map<String, Object> resultMap = fuBaoApiService.writeBackPicResult(auditInsertList, request);
+        log.info("请求返回的结果：{}", resultMap);
+
+    }
 
 
 }
