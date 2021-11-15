@@ -1,0 +1,32 @@
+{
+  "groups": [
+    {
+      "name": "shop",
+      "type": "com.onnoa.shop.common.properties.base.ShopProperties",
+      "sourceType": "com.onnoa.shop.common.properties.base.ShopProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "shop.qiniu",
+      "type": "com.onnoa.shop.common.properties.qiniu.QiniuProperties",
+      "sourceType": "com.onnoa.shop.common.properties.base.ShopProperties"
+    },
+    {
+      "name": "shop.task",
+      "type": "com.onnoa.shop.common.properties.async.AsyncTaskProperties",
+      "sourceType": "com.onnoa.shop.common.properties.base.ShopProperties"
+    },
+    {
+      "name": "shop.video",
+      "type": "com.onnoa.shop.common.properties.video.VideoFFMpegProperties",
+      "sourceType": "com.onnoa.shop.common.properties.base.ShopProperties"
+    },
+    {
+      "name": "shop.zk",
+      "type": "com.onnoa.shop.common.distributed.lock.zookeeper.properties.ZookeeperProperties",
+      "sourceType": "com.onnoa.shop.common.properties.base.ShopProperties"
+    }
+  ],
+  "hints": []
+}
