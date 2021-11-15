@@ -29,6 +29,7 @@ public class FTPClientConfig {
     public FTPClient ftpClient() {
         FTPClient ftpClient = new FTPClient();
         try {
+
             //设置缓存区大小
             ftpClient.setBufferSize(1024 * 1024);
             // 连接FTP服务器
