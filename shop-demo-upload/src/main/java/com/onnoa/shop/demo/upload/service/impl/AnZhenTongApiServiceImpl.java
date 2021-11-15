@@ -7,12 +7,12 @@ import com.onnoa.shop.common.utils.GetBase64Utils;
 import com.onnoa.shop.demo.upload.dto.OcsRmInterfaceResponse;
 import com.onnoa.shop.demo.upload.service.AnZhenTongApiService;
 import com.onnoa.shop.demo.upload.service.DcoosApiService;
-import com.ztesoft.router.util.StringUtil;
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +67,7 @@ public class AnZhenTongApiServiceImpl implements AnZhenTongApiService {
                 response.setCode(1);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
-                if (!StringUtil.isEmpty(response.getMessage())) {
+                if (!StringUtils.isEmpty(response.getMessage())) {
                     response.setMessage(response.getMessage() + " \n " + getStackMsg(e));
                 } else {
                     response.setMessage(getStackMsg(e));

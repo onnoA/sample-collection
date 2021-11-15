@@ -1,5 +1,6 @@
 package com.onnoa.shop.demo.elk.domain;
 
+import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
@@ -11,6 +12,7 @@ import java.io.Serializable;
  * @Author: onnoA
  * @Date: 2020/5/26 15:37
  */
+@Data
 public class User implements Serializable {
     @NotBlank(message = "用户名不能为空。。")
     private String username;
@@ -20,6 +22,6 @@ public class User implements Serializable {
     private String password;
 
     @NotBlank(message = "邮箱不能为空。。")
-    @Email( message = "邮件格式校验失败。。")
+    @Email(message = "邮件格式校验失败。。")
     private String email;
 }

@@ -28,6 +28,7 @@
         <module>myshop-springcloud-nacos-before</module>
         <module>shop-demo-elasticsearch</module>
         <module>shop-demo-mybatis-plus</module>
+        <module>spring-configuration-metadata</module>
     </modules>
 
     <!-- <distributionManagement>

@@ -45,6 +45,6 @@
   </select>
 
   <select id="getUserStr" resultType="com.onnoa.shop.demo.authority.system.dto.UserDto" parameterType="java.lang.String">
-    select * from sys_user where username = #{username}
+        select * from sys_user where username = #{username}
   </select>
 </mapper>

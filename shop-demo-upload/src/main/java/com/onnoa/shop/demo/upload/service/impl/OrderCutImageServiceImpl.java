@@ -2,7 +2,7 @@ package com.onnoa.shop.demo.upload.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.util.StringUtil;
+
 import com.google.common.collect.Maps;
 import com.onnoa.shop.demo.upload.dto.OcrCustomerOrderAttrDTO;
 import com.onnoa.shop.demo.upload.service.DcoosApiService;
@@ -11,11 +11,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.alibaba.druid.stat.DruidStatService.RESULT_CODE_SUCCESS;
 
 @Service
 @Slf4j
@@ -61,7 +61,7 @@ public class OrderCutImageServiceImpl implements OrderCutImageService {
         String livingImage = customerOrder.getLivingImage();
         String livingImage1 = "";
         String livingImage2 = "";
-        if (!StringUtil.isEmpty(livingImage)) {
+        if (!StringUtils.isEmpty(livingImage)) {
             String[] livingImageArr = livingImage.split(",");
             if (livingImageArr != null) {
                 if (livingImageArr.length == 1) {

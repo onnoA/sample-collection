@@ -1,6 +1,5 @@
 package com.onnoa.shop.demo.video.exception;
 
-import com.onnoa.shop.common.exception.ServiceException;
 
 /**
  * @Description:
@@ -28,6 +27,17 @@ public class VideoException extends ServiceException {
     public static VideoException FTP_CHANGE_DIRECTORY = new VideoException(700010014, "FTP进入文件夹时异常。");
 
     public static VideoException FTP_MAKE_DIRECTORY = new VideoException(700010015, "FTP创建文件夹时异常。");
+
+    public static VideoException FAILED_TO_PARSE_INFORMATION = new VideoException(700010016, "视频格式转换错误!");
+
+    public static VideoException FAILED_TO_READ_INFORMATION = new VideoException(700010017, "视频信息读取失败");
+
+    public static VideoException VIDEO_TRANSCODE_FAILED = new VideoException(700010018, "视频转码失败");
+
+    public static VideoException VIDEO_GETSCREENTSHOT_FAILED = new VideoException(700010019, "视频截图失败");
+
+    public static VideoException PIC_TRANSTODATA_FAILED = new VideoException(700010020, "图片转流失败");
+
 
     protected int code;
     protected String msg;

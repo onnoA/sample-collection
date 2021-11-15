@@ -1,6 +1,7 @@
 package com.onnoa.shop.demo.video.constant;
 
-import com.onnoa.shop.common.exception.ErrorCode;
+
+import com.onnoa.shop.demo.video.exception.ErrorCode;
 
 public enum VideoErrorCodeEnum implements ErrorCode {
 

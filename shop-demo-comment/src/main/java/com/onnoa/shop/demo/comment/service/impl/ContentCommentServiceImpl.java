@@ -48,7 +48,7 @@ public class ContentCommentServiceImpl implements ContentCommentService {
 
     @Override
     public PageDto<ContentCommentsListVo> commentList(ContentCommentsListDto listDto) {
-        Page<ContentCommentsListVo> dtoPage = new Page<>(listDto.getPageNo(), listDto.getPageSize());
+        Page<ContentCommentsListVo> dtoPage = new Page<>(1, 10);
         List<ContentCommentsListVo> resultList = commentsInfoMapper.getTopCommentsPageByResourceId(listDto, dtoPage);
         // 递归获取子评论
         findChildCommentList(resultList);

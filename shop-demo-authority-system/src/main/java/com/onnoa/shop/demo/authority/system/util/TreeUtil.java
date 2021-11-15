@@ -25,6 +25,12 @@ public class TreeUtil {
         return getChildTree(treeRootStructList, list);
     }
 
+    public static void main(String[] args) {
+        Integer a = 10;
+        String b = "10";
+        System.out.println();
+    }
+
     private static List<BaseSysFrontViewResourceDto> getChildTree(List<BaseSysFrontViewResourceDto> treeRootStructList, List<BaseSysFrontViewResourceDto> list) {
         for (BaseSysFrontViewResourceDto treeRoot : treeRootStructList) {
             for (BaseSysFrontViewResourceDto childTree : list) {

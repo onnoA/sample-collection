@@ -158,4 +158,18 @@ public class ByteUtils {
         }
         return result;
     }
+
+
+    public static byte[] getBytesFromFile(InputStream is) throws IOException {
+        ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
+        byte[] buff = new byte[1024*1024]; //buff用于存放循环读取的临时数据
+        int rc = 0;
+        while ((rc = is.read(buff, 0, 1024)) > 0) {
+            swapStream.write(buff, 0, rc);
+        }
+        buff = swapStream.toByteArray(); //in_b为转换之后的结果
+        is.close();
+        swapStream.close();
+        return buff;
+    }
 }

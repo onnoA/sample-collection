@@ -54,7 +54,7 @@ shop:
   zk:
     zkAddressList: 47.115.175.38:2181
   task:
-    corePoolSize: 10 # 核心线程池数：IO型推荐设置为cpu核心数*2；cpu型推荐设置为cpu数+1
+    corePoolSize: 5 # 核心线程池数：IO型推荐设置为cpu核心数*2；cpu型推荐设置为cpu数+1
     maxPoolSize: 10 # 最大线程池数
     queueCapacity: 300 # 线程池阻塞队列容量
     keepAliveSeconds: 60 # 允许线程空闲时间

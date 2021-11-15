@@ -3,4 +3,18 @@
 <mapper namespace="com.onnoa.shop.demo.video.mapper.VideoTaskQueueMapper">
 
 
+    <select id="queryIdsByData" resultType="java.lang.String">
+        SELECT DISTINCT
+        task_id
+        FROM
+        videostream_svc_video_task_queue
+        WHERE
+        deleted = 0
+        AND status IN ( 0, 10 )
+        AND now( ) > SUBDATE(
+        update_time,
+        INTERVAL - #{data} MINUTE)
+        LIMIT 0, 1000;
+    </select>
+
 </mapper>

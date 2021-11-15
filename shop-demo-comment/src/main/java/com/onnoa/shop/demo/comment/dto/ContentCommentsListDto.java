@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
  * @Date: 2020/5/28 09:28
  */
 @Data
-public class ContentCommentsListDto extends PageRequestDto {
+public class ContentCommentsListDto  {
 
     // 资源id (内容id)
     @NotBlank(message = "资源id不能为空。。")

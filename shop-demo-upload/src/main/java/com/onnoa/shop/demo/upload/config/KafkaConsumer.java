@@ -13,17 +13,23 @@ public class KafkaConsumer {
 
 
     // 消费监听
-    @KafkaListener(topics = {"topic3"})
-    public void listen2(@Payload List<String> data,
-                        @Header(KafkaHeaders.RECEIVED_TOPIC) List<String> topics,
-                        @Header(KafkaHeaders.RECEIVED_PARTITION_ID) List<Integer> partitions,
-                        @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) List<String> keys,
-                        @Header(KafkaHeaders.RECEIVED_TIMESTAMP) List<Long> tss) {
-        System.out.println("收到" + data.size() + "条消息：");
-        System.out.println(data);
-        System.out.println(topics);
-        System.out.println(partitions);
-        System.out.println(keys);
-        System.out.println(tss);
+//    @KafkaListener(topics = {"testTopic"})
+//    public void listen2(@Payload List<Object> data,
+//                        @Header(KafkaHeaders.RECEIVED_TOPIC) List<String> topics,
+//                        @Header(KafkaHeaders.RECEIVED_PARTITION_ID) List<Integer> partitions,
+//                        @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) List<String> keys,
+//                        @Header(KafkaHeaders.RECEIVED_TIMESTAMP) List<Long> tss) {
+//        System.out.println("收到" + data.size() + "条消息：");
+//        System.out.println(data);
+//        System.out.println(topics);
+//        System.out.println(partitions);
+//        System.out.println(keys);
+//        System.out.println(tss);
+//    }
+
+    @KafkaListener(topics = {"testTopic"})
+    public void singleListen(String data){
+        System.out.println("收到 " + data + " 消息");
+
     }
 }

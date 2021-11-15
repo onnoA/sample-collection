@@ -1,7 +1,6 @@
 package com.onnoa.shop.common.global;
 
 import com.onnoa.shop.common.exception.ServiceException;
-import com.onnoa.shop.common.exception.ServiceExceptionUtil;
 import com.onnoa.shop.common.exception.SysErrorCodeEnum;
 import com.onnoa.shop.common.result.ResultBean;
 import org.slf4j.Logger;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;

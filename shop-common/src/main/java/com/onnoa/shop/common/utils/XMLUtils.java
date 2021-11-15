@@ -5,16 +5,23 @@ import com.onnoa.shop.common.dto.User;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import org.apache.curator.shaded.com.google.common.collect.Lists;
+import org.w3c.dom.Document;
 import org.xml.sax.ContentHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -160,9 +167,12 @@ public class XMLUtils {
         // 将对象转换成string类型的xml
         convertToXml(user, path);
         String s = bean2XmlString(user);
-        System.out.println(s);
+        System.out.println("生成的xml ：" + s);
         User result = xml2Bean(s, User.class);
         System.out.println(result);
+
+
+
     }
 
 
