@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onnoa.shop.demo.video.mapper.ArticleMapper">
+
+
+    <select id="selectById" resultType="com.onnoa.shop.demo.video.test.Article">
+        select * from article where id = #{id}
+    </select>
+
+    <select id="selectArticleList" resultType="com.onnoa.shop.demo.video.test.Article" parameterType="map">
+        select * from article where id > #{id}
+    </select>
+
+
+</mapper>

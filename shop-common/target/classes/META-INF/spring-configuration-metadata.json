@@ -1,0 +1,82 @@
+{
+  "groups": [
+    {
+      "name": "ftp",
+      "type": "com.onnoa.shop.common.config.FtpClientProperties",
+      "sourceType": "com.onnoa.shop.common.config.FtpClientProperties"
+    },
+    {
+      "name": "ftp.test-host",
+      "type": "com.onnoa.shop.common.config.FtpClientProperties$Host",
+      "sourceType": "com.onnoa.shop.common.config.FtpClientProperties"
+    },
+    {
+      "name": "shop",
+      "type": "com.onnoa.shop.common.properties.base.ShopProperties",
+      "sourceType": "com.onnoa.shop.common.properties.base.ShopProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "acme.messaging.addresses",
+      "defaultValue": [
+        "a",
+        "b"
+      ]
+    },
+    {
+      "name": "acme.messaging.container-type",
+      "defaultValue": "simple"
+    },
+    {
+      "name": "ftp.container-type",
+      "type": "com.onnoa.shop.common.config.FtpClientProperties$ContainerType",
+      "sourceType": "com.onnoa.shop.common.config.FtpClientProperties"
+    },
+    {
+      "name": "ftp.host",
+      "type": "java.net.InetAddress",
+      "description": "ftp ip 地址",
+      "sourceType": "com.onnoa.shop.common.config.FtpClientProperties"
+    },
+    {
+      "name": "ftp.port",
+      "type": "java.lang.Integer",
+      "sourceType": "com.onnoa.shop.common.config.FtpClientProperties",
+      "defaultValue": 22
+    },
+    {
+      "name": "ftp.pwd",
+      "type": "java.lang.String",
+      "description": "DDL mode. This is actually a shortcut for the \"hibernate.hbm2ddl.auto\" property.",
+      "sourceType": "com.onnoa.shop.common.config.FtpClientProperties"
+    },
+    {
+      "name": "ftp.username",
+      "type": "java.lang.String",
+      "description": "DDL mode. This is actually a shortcut for the \"hibernate.hbm2ddl.auto\" property.",
+      "sourceType": "com.onnoa.shop.common.config.FtpClientProperties"
+    },
+    {
+      "name": "shop.qiniu",
+      "type": "com.onnoa.shop.common.properties.qiniu.QiniuProperties",
+      "sourceType": "com.onnoa.shop.common.properties.base.ShopProperties"
+    },
+    {
+      "name": "shop.task",
+      "type": "com.onnoa.shop.common.properties.async.AsyncTaskProperties",
+      "sourceType": "com.onnoa.shop.common.properties.base.ShopProperties"
+    },
+    {
+      "name": "shop.video",
+      "type": "com.onnoa.shop.common.properties.video.VideoFFMpegProperties",
+      "sourceType": "com.onnoa.shop.common.properties.base.ShopProperties"
+    },
+    {
+      "name": "shop.zk",
+      "type": "com.onnoa.shop.common.distributed.lock.zookeeper.properties.ZookeeperProperties",
+      "sourceType": "com.onnoa.shop.common.properties.base.ShopProperties"
+    }
+  ],
+  "hints": []
+}

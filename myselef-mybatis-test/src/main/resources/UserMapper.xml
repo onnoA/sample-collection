@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<mapper namespace="cn.quellanan.dao.UserDao">
+
+    <select id="selectAll" resultType="cn.quellanan.pojo.User">
+        select * from user
+    </select>
+
+    <select id="selectByName" resultType="cn.quellanan.pojo.User" paramType="cn.quellanan.pojo.User">
+        select * from user where username=#{username}
+    </select>
+
+<!--    <select id="selectById" resultType="cn.quellanan.pojo.User" paramType="cn.quellanan.pojo.User">select * from user where id=#{id}</select>-->
+
+    <select id="selectById" resultType="cn.quellanan.pojo.User" paramType="cn.quellanan.pojo.User">select * from user where id=#{id}</select>
+
+    <insert id="add" paramType="cn.quellanan.pojo.User">
+        insert into user(username,password,birthday)
+        values(#{username},#{password},#{birthday})
+    </insert>
+
+    <update id="update" paramType="cn.quellanan.pojo.User">
+        update user set username=#{username},password=#{password},birthday=#{birthday} where id=#{id}
+    </update>
+
+    <delete id="delete" paramType="java.lang.Integer">
+        delete from user where id=#{id}
+    </delete>
+
+</mapper>
