@@ -9,7 +9,7 @@ import com.onnoa.shop.common.exception.ServiceException;
  */
 public class FileUploadException extends ServiceException {
 
-    public static final ServiceException FILE_NOT_ALLOW_NULL = new ServiceException(300010001, "图片文件不能为空。。");
+    public static final ServiceException FILE_NOT_ALLOW_NULL = new FileUploadException(300010001, "图片文件不能为空。。");
 
     public static FileUploadException FAILED_TO_READ_VIDEO_FILE = new FileUploadException(300010002, "解析视频信息失败");
 

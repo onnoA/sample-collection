@@ -12,4 +12,6 @@ public class AuthoritySystemCache extends CacheFacade {
     protected AuthoritySystemCache(String keyPrefix) {
         super(keyPrefix);
     }
+
+
 }

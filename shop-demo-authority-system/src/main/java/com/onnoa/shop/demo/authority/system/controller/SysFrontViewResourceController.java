@@ -1,12 +1,11 @@
 package com.onnoa.shop.demo.authority.system.controller;
 
-import com.onnoa.shop.common.result.ResultBean;
-import com.onnoa.shop.demo.authority.system.dto.ButtonListDto;
-import com.onnoa.shop.demo.authority.system.dto.BaseSysFrontViewResourceDto;
-import com.onnoa.shop.demo.authority.system.dto.FrontViewResourceDto;
-import com.onnoa.shop.demo.authority.system.service.SysFrontViewResourceService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import java.util.List;
+
+import javax.validation.Valid;
+
+import com.onnoa.shop.demo.authority.system.annotation.NoNeedTokenAuth;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.List;
+import com.onnoa.shop.common.result.ResultBean;
+import com.onnoa.shop.demo.authority.system.dto.AddOrUpdateResourceInfoDto;
+import com.onnoa.shop.demo.authority.system.dto.BaseSysFrontViewResourceDto;
+import com.onnoa.shop.demo.authority.system.dto.ButtonListDto;
+import com.onnoa.shop.demo.authority.system.dto.FrontViewResourceDto;
+import com.onnoa.shop.demo.authority.system.service.SysFrontViewResourceService;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * @Description: 前端资源控制层
@@ -26,6 +32,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "sys/frontViewResource")
 @Api(tags = "获取资源相关接口", description = "提供获取资源相关的 Rest API")
+@Slf4j
 public class SysFrontViewResourceController {
 
     @Autowired
@@ -34,15 +41,18 @@ public class SysFrontViewResourceController {
     /**
      * 功能描述: 根据用户名获取菜单树形结构
      *
-     * @param username
-     * @return
+     * @param username 用户名
+     * @return 用户权限列表
      * @date 2020/7/20 19:58
      */
     @GetMapping(value = "/menuTree")
+    @NoNeedTokenAuth
     @ApiOperation(value = "获取前端资源树", notes = "获取前端资源树")
     public ResultBean getFrontViewResource(@RequestParam String username) {
         List<BaseSysFrontViewResourceDto> frontResourceList = frontViewResourceService.getFrontViewResource(username);
-        return ResultBean.success(frontResourceList);
+        List<BaseSysFrontViewResourceDto> treeList = frontViewResourceService.getTreeList(username);
+        //log.info("获取到的前端资源树形结构，1 ：普通实现 :{}  \n 2 : java8 新特性实现 ：{}", frontResourceList, treeList);
+        return ResultBean.success(treeList);
     }
 
     /**
@@ -91,7 +101,6 @@ public class SysFrontViewResourceController {
      * 功能描述: 根据id修改资源
      *
      * @param requestDto
-     * @return
      * @date 2020/7/23 11:10
      */
     @GetMapping(value = "/modifyViewResourceById")
@@ -100,22 +109,48 @@ public class SysFrontViewResourceController {
         Boolean isSuccess = frontViewResourceService.modifyResource(requestDto);
         if (Boolean.TRUE == isSuccess) {
             return ResultBean.success(Boolean.TRUE);
-        }
-        else {
+        } else {
             return ResultBean.error(Boolean.FALSE);
         }
     }
 
-    @PostMapping(value = "/deleteResourceById")
+    /**
+     * 根据id删除资源信息
+     *
+     * @param viewId 前端资源id
+     */
+    @PostMapping(value = "/deleteResourceByViewId")
     @ApiOperation(value = "根据id删除资源信息", notes = "根据id删除资源信息")
-    public ResultBean deleteByViewId(@RequestParam(value = "viewId") String viewId) {
-        Boolean isSuccess = frontViewResourceService.deleteByViewId(viewId);
-        if (Boolean.TRUE == isSuccess) {
-            return ResultBean.success(Boolean.TRUE);
-        }
-        else {
-            return ResultBean.error(Boolean.FALSE);
-        }
+    public ResultBean deleteResourceByViewId(@RequestParam(value = "viewId") String viewId) {
+        frontViewResourceService.deleteByViewId(viewId);
+        return ResultBean.success();
+
     }
+
+    /**
+     * 新增菜单资源文件(包括文件夹、文件或按钮)
+     *
+     * @param addInfoDto 请求参数
+     */
+    @PostMapping(value = "/addResourceInfo")
+    @ApiOperation(value = "新增资源文件", notes = "新增资源文件")
+    public ResultBean addResourceInfo(@RequestBody @Valid AddOrUpdateResourceInfoDto addInfoDto) {
+        frontViewResourceService.addResourceInfo(addInfoDto);
+        return ResultBean.success();
+    }
+
+    /**
+     * 修改资源文件(包括文件夹、文件或按钮)
+     *
+     * @param addInfoDto
+     * @return
+     */
+    @PostMapping(value = "/updateResourceInfo")
+    @ApiOperation(value = "修改资源文件", notes = "修改资源文件")
+    public ResultBean updateResourceInfo(@RequestBody @Valid AddOrUpdateResourceInfoDto addInfoDto) {
+        frontViewResourceService.updateResourceInfo(addInfoDto);
+        return ResultBean.success();
+    }
+
 
 }

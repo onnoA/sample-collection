@@ -1,15 +1,11 @@
 package com.onnoa.shop.common.utils;
 
 
-
 import java.util.UUID;
 
 /**
- * @program: utopa-service-pay-operation
- * @description: UUID工具
- * @author: Mr.Chen
- * @create: 2019-12-04 11:20
- **/
+ * UUID工具
+ */
 public abstract class UuidUtil {
     public static String genUuid() {
         return getUuid().toString();
@@ -26,8 +22,10 @@ public abstract class UuidUtil {
         Long least = uuid.getLeastSignificantBits();
         return ByteUtils.bytesToHexString(ByteUtils.longToBytes(most, least));
     }
+
     /**
      * 产生短的UUID
+     *
      * @return
      */
     public static String shortUuid() {

@@ -1,8 +1,9 @@
 package com.onnoa.shop.demo.video.constant;
 
+import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import java.util.Map;
  */
 @Getter
 @AllArgsConstructor
+@Slf4j
 public enum VideoFileFormatEnum {
 
     MP4_VIDEO_FORMAT(1, ".mp4"),
@@ -42,6 +44,14 @@ public enum VideoFileFormatEnum {
         return list;
     }
 
+    public static List<String> getAllFormat() {
+        List<String> list = Lists.newArrayList();
+        for (VideoFileFormatEnum videoFileFormatEnum : VideoFileFormatEnum.values()) {
+            list.add(videoFileFormatEnum.getFormat());
+        }
+        return list;
+    }
+
     public static final VideoFileFormatEnum getVideoFormatByCode(int code) {
         for (VideoFileFormatEnum videoFileFormat : values()) {
             if (code == videoFileFormat.code) {
@@ -50,8 +60,6 @@ public enum VideoFileFormatEnum {
         }
         return null;
     }
-
-
 
 
 }

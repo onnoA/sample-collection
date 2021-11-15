@@ -1,5 +1,6 @@
 package com.onnoa.shop.common.utils;
 
+import com.onnoa.shop.common.exception.ServiceException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -692,4 +693,36 @@ public class DateUtils {
         LOGGER.info("时间超过设定间隔 重新从ftp拉取");
         return  true;
     }
+
+    public static Date getFormatedDateTime(String text) {
+        if (null == text) {
+            return null;
+        }
+        try {
+            SimpleDateFormat dateFormator = new SimpleDateFormat(DATE_TIME_FORMAT);
+            return dateFormator.parse(text);
+        }
+        catch (Exception e) {
+            // log.log(Level.SEVERE, "Error while switch datatime format " + text,
+            // e);
+            throw new ServiceException(e.getMessage());
+        }
+
+    }
+
+    public static Date getFormatedDate(String text) {
+        if (null == text) {
+            return null;
+        }
+        try {
+            SimpleDateFormat dateFormator = new SimpleDateFormat(DATE_FORMAT);
+            return dateFormator.parse(text);
+        }
+        catch (Exception e) {
+            LOGGER.error("Error while switch data format " + text, e);
+        }
+
+        return null;
+    }
+
 }

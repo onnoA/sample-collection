@@ -1,9 +1,9 @@
 package com.onnoa.shop.demo.video.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -17,7 +17,7 @@ import java.util.Date;
  * @Version: V1.0
  */
 @Data
-@TableName("utopa_videostream_svc_video_task_queue")
+@TableName("videostream_svc_video_task_queue")
 public class VideoTaskQueue implements Serializable {
     private static final long serialVersionUID = 1L;
 

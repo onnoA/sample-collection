@@ -1,7 +1,6 @@
 package com.onnoa.shop.common.global;
 
 import com.onnoa.shop.common.exception.ServiceException;
-import com.onnoa.shop.common.exception.ServiceExceptionUtil;
 import com.onnoa.shop.common.exception.SysErrorCodeEnum;
 import com.onnoa.shop.common.result.ResultBean;
 import org.slf4j.Logger;
@@ -9,12 +8,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -76,17 +76,17 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResultBean handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         LOGGER.error("参数校验失败={}", e.getMessage(), e);
+
+        // 从异常对象中拿到ObjectError对象
+        ObjectError objectError = e.getBindingResult().getAllErrors().get(0);
+        List<ObjectError> allErrors = e.getBindingResult().getAllErrors();
+        String collect = allErrors.stream().map(ex -> ex.getObjectName() + ":" + ex.getDefaultMessage()).collect(Collectors.joining(";"));
+        LOGGER.error("参数校验返回异常信息:{}",collect);
+        // 然后提取错误提示信息进行返回
+
         List<FieldError> bindingResult = e.getBindingResult().getFieldErrors();
         return ResultBean.error(SysErrorCodeEnum.COMMON_PARAMS_IS_ILLICIT.getCode(), bindingResult.stream().map(ex -> ex.getField() + ":" + ex.getDefaultMessage()).collect(Collectors.joining("，")));
     }
-
-   /* @ExceptionHandler(value = SQLException.class)
-    @ResponseBody
-    public ResultBean handleMethodArgumentNotValidException(SQLException e) {
-        LOGGER.error("sql执行异常={}", e.getMessage(), e);
-        return ResultBean.error(ServiceExceptionUtil.error(SysErrorCodeEnum.COMMON_SQL_EXECUTE_ABNORMITY));
-    }*/
-
 
     /**
      * 功能描述: 全局未处理的异常.
@@ -102,4 +102,5 @@ public class GlobalExceptionHandler {
         LOGGER.error("系统异常：{}", e.getMessage(), e);
         return ResultBean.error(SysErrorCodeEnum.SYSTEM_GATEWAY_ERROR.getCode(), SysErrorCodeEnum.SYSTEM_GATEWAY_ERROR.getMessage() + e.getMessage() + ":" + e);
     }
+
 }

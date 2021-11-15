@@ -1,0 +1,33 @@
+
+#server:
+#  port: 9092
+#spring:
+#  application:
+#    name: springcloud-nacos-test-provider
+#  cloud:
+#    nacos:
+#      config:
+#        server-addr: 192.168.118.131:8848
+#        enabled: false
+#        namespace: 4faab170-f047-4434-ba9d-e837c3c322c2
+#        file-extension: yaml
+#          #配置组名子，需要在nacos的配置设置，不然找不到
+#        group: dev
+#      discovery:
+#        server-addr: 192.168.118.131:8848 #注册中心地址
+
+spring:
+  application:
+    # 服务名，注册到注册中心的服务名，以及对应的配置中心的配置名
+    name: nacos-provider-test
+  cloud:
+    nacos:
+      config:
+        # 配置中心地址
+        server-addr: 192.168.118.131:8848
+        # 指定配置文件格式
+        file-extension: yaml
+        # 组名
+        group: myshop-cloud
+        # 命名空间
+        namespace: 7a9cfa43-efdb-480b-9388-73b347216d2d

@@ -48,7 +48,7 @@ public class FrontViewResourceVo implements Serializable {
     /**
      * 类型：1菜单文件夹2菜单文件3按钮功能
      */
-    private Integer type;
+    private String type;
 
     /**
      * 层级

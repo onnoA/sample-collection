@@ -6,7 +6,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+//@Configuration
 //@MapperScan("com.onnoa.shop.demo.*.mapper")
 public class MyBatisPlusConfig {
 
@@ -15,7 +15,7 @@ public class MyBatisPlusConfig {
      *
      * @return
      */
-    @Bean
+//    @Bean
     public PaginationInterceptor paginationInterceptor() {
         return new PaginationInterceptor();
     }

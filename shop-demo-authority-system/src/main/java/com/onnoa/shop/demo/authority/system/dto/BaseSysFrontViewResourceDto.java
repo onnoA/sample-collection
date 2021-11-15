@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -54,8 +55,8 @@ public class BaseSysFrontViewResourceDto implements Serializable {
     /**
      * 类型：1菜单文件夹2菜单文件3按钮功能
      */
-    //@Pattern(regexp = "^(?=.*1)(?=.*2)(?=.*3).{3}$", message = "类型必须为1、2、3。")
-    private Integer type;
+    @Pattern(regexp = "^[1-3]{1}$", message = "类型必须为1、2、3。")
+    private String type;
 
     /**
      * 层级
@@ -83,4 +84,6 @@ public class BaseSysFrontViewResourceDto implements Serializable {
     private List<BaseSysFrontViewResourceDto> children = new ArrayList<>();
 
     private static final long serialVersionUID = 1L;
+
+
 }

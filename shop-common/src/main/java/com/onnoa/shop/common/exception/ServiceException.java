@@ -2,6 +2,7 @@ package com.onnoa.shop.common.exception;
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 
 /**
@@ -34,15 +35,45 @@ import java.text.MessageFormat;
  */
 public class ServiceException extends RuntimeException implements Serializable {
 
-    public static final ServiceException SYS_ERROR = new ServiceException(99990001, "系统异常：{0}");
+    public static final ServiceException SYS_ERROR = new ServiceException(999900000, "系统异常：{0}");
 
-    public static final ServiceException NEW_EXCEPTION_INSTANCE_FAILED = new ServiceException(99990002, "创建业务异常新实例失败");
+    public static final ServiceException NEW_EXCEPTION_INSTANCE_FAILED = new ServiceException(999900001, "创建业务异常新实例失败。");
 
-    public static final ServiceException COMMON_PARAMS_NOT_NULL = new ServiceException(99990003, "参数{0}不能为空。。");
+    public static final ServiceException COMMON_PARAMS_NOT_NULL = new ServiceException(999900002, "参数{0}不能为空。。");
 
-    public static final ServiceException OBJECT_IS_NOT_EXIST = new ServiceException(99990004, "对象信息不存在：{0}");
+    public static final ServiceException OBJECT_IS_NOT_EXIST = new ServiceException(999900003, "对象信息不存在：{0}");
 
-    public static final ServiceException DATA_INVALID = new ServiceException(99990005, "{0}");
+    public static final ServiceException DATA_INVALID = new ServiceException(999900004, "{0}");
+
+    public static final ServiceException SMS_SEND_FAIL = new ServiceException(999900005, "短信发送失败，{0}");
+
+    public static final ServiceException SMS_CODE_HAS_NOT_EXPIRED = new ServiceException(999900006, "该短信验证码尚未过期，请勿重复操作。");
+
+    public static final ServiceException SMS_CODE_HAS_EXPIRED = new ServiceException(999900007, "该短信验证码已过期，请重新获取验证码。");
+
+    public static final ServiceException SMS_CODE_ERROR = new ServiceException(999900008, "您输入的验证码有误，请重新输入。");
+
+    public static final ServiceException PROFILE_NOT_EXIST = new ServiceException(999900009, "该配置文件不存在，文件名: {0}。");
+
+    public static final ServiceException FILE_UPLOAD_FAILED = new ServiceException(999900010, "文件上传失败，文件名: {0} 。");
+
+    public static final ServiceException FILE_TO_GET_CONNECTION = new ServiceException(999900011, "获取 {0} 连接失败。");
+
+
+    public static void main(String[] args) throws NoSuchMethodException, IllegalAccessException, InstantiationException, InvocationTargetException {
+
+        ServiceException serviceException = new ServiceException(null);
+        serviceException.test();
+
+    }
+
+    public void test() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        Constructor<? extends ServiceException> constructor = this.getClass().getDeclaredConstructor(new Class[]{Integer.class, String.class});
+        constructor.setAccessible(true);
+        ServiceException serviceException = constructor.newInstance();
+        Integer code = serviceException.getCode();
+
+    }
 
 
     protected int code;
@@ -95,9 +126,8 @@ public class ServiceException extends RuntimeException implements Serializable {
             Constructor<?> constructor;
             constructor = clazz.getDeclaredConstructor(new Class[]{int.class, String.class});
             constructor.setAccessible(true);
-            ServiceException se;
-            se = (ServiceException) constructor.newInstance(this.code, msg);
-            return se;
+            //ServiceException se;
+            return (ServiceException) constructor.newInstance(this.code, msg);
         } catch (Exception e) {
             throw NEW_EXCEPTION_INSTANCE_FAILED.newInstance("创建业务异常新实例失败" + e.toString());
         }

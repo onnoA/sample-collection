@@ -1,6 +1,5 @@
 package com.onnoa.shop.demo.video.utils;
 
-import com.onnoa.shop.common.utils.DateUtils;
 import com.onnoa.shop.demo.video.constant.VideoConstants;
 import com.onnoa.shop.demo.video.exception.VideoException;
 import com.onnoa.shop.demo.video.properties.FTPPathConfig;
@@ -108,6 +107,8 @@ public class FtpUtil {
             File localFile = new File(filepath + File.separatorChar + downloadFileName);
             log.info("下载到本地的路径: {} 文件名: {}", filepath, downloadFileName);
             outputStream = new FileOutputStream(localFile);
+            //从服务器检索命名文件并将其写入给定的OutputStream中。
+            //如果成功完成返回True，否则为false。
             ftpClient.retrieveFile(downloadFileName, outputStream);
             log.info("下载成功 结束时间:{}", new Date());
         } catch (FileNotFoundException e) {

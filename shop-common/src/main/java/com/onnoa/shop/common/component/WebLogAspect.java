@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import io.swagger.annotations.ApiOperation;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -41,13 +40,19 @@ public class WebLogAspect {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
-    @Pointcut("execution(public * com.onnoa.shop.*.*.controller..*.*(..)) ||"
-        + "execution(public * com.onnoa.shop.*.*.*.controller..*.*(..)) ||"
-        + "execution(public * com.onnoa.*.*.*.controller..*.*(..))")
+    /*@Pointcut("execution(public * com.onnoa.shop.*.*.controller..*.*(..)) ||"
+            + "execution(public * com.onnoa.shop.*.*.*.controller..*.*(..)) ||"
+            + "execution(public * com.onnoa.*.*.*.controller..*.*(..))")
+    //@Pointcut("@annotation(com.onnoa.shop.common.component.AspectLogOperation)")
     public void webLog() {
+    }*/
+
+    @Pointcut("@annotation(com.onnoa.shop.common.component.AspectLogOperation)")
+    public void noteWebLog() {
+
     }
 
-    @Around("webLog()")
+    @Around(value = "noteWebLog()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         LOGGER.info("", joinPoint.getArgs());
         Long startTime = System.currentTimeMillis();
@@ -61,8 +66,8 @@ public class WebLogAspect {
         Method method = methodSignature.getMethod();
         Object target = joinPoint.getTarget();
         LOGGER.info(
-            "signature:{},signature.getName():{},target：{},target.getClass().getName():{},joinPoint.getThis():{}",
-            signature, signature.getName(), target, target.getClass().getName(), joinPoint.getThis());
+                "signature:{},signature.getName():{},target：{},target.getClass().getName():{},joinPoint.getThis():{}",
+                signature, signature.getName(), target, target.getClass().getName(), joinPoint.getThis());
         String methodDesc = "";
         // swagger 注解
         if (method.isAnnotationPresent(ApiOperation.class)) {
@@ -70,11 +75,12 @@ public class WebLogAspect {
             methodDesc = log.value();
         }
         LOGGER.info("\n 请求开始 》》》》》》》》》》》 " + "方法名:【{}】,路径:【{}】,请求方式:【{}】,\n请求参数【{}】,方法描述:【{}】 ",
-            request.getRequestURI(), request.getRequestURL() + "", request.getMethod(),
-            getParameter(method, joinPoint.getArgs()), methodDesc);
+                request.getRequestURI(), request.getRequestURL() + "", request.getMethod(),
+                getParameter(method, joinPoint.getArgs()), methodDesc);
         Object result = joinPoint.proceed();
         LOGGER.info("\n请求结束:耗时： 》》》》》》》  {}ms , 响应结果: 》》》》》》》\n  {} ", (System.currentTimeMillis() - startTime),
-            result);
+                result);
+        // 测试cherry pick
         return result;
     }
 
@@ -113,11 +119,9 @@ public class WebLogAspect {
         }
         if (argList.isEmpty()) {
             return null;
-        }
-        else if (argList.size() == 1) {
+        } else if (argList.size() == 1) {
             return argList.get(0);
-        }
-        else {
+        } else {
             return argList;
         }
     }

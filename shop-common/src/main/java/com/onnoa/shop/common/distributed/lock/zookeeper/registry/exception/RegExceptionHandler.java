@@ -6,10 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.zookeeper.KeeperException.NoNodeException;
 import org.apache.zookeeper.KeeperException.NodeExistsException;
 
+
 /**
- * @Author gfxiang
- * @date 2019/8/9 16:34
- * @description	注册中心异常处理类.
+ * 注册中心异常处理类.
  */
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

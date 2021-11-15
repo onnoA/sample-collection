@@ -33,10 +33,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
+
 /**
- * @Author gfxiang
- * @date 2019/8/9 16:34
- * @description	基于Zookeeper的注册中心.
+ * 基于Zookeeper的注册中心.
  */
 @Slf4j
 public final class ZookeeperRegistryCenter implements CoordinatorRegistryCenter {

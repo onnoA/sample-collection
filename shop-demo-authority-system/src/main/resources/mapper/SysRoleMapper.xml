@@ -32,4 +32,12 @@
         where user.username = #{username}
 
     </select>
+
+    <select id="getRolesByUserId" resultMap="BaseResultMap">
+        select
+            <include refid="Base_Column_List"/>
+        from sys_role role
+        left join sys_user_role user_role on user_role.role_id = role.id
+        where user_role.user_id = #{userId}
+    </select>
 </mapper>

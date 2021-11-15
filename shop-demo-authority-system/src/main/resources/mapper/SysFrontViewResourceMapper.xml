@@ -10,7 +10,7 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="descr" jdbcType="VARCHAR" property="descr"/>
         <result column="icon" jdbcType="VARCHAR" property="icon"/>
-        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
         <result column="level" jdbcType="INTEGER" property="level"/>
         <result column="sort" jdbcType="INTEGER" property="sort"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
@@ -62,6 +62,15 @@
         inner join sys_front_view_resource front on front.id = front_back_resource.front_view_path_id
         inner join sys_back_end_inter_resource back_resource on front_back_resource.back_end_view_url_id = back_resource.id
         where front_back_resource.front_view_path_id = #{frontViewId}
+    </select>
+
+    <select id="selectByParentId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_front_view_resource where parent_id = #{parentId}
+    </select>
+    <select id="selectPageList" resultMap="BaseResultMap">
+        select * from sys_front_view_resource
     </select>
 
 </mapper>

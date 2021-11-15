@@ -1,12 +1,14 @@
 package com.onnoa.shop.demo.authority.system.mapper;
 
+import java.util.List;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Param;
+
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.onnoa.shop.demo.authority.system.domain.SysFrontViewResource;
 import com.onnoa.shop.demo.authority.system.dto.BaseSysFrontViewResourceDto;
 import com.onnoa.shop.demo.authority.system.dto.FrontViewResourceDto;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 public interface SysFrontViewResourceMapper extends BaseMapper<SysFrontViewResource> {
 
@@ -19,4 +21,8 @@ public interface SysFrontViewResourceMapper extends BaseMapper<SysFrontViewResou
     List<BaseSysFrontViewResourceDto> getAllFrontResourceList();
 
     FrontViewResourceDto selectViewResourceById(@Param("frontViewId") String frontViewId);
+
+    List<SysFrontViewResource> selectByParentId(@Param("parentId") String parentId);
+
+    List<SysFrontViewResource> selectPageList(@Param("page") Page<SysFrontViewResource> page);
 }

@@ -3,18 +3,19 @@ server:
 
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/sample_collections?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
-    username: root
-    password: 123456
-    type: com.alibaba.druid.pool.DruidDataSource
-    druid:
-      initial-size: 5
-      min-idle: 5
-      max-active: 10
-      test-on-borrow: true
-      time-between-eviction-runs-millis: 60000
-      min-evictable-idle-time-millis: 300000
+    mysqlMain: # 数据源1mysql配置
+      type: com.alibaba.druid.pool.DruidDataSource
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/sample_collections?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+      username: root
+      password: 123456
+    hive:
+      jdbc-url: jdbc:hive2://172.16.198.21:10000/hive
+      username: hive
+      password: hive
+      driver-class-name: org.apache.hive.jdbc.HiveDriver
+      type: com.alibaba.druid.pool.DruidDataSource
+
   redis:
     # Redis 服务器地址
     host: localhost

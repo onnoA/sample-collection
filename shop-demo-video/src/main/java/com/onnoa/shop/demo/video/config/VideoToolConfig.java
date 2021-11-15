@@ -1,8 +1,7 @@
 package com.onnoa.shop.demo.video.config;
 
-import com.onnoa.shop.common.exception.ServiceException;
-import com.onnoa.shop.common.properties.base.ShopProperties;
-import com.onnoa.shop.common.properties.video.VideoFFMpegProperties;
+import com.onnoa.shop.demo.video.exception.ServiceException;
+import com.onnoa.shop.demo.video.properties.VideoFFMpegProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
