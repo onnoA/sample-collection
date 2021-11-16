@@ -2,11 +2,12 @@ package com.onnoa.message.controller;
 
 import com.google.common.collect.Maps;
 import com.onnoa.message.cache.SmsCache;
+import com.onnoa.message.entity.UserDto;
 import com.onnoa.message.service.impl.IMessageServiceImpl;
 import com.onnoa.shop.common.exception.ServiceException;
 import com.onnoa.shop.common.result.ResultBean;
 import com.onnoa.shop.common.utils.UuidUtil;
-import entity.dto.UserDto;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

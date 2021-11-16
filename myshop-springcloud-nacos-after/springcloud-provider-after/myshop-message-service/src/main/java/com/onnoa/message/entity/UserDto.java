@@ -1,6 +1,10 @@
 package com.onnoa.message.entity;
 
-/*
+import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
+
 @Data
 public class UserDto implements Serializable {
 
@@ -13,4 +17,4 @@ public class UserDto implements Serializable {
     private String code;
 
 }
-*/
+

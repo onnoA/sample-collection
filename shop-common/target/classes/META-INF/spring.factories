@@ -1,6 +1,0 @@
-# Auto Configure com.onnoa.shop.demo.authority.system.config.CoreConfiguration org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-
-# Auto Configure
-#org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-#com.onnoa.shop.common.component.CoreConfiguration
-

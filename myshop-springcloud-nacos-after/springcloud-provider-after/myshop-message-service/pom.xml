@@ -13,9 +13,6 @@
     <name>myshop-message-service</name>
     <description>myshop-message-service project for Spring Boot</description>
 
-    <properties>
-    </properties>
-
     <dependencies>
 
         <dependency>
