@@ -87,12 +87,6 @@
             <scope>system</scope>
         </dependency>
 
-        <!--数据库连接驱动-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-
     </dependencies>
 
     <!-- 此插件能够将Spring Boot应用打包为可执行的jar或war文件，然后以通常的方式运行Spring Boot应用。 -->
