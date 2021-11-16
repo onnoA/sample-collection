@@ -50,14 +50,6 @@
             <artifactId>logstash-logback-encoder</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>${project.groupId}</groupId>-->
-<!--            <artifactId>shop-common</artifactId>-->
-<!--            <version>1.0.0-SNAPSHOT</version>-->
-<!--        </dependency>-->
-
-
-
         <!--连接ftp服务器的依赖-->
         <dependency>
             <groupId>commons-net</groupId>
