@@ -7,6 +7,7 @@ package com.onnoa.mybatis.source.analysis.entity;
  * @date: 2021/9/28
  **/
 public class Acct {
+
     private String id;
 
     private String payName;
