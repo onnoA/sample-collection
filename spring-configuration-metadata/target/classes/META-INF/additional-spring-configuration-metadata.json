@@ -1,0 +1,40 @@
+{
+  "groups": [
+    {
+      "name": "swagger",
+      "type": "com.onnoa.spring.configuration.metadata.config.SwaggerProperties",
+      "sourceType": "com.onnoa.spring.configuration.metadata.config.SwaggerProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "basePackage",
+      "type": "java.lang.String",
+      "description": "文档扫描包路径。"
+    },
+    {
+      "name": "title",
+      "type": "java.lang.String",
+      "defaultValue": "平台系统接口详情",
+      "description": "title 如: 用户模块系统接口详情。"
+    },
+    {
+      "name": "description",
+      "type": "java.lang.String",
+      "defaultValue": "在线文档",
+      "description": "服务文件介绍。"
+    },
+    {
+      "name": "termsOfServiceUrl",
+      "type": "java.lang.String",
+      "defaultValue": "https://www.test.com/",
+      "description": "服务条款网址。"
+    },
+    {
+      "name": "version",
+      "type": "java.lang.String",
+      "defaultValue": "V1.0",
+      "description": "版本。"
+    }
+  ]
+}
