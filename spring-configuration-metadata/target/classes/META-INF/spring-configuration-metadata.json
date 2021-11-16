@@ -1,0 +1,76 @@
+{
+  "groups": [
+    {
+      "name": "swagger",
+      "type": "com.onnoa.spring.configuration.metadata.config.SwaggerProperties",
+      "sourceType": "com.onnoa.spring.configuration.metadata.config.SwaggerProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "basePackage",
+      "type": "java.lang.String",
+      "description": "文档扫描包路径。"
+    },
+    {
+      "name": "description",
+      "type": "java.lang.String",
+      "description": "服务文件介绍。",
+      "defaultValue": "在线文档"
+    },
+    {
+      "name": "swagger.base-package",
+      "type": "java.lang.String",
+      "description": "文档扫描包路径",
+      "sourceType": "com.onnoa.spring.configuration.metadata.config.SwaggerProperties",
+      "defaultValue": ""
+    },
+    {
+      "name": "swagger.description",
+      "type": "java.lang.String",
+      "description": "服务文件介绍",
+      "sourceType": "com.onnoa.spring.configuration.metadata.config.SwaggerProperties",
+      "defaultValue": "在线文档"
+    },
+    {
+      "name": "swagger.terms-of-service-url",
+      "type": "java.lang.String",
+      "description": "服务条款网址",
+      "sourceType": "com.onnoa.spring.configuration.metadata.config.SwaggerProperties",
+      "defaultValue": "https:\/\/www.test.com\/"
+    },
+    {
+      "name": "swagger.title",
+      "type": "java.lang.String",
+      "description": "title 如: 用户模块系统接口详情",
+      "sourceType": "com.onnoa.spring.configuration.metadata.config.SwaggerProperties",
+      "defaultValue": "平台系统接口详情"
+    },
+    {
+      "name": "swagger.version",
+      "type": "java.lang.String",
+      "description": "版本",
+      "sourceType": "com.onnoa.spring.configuration.metadata.config.SwaggerProperties",
+      "defaultValue": "V1.0"
+    },
+    {
+      "name": "termsOfServiceUrl",
+      "type": "java.lang.String",
+      "description": "服务条款网址。",
+      "defaultValue": "https:\/\/www.test.com\/"
+    },
+    {
+      "name": "title",
+      "type": "java.lang.String",
+      "description": "title 如: 用户模块系统接口详情。",
+      "defaultValue": "平台系统接口详情"
+    },
+    {
+      "name": "version",
+      "type": "java.lang.String",
+      "description": "版本。",
+      "defaultValue": "V1.0"
+    }
+  ],
+  "hints": []
+}
