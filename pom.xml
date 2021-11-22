@@ -29,6 +29,7 @@
         <module>shop-demo-elasticsearch</module>
         <module>shop-demo-mybatis-plus</module>
         <module>spring-configuration-metadata</module>
+        <module>java8-stream</module>
     </modules>
 
     <!-- <distributionManagement>
